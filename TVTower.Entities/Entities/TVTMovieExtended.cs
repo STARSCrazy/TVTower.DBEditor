@@ -12,6 +12,10 @@ namespace TVTower.Entities
 
 		public string OriginalTitleEN { get; set; }
 
+		public string OriginalDescriptionDE { get; set; }
+
+		public string OriginalDescriptionEN { get; set; }
+
 		public string DescriptionMovieDB { get; set; }
 
 

@@ -46,7 +46,7 @@ namespace TVTower.Entities
 		public int Scandalizing { get; set; }			//0 - 100	Besonders Interessant für Shows und Sonderevents
 		public int PriceFactor { get; set; }
 
-		public int TopGenre1 { get; set; }
-		public int TopGenre2 { get; set; }
+		public TVTGenre TopGenre1 { get; set; }
+		public TVTGenre TopGenre2 { get; set; }
 	}
 }

@@ -3,9 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using TVTower.Entities;
-using TVTower.DBEditor;
-using TVTower.Xml;
 using TVTower.Import;
+using TVTower.Xml;
 
 namespace TVTower.DBEditor
 {
@@ -69,7 +68,7 @@ namespace TVTower.DBEditor
 		private void btnExcelExport_Click( object sender, EventArgs e )
 		{
 			XmlPersister persister = new XmlPersister();
-			persister.SaveXML( database, "ExportDataFull.xml" );
+			persister.SaveXML( database, "ExportDatabaseFull.xml", DataStructure.Full );
 		}
 
 		private void btnLoad_Click( object sender, EventArgs e )
@@ -80,8 +79,9 @@ namespace TVTower.DBEditor
 			{
 				XmlPersister persister = new XmlPersister();
 				var tempDatabase = new TVTBindingListDatabase<TVTMovieExtended>();
+				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
-				database.AddMovies(tempDatabase.GetAllMovies());
+				database.AddMovies( tempDatabase.GetAllMovies() );
 			}
 		}
 

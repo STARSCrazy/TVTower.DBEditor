@@ -31,6 +31,12 @@ namespace TVTower.Xml
 				return null;
 		}
 
+		public static bool HasAttribute( this XmlNode node, string name )
+		{
+			var attr = node.Attributes[name];
+			return (attr != null);
+		}
+
 		public static int GetAttributeInteger( this XmlNode node, string name )
 		{
 			var attr = node.Attributes[name];

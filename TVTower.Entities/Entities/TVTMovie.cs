@@ -4,7 +4,7 @@ namespace TVTower.Entities
 {
 	public class TVTMovie : TVTEpisode
 	{
-		public int? DataVersion { get; set; }
+		//public int? DataVersion { get; set; }
 
 		public TVTPerson Director { get; set; }
 		public List<TVTPerson> Actors { get; set; }
