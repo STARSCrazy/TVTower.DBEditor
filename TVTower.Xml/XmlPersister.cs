@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using TVTower.Entities;
@@ -21,6 +22,9 @@ namespace TVTower.Xml
 
 		public void SaveXML( ITVTowerDatabase<TVTMovieExtended> database, string filename, DataStructure dataStructure )
 		{
+			Stopwatch stopWatch = new Stopwatch();
+			stopWatch.Start();
+
 			XmlDocument doc = new XmlDocument();
 
 			var declaration = doc.CreateXmlDeclaration( "1.0", "utf-8", null );
@@ -30,10 +34,9 @@ namespace TVTower.Xml
 			doc.AppendChild( tvgdb );
 
 			var version = doc.CreateElement( "version" );
-			version.AddAttribute( "version", CURRENT_VERSION.ToString() );
+			version.AddAttribute( "value", CURRENT_VERSION.ToString() );
 			version.AddAttribute( "comment", "Export from TVTowerDBEditor" );
 			version.AddAttribute( "exportDate", DateTime.Now.ToString() );
-			version.AddAttribute( "dataStructure", dataStructure.ToString() );
 			tvgdb.AppendChild( version );
 
 			var allmovies = doc.CreateElement( "allmovies" );
@@ -54,7 +57,17 @@ namespace TVTower.Xml
 				SetPersonDetailNode( doc, allpeople, person, dataStructure );
 			}
 
-			//doc.Save( filename );
+			var exportOptions = doc.CreateElement( "exportOptions" );
+			exportOptions.AddAttribute( "onlyFakes", (dataStructure == DataStructure.FakeData || dataStructure == DataStructure.FakeDataOldFormat).ToString().ToLower() );
+			exportOptions.AddAttribute( "onlyCustom", "false" );
+			exportOptions.AddAttribute( "dataStructure", dataStructure.ToString() );
+			tvgdb.AppendChild( exportOptions );
+
+			stopWatch.Stop();
+
+			var time = doc.CreateElement( "time" );
+			time.AddAttribute( "value", stopWatch.ElapsedMilliseconds.ToString() + "ms" );
+			tvgdb.AppendChild( time );
 
 			XmlWriterSettings settings = new XmlWriterSettings();
 			settings.Indent = true;
@@ -251,7 +264,7 @@ namespace TVTower.Xml
 				additionalNode.AddAttribute( "budget", movie.Budget.ToString() );
 				additionalNode.AddAttribute( "revenue", movie.Revenue.ToString() );
 				movieNode.AppendChild( additionalNode );
-			}			
+			}
 
 			return movieNode;
 		}
@@ -264,13 +277,14 @@ namespace TVTower.Xml
 			var doc = new XmlDocument();
 			doc.Load( filename );
 
+			var versionElement = doc.GetElementsByTagName( "version" );
+			if ( versionElement[0].HasAttribute( "value" ) )
+				version = versionElement[0].GetAttributeInteger( "value" );
+
 			var allMovies = doc.GetElementsByTagName( "allmovies" );
 
 			foreach ( XmlNode xmlMovie in allMovies )
 			{
-				if ( xmlMovie.HasAttribute( "version" ) )
-					version = xmlMovie.GetAttributeInteger( "version" );
-
 				foreach ( XmlNode childNode in xmlMovie.ChildNodes )
 				{
 					var movie = new TVTMovieExtended();
@@ -391,7 +405,7 @@ namespace TVTower.Xml
 
 		private void ConvertOldMovieData( TVTMovieExtended movie, int version )
 		{
-			if ( version == 0 )
+			if ( version <= 2 ) //Alte BlitzMax-Datenbank
 			{
 				GenreConverter( movie );
 			}
