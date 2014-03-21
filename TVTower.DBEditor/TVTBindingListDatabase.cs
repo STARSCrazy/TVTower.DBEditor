@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using TVTower.DBEditor;
 using System.Collections.Generic;
+using System.Linq;
 using TVTower.Entities;
 
 namespace TVTower.DBEditor
@@ -58,7 +57,7 @@ namespace TVTower.DBEditor
 		public IEnumerable<T> GetAllMovies()
 		{
 			var result = new List<T>();
-			result.AddRange(MovieData);
+			result.AddRange( MovieData );
 			return result;
 		}
 
@@ -86,6 +85,11 @@ namespace TVTower.DBEditor
 		public TVTPerson GetPersonByTmdbId( int tmdbId )
 		{
 			return PersonData.FirstOrDefault( x => x.TmdbId == tmdbId );
+		}
+
+		public TVTPerson GetPersonByName( string name )
+		{
+			return PersonData.FirstOrDefault( x => x.Name.Trim() == name.Trim() );
 		}
 
 		#endregion

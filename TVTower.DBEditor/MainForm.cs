@@ -56,33 +56,14 @@ namespace TVTower.DBEditor
 			database.PersonData = personDataList;
 		}
 
-		private void button1_Click( object sender, EventArgs e )
-		{
-			importer = new MovieImporter();
-			importer.Database = database;
-			importer.Start();
-		}
+
 
 
 
 		private void btnExcelExport_Click( object sender, EventArgs e )
 		{
 			XmlPersister persister = new XmlPersister();
-			persister.SaveXML( database, "ExportDatabaseFull.xml", DataStructure.Full );
-		}
-
-		private void btnLoad_Click( object sender, EventArgs e )
-		{
-			openFileDialog.InitialDirectory = Environment.CurrentDirectory;
-
-			if ( openFileDialog.ShowDialog() == DialogResult.OK )
-			{
-				XmlPersister persister = new XmlPersister();
-				var tempDatabase = new TVTBindingListDatabase<TVTMovieExtended>();
-				tempDatabase.Initialize();
-				persister.LoadXML( openFileDialog.FileName, tempDatabase );
-				database.AddMovies( tempDatabase.GetAllMovies() );
-			}
+			persister.SaveXML( database, "ExportDatabaseFull.xml", DatabaseVersion.V3, DataStructure.Full );
 		}
 
 		private void btnMerge_Click( object sender, EventArgs e )
@@ -143,25 +124,147 @@ namespace TVTower.DBEditor
 			}
 		}
 
+		private void btnSaveOldFormat_Click( object sender, EventArgs e )
+		{
+			XmlPersister persister = new XmlPersister();
+			persister.SaveXML( database, "ExportDatabaseFakeDataOldFormat.xml", DatabaseVersion.V2, DataStructure.FakeData );
+		}
 
-		//private void dataGridView1_ColumnHeaderMouseClick_1(object sender, DataGridViewCellMouseEventArgs e)
-		//{
-		//    DataGridViewColumn column = dataGridView1.Columns[e.ColumnIndex];
+		private void miLoadDB_Click( object sender, EventArgs e )
+		{
+			openFileDialog.InitialDirectory = Environment.CurrentDirectory;
 
-		//    _isSortAscending = (_sortColumn == null || _isSortAscending == false);
+			if ( openFileDialog.ShowDialog() == DialogResult.OK )
+			{
+				database.Initialize();
 
-		//    string direction = _isSortAscending ? "ASC" : "DESC";
+				XmlPersister persister = new XmlPersister();
+				var tempDatabase = new TVTBindingListDatabase<TVTMovieExtended>();
+				tempDatabase.Initialize();
+				persister.LoadXML( openFileDialog.FileName, tempDatabase );
+				database.AddPeople( tempDatabase.GetAllPeople() );
+				database.AddMovies( tempDatabase.GetAllMovies() );
+			}
+		}
 
-		//    //movieDataList
+		private void miImportDB_Click( object sender, EventArgs e )
+		{
+			openFileDialog.InitialDirectory = Environment.CurrentDirectory;
 
-		//    //movieDataList.OrderBy(x => x.Title);
+			if ( openFileDialog.ShowDialog() == DialogResult.OK )
+			{
+				XmlPersister persister = new XmlPersister();
+				var tempDatabase = new TVTBindingListDatabase<TVTMovieExtended>();
+				tempDatabase.Initialize();
+				persister.LoadXML( openFileDialog.FileName, tempDatabase );
+				database.AddPeople( tempDatabase.GetAllPeople() );
+				database.AddMovies( tempDatabase.GetAllMovies() );
+			}
+		}
 
-		//    //myBindingSource.DataSource = _context.MyEntities.OrderBy(
-		//    //   string.Format("it.{0} {1}", column.DataPropertyName, direction)).ToList();
+		private void miImportFromWebDB_Click( object sender, EventArgs e )
+		{
+			importer = new MovieImporter();
+			importer.Database = database;
+			importer.Start();
+		}
 
-		//    if (_sortColumn != null) _sortColumn.HeaderCell.SortGlyphDirection = SortOrder.None;
-		//    column.HeaderCell.SortGlyphDirection = _isSortAscending ? SortOrder.Ascending : SortOrder.Descending;
-		//    _sortColumn = column;
-		//}
+		private void miSaveAll_Click( object sender, EventArgs e )
+		{
+			XmlPersister persister = new XmlPersister();
+			persister.SaveXML( database, "TVTDatabaseV3Full.xml", DatabaseVersion.V3, DataStructure.Full );
+		}
+
+		private void miExportV3Original_Click( object sender, EventArgs e )
+		{
+			XmlPersister persister = new XmlPersister();
+			persister.SaveXML( database, "ExportTVTDatabaseV3Original.xml", DatabaseVersion.V3, DataStructure.OriginalData );
+		}
+
+		private void miExportV3Fake_Click( object sender, EventArgs e )
+		{
+			XmlPersister persister = new XmlPersister();
+			persister.SaveXML( database, "ExportTVTDatabaseV3Fake.xml", DatabaseVersion.V3, DataStructure.FakeData );
+		}
+
+		private void miExportV2Original_Click( object sender, EventArgs e )
+		{
+			XmlPersister persister = new XmlPersister();
+			persister.SaveXML( database, "ExportTVTDatabaseV2Original.xml", DatabaseVersion.V2, DataStructure.OriginalData );
+		}
+
+		private void miExportV2Fake_Click( object sender, EventArgs e )
+		{
+			XmlPersister persister = new XmlPersister();
+			persister.SaveXML( database, "ExportTVTDatabaseV2Fake.xml", DatabaseVersion.V2, DataStructure.FakeData );
+		}
+
+		private void miCloseWindow_Click( object sender, EventArgs e )
+		{
+			this.Close();
+		}
+
+		private void btnMerge_Click_1( object sender, EventArgs e )
+		{
+			if ( movieDataGrid.SelectedRows.Count == 2 )
+			{
+				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTMovieExtended;
+				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTMovieExtended;
+
+				TVTMovieExtended imported = null;
+				TVTMovieExtended fake = null;
+
+				if ( movie1.TmdbId > 0 )
+				{
+					imported = movie1;
+					fake = movie2;
+				}
+
+				if ( movie2.TmdbId > 0 )
+				{
+					if ( imported != null )
+						throw new Exception();
+
+					imported = movie2;
+					fake = movie1;
+				}
+
+				if ( imported == null )
+					throw new Exception();
+
+				if ( fake == null )
+					throw new Exception();
+
+				imported.TitleDE = fake.TitleDE;
+				imported.DescriptionDE = fake.DescriptionDE;
+
+				imported.PriceRateOld = fake.PriceRate;
+				imported.CriticRateOld = fake.CriticsRate;
+				imported.SpeedRateOld = fake.SpeedRateOld;
+				imported.BoxOfficeRateOld = fake.BoxOfficeRateOld;
+
+				foreach ( var actor in imported.Actors )
+				{
+					if ( string.IsNullOrEmpty( actor.Info ) )
+						actor.Info = fake.Actors.Select( x => x.Name ).ToContentString( " | " );
+					else
+						actor.Info = actor.Info + " | " + fake.Actors;
+				}
+
+
+				var director = imported.Director;
+				if ( string.IsNullOrEmpty( director.Info ) )
+					director.Info = fake.Director.Name;
+				else
+					director.Info = director.Info + " | " + fake.Director.Name;
+
+				database.MovieData.Remove( fake );
+			}
+		}
+
+		private void btnSaveAll_Click( object sender, EventArgs e )
+		{
+			miSaveAll_Click( sender, e );
+		}
 	}
 }

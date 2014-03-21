@@ -142,7 +142,7 @@ namespace TVTower.Import
 				person = new TVTPerson();
 				person.OriginalName = cast.name;
 				person.TmdbId = cast.id;
-				person.Function = TVTPersonFunction.Actor;
+				person.Functions.Add(TVTPersonFunction.Actor);
 				person.OtherInfo = cast.character;
 
 				RegisterPerson( person, cast.id );
@@ -162,7 +162,7 @@ namespace TVTower.Import
 				person = new TVTPerson();
 				person.OriginalName = crew.name;
 				person.TmdbId = crew.id;
-				person.Function = TVTPersonFunction.Director;
+				person.Functions.Add(TVTPersonFunction.Director);
 				person.OtherInfo = crew.job + "/" + crew.department;
 
 				RegisterPerson( person, crew.id );

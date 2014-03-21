@@ -28,6 +28,8 @@ namespace TVTower.Entities
 
 		public string ImageUrl { get; set; }			//Von hier kann die Bildquelle geladen werden
 
+		public TVTDataStatus DataStatus { get; set; }
+
 		//Für Serien
 		public bool IsSeries { get; set; }
 		public List<TVTEpisode> Episodes { get; set; }

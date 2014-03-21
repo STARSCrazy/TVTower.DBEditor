@@ -7,20 +7,24 @@ using TVTower.Entities;
 
 namespace TVTower.Xml
 {
+	public enum DatabaseVersion
+	{
+		V2 = 2,
+		V3 = 3
+	}
+
 	public enum DataStructure
 	{
 		Full,
 		FakeData,
-		FakeDataOldFormat,
-		OriginalData,
-		OriginalDataOldFormat
+		OriginalData
 	}
 
 	public class XmlPersister
 	{
 		public const int CURRENT_VERSION = 3;
 
-		public void SaveXML( ITVTowerDatabase<TVTMovieExtended> database, string filename, DataStructure dataStructure )
+		public void SaveXML( ITVTowerDatabase<TVTMovieExtended> database, string filename, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
 			Stopwatch stopWatch = new Stopwatch();
 			stopWatch.Start();
@@ -34,7 +38,7 @@ namespace TVTower.Xml
 			doc.AppendChild( tvgdb );
 
 			var version = doc.CreateElement( "version" );
-			version.AddAttribute( "value", CURRENT_VERSION.ToString() );
+			version.AddAttribute( "value", ((int)dbVersion).ToString() );
 			version.AddAttribute( "comment", "Export from TVTowerDBEditor" );
 			version.AddAttribute( "exportDate", DateTime.Now.ToString() );
 			tvgdb.AppendChild( version );
@@ -45,20 +49,23 @@ namespace TVTower.Xml
 
 			foreach ( var movie in database.GetAllMovies() )
 			{
-				SetMovieDetailNode( doc, allmovies, movie, dataStructure );
+				SetMovieDetailNode( doc, allmovies, movie, dbVersion, dataStructure );
 			}
 
-			var allpeople = doc.CreateElement( "allpeople" );
-			//allpeople.AddElement( "version", CURRENT_VERSION.ToString() );
-			tvgdb.AppendChild( allpeople );
-
-			foreach ( var person in database.GetAllPeople() )
+			if ( ((int)dbVersion) >= 3 )
 			{
-				SetPersonDetailNode( doc, allpeople, person, dataStructure );
+				var allpeople = doc.CreateElement( "allpeople" );
+				//allpeople.AddElement( "version", CURRENT_VERSION.ToString() );
+				tvgdb.AppendChild( allpeople );
+
+				foreach ( var person in database.GetAllPeople() )
+				{
+					SetPersonDetailNode( doc, allpeople, person, dbVersion, dataStructure );
+				}
 			}
 
 			var exportOptions = doc.CreateElement( "exportOptions" );
-			exportOptions.AddAttribute( "onlyFakes", (dataStructure == DataStructure.FakeData || dataStructure == DataStructure.FakeDataOldFormat).ToString().ToLower() );
+			exportOptions.AddAttribute( "onlyFakes", (dataStructure == DataStructure.FakeData).ToString().ToLower() );
 			exportOptions.AddAttribute( "onlyCustom", "false" );
 			exportOptions.AddAttribute( "dataStructure", dataStructure.ToString() );
 			tvgdb.AppendChild( exportOptions );
@@ -79,11 +86,16 @@ namespace TVTower.Xml
 			}
 		}
 
-		public XmlNode SetPersonDetailNode( XmlDocument doc, XmlElement element, TVTPerson person, DataStructure dataStructure )
+		public XmlNode SetPersonDetailNode( XmlDocument doc, XmlElement element, TVTPerson person, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
 			XmlNode personNode;
 
 			personNode = doc.CreateElement( "person" );
+			{
+				personNode.AddAttribute( "id", person.Id.ToString() );
+				if ( dataStructure == DataStructure.Full )
+					personNode.AddAttribute( "status", person.DataStatus.ToString() );
+			}
 			element.AppendChild( personNode );
 
 			switch ( dataStructure )
@@ -92,32 +104,38 @@ namespace TVTower.Xml
 					personNode.AddElement( "name", person.Name );
 					break;
 				case DataStructure.FakeData:
-				case DataStructure.FakeDataOldFormat:
 					personNode.AddElement( "name", person.Name );
 					break;
 				case DataStructure.OriginalData:
-				case DataStructure.OriginalDataOldFormat:
 					personNode.AddElement( "name", person.OriginalName );
 					break;
 			}
 
-			personNode.AddElement( "tmdb_id", person.TmdbId.ToString() );
-			personNode.AddElement( "imdb_id", person.ImdbId );
-			personNode.AddElement( "image_url", person.ImageUrl );
-			personNode.AddElement( "function", person.Function.ToString() );
+			personNode.AddElement( "function", person.Functions.ToContentString( ";" ) );
 			personNode.AddElement( "gender", person.Gender.ToString() );
 			personNode.AddElement( "birthday", person.Birthday );
 			personNode.AddElement( "deathday", person.Deathday );
 			personNode.AddElement( "country", person.Country );
 
+			personNode.AddElement( "image_url", person.ImageUrl );
+
+			XmlNode referencesNode = doc.CreateElement( "references" );
+			referencesNode.AddAttribute( "tmdb_id", person.TmdbId.ToString() );
+			referencesNode.AddAttribute( "imdb_id", person.ImdbId );
+			personNode.AppendChild( referencesNode );
+
+			//personNode.AddElement( "tmdb_id", person.TmdbId.ToString() );
+			//personNode.AddElement( "imdb_id", person.ImdbId );
+			//personNode.AddElement( "image_url", person.ImageUrl );
+
 			if ( dataStructure == DataStructure.Full )
 			{
 				XmlNode additionalNode = doc.CreateElement( "additional" );
-				additionalNode.AddElement( "original_name", person.OriginalName );
-				additionalNode.AddElement( "place_of_birth", person.PlaceOfBirth );
-				additionalNode.AddElement( "info", person.Info );
-				additionalNode.AddElement( "movieRegistrations", person.MovieRegistrations.ToString() );
-				additionalNode.AddElement( "otherInfo", person.OtherInfo );
+				additionalNode.AddAttribute( "original_name", person.OriginalName );
+				additionalNode.AddAttribute( "place_of_birth", person.PlaceOfBirth );
+				additionalNode.AddAttribute( "info", person.Info );
+				additionalNode.AddAttribute( "movieRegistrations", person.MovieRegistrations.ToString() );
+				additionalNode.AddAttribute( "otherInfo", person.OtherInfo );
 				personNode.AppendChild( additionalNode );
 			}
 
@@ -142,7 +160,7 @@ namespace TVTower.Xml
 			return personNode;
 		}
 
-		public XmlNode SetMovieDetailNode( XmlDocument doc, XmlElement element, TVTMovieExtended movie, DataStructure dataStructure )
+		public XmlNode SetMovieDetailNode( XmlDocument doc, XmlElement element, TVTMovieExtended movie, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
 			XmlNode movieNode, dataNode;
 
@@ -150,6 +168,11 @@ namespace TVTower.Xml
 				throw new NotImplementedException();
 
 			movieNode = doc.CreateElement( "movie" );
+			if ( dbVersion != DatabaseVersion.V2 )
+			{
+				movieNode.AddAttribute( "id", movie.Id.ToString() );
+				movieNode.AddAttribute( "status", movie.DataStatus.ToString() );
+			}
 			element.AppendChild( movieNode );
 
 			switch ( dataStructure )
@@ -166,24 +189,32 @@ namespace TVTower.Xml
 					movieNode.AddElement( "description_tmdb", movie.DescriptionMovieDB );
 					break;
 				case DataStructure.FakeData:
-					movieNode.AddElement( "title_de", movie.TitleDE );
-					movieNode.AddElement( "title_en", movie.TitleEN );
-					movieNode.AddElement( "description_de", movie.DescriptionDE );
-					movieNode.AddElement( "description_en", movie.DescriptionEN );
-					break;
-				case DataStructure.FakeDataOldFormat:
-					movieNode.AddElement( "title", movie.TitleDE );
-					movieNode.AddElement( "description", movie.DescriptionDE );
+					if ( dbVersion == DatabaseVersion.V2 )
+					{
+						movieNode.AddElement( "title", movie.TitleDE );
+						movieNode.AddElement( "description", movie.DescriptionDE );
+					}
+					else
+					{
+						movieNode.AddElement( "title_de", movie.TitleDE );
+						movieNode.AddElement( "title_en", movie.TitleEN );
+						movieNode.AddElement( "description_de", movie.DescriptionDE );
+						movieNode.AddElement( "description_en", movie.DescriptionEN );
+					}
 					break;
 				case DataStructure.OriginalData:
-					movieNode.AddElement( "title_de", movie.OriginalTitleDE );
-					movieNode.AddElement( "title_en", movie.OriginalTitleEN );
-					movieNode.AddElement( "description_de", movie.OriginalDescriptionDE );
-					movieNode.AddElement( "description_en", movie.OriginalDescriptionEN );
-					break;
-				case DataStructure.OriginalDataOldFormat:
-					movieNode.AddElement( "title", movie.OriginalTitleDE );
-					movieNode.AddElement( "description", movie.OriginalDescriptionDE );
+					if ( dbVersion == DatabaseVersion.V2 )
+					{
+						movieNode.AddElement( "title", movie.OriginalTitleDE );
+						movieNode.AddElement( "description", movie.OriginalDescriptionDE );
+					}
+					else
+					{
+						movieNode.AddElement( "title_de", movie.OriginalTitleDE );
+						movieNode.AddElement( "title_en", movie.OriginalTitleEN );
+						movieNode.AddElement( "description_de", movie.OriginalDescriptionDE );
+						movieNode.AddElement( "description_en", movie.OriginalDescriptionEN );
+					}
 					break;
 			}
 
@@ -191,7 +222,13 @@ namespace TVTower.Xml
 
 			dataNode = doc.CreateElement( "data" );
 
-			if ( dataStructure != DataStructure.FakeDataOldFormat && dataStructure != DataStructure.OriginalDataOldFormat )
+			if ( dbVersion == DatabaseVersion.V2 )
+			{
+				//altes Format
+				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.Name ).ToContentString( ", " ) );
+				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.Name : "" );
+			}
+			else
 			{
 				movieNode.AddElement( "image_url", movie.ImageUrl );
 
@@ -207,40 +244,26 @@ namespace TVTower.Xml
 				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.Name : "" );
 				dataNode.AddAttribute( "director_id", movie.Director != null ? movie.Director.Id.ToString() : "" );
 			}
-			else
-			{
-				//altes Format
-				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.Name ).ToContentString( ", " ) );
-				dataNode.AddAttribute( "director", movie.Director.Name );
-			}
 
 			dataNode.AddAttribute( "country", movie.Country );
 			dataNode.AddAttribute( "year", movie.Year.ToString() );
 
-			switch ( dataStructure )
+			if ( dbVersion == DatabaseVersion.V2 )
 			{
-				case DataStructure.Full:
-					dataNode.AddAttribute( "main_genre", movie.MainGenre.ToString() );
-					dataNode.AddAttribute( "sub_genre", movie.SubGenre.ToString() );
-					dataNode.AddAttribute( "show_genre", movie.ShowGenre.ToString() );
-					dataNode.AddAttribute( "reportage_genre", movie.ReportageGenre.ToString() );
-					break;
-				case DataStructure.FakeData:
-				case DataStructure.OriginalData:
-					dataNode.AddAttribute( "main_genre", movie.MainGenre.ToString() );
-					dataNode.AddAttribute( "sub_genre", movie.SubGenre.ToString() );
-					dataNode.AddAttribute( "show_genre", movie.ShowGenre.ToString() );
-					dataNode.AddAttribute( "reportage_genre", movie.ReportageGenre.ToString() );
-					break;
-				case DataStructure.FakeDataOldFormat:
-				case DataStructure.OriginalDataOldFormat:
-					dataNode.AddAttribute( "genre", movie.GenreOldVersion.ToString() );
-					break;
+				dataNode.AddAttribute( "genre", movie.GenreOldVersion.ToString() );
+			}
+			else
+			{
+				dataNode.AddAttribute( "main_genre", ((int)movie.MainGenre).ToString() );
+				dataNode.AddAttribute( "sub_genre", ((int)movie.SubGenre).ToString() );
+				dataNode.AddAttribute( "show_genre", ((int)movie.ShowGenre).ToString() );
+				dataNode.AddAttribute( "reportage_genre", ((int)movie.ReportageGenre).ToString() );
 			}
 
 			dataNode.AddAttribute( "blocks", movie.Blocks.ToString() );
 			dataNode.AddAttribute( "time", movie.LiveHour.ToString() );
-			if ( dataStructure != DataStructure.FakeDataOldFormat && dataStructure != DataStructure.OriginalDataOldFormat )
+
+			if ( dbVersion != DatabaseVersion.V2 )
 				dataNode.AddAttribute( "flags", movie.Flags.ToContentString( " " ) );
 
 			dataNode.AddAttribute( "price", movie.PriceRate.ToString() );
@@ -273,13 +296,28 @@ namespace TVTower.Xml
 		{
 			var result = database;
 			int version = 0;
+			TVTDataStatus defaultStatus = TVTDataStatus.FakeWithRefId;
 
 			var doc = new XmlDocument();
 			doc.Load( filename );
 
 			var versionElement = doc.GetElementsByTagName( "version" );
 			if ( versionElement[0].HasAttribute( "value" ) )
+			{
 				version = versionElement[0].GetAttributeInteger( "value" );
+
+				if ( version == 1 )
+					throw new NotSupportedException( "database version '1' is not supported." );
+			}
+
+			if ( version == 2 )
+			{
+				var exportOptions = doc.GetElementsByTagName( "exportOptions" );
+				if ( bool.Parse( exportOptions[0].GetAttribute( "onlyFakes" ) ) )
+				{
+					defaultStatus = TVTDataStatus.Fake;
+				}
+			}
 
 			var allMovies = doc.GetElementsByTagName( "allmovies" );
 
@@ -288,10 +326,29 @@ namespace TVTower.Xml
 				foreach ( XmlNode childNode in xmlMovie.ChildNodes )
 				{
 					var movie = new TVTMovieExtended();
+					if ( version == 2 )
+					{
+						movie.GenerateGuid();
+						movie.DataStatus = defaultStatus;
+					}
 
 					switch ( childNode.Name )
 					{
 						case "movie":
+
+							foreach ( XmlLinkedNode attrib in childNode.Attributes )
+							{
+								switch ( attrib.Name )
+								{
+									case "id":
+										movie.Id = Guid.Parse( attrib.GetElementValue() );
+										break;
+									case "status":
+										movie.DataStatus = (TVTDataStatus)Enum.Parse( typeof( TVTDataStatus ), attrib.GetElementValue() );
+										break;
+								}
+							}
+
 							foreach ( XmlLinkedNode movieChild in childNode.ChildNodes )
 							{
 								switch ( movieChild.Name )
@@ -341,9 +398,16 @@ namespace TVTower.Xml
 										break;
 									case "data":
 										//movie.Actors = movieChild.GetAttribute( "actors" );
-										movie.Actors = ToPersonList( movieChild.GetAttribute( "actorIds" ), result );
-										//movie.Director = movieChild.GetAttribute( "director" );
-										movie.Director = result.GetPersonByStringId( movieChild.GetAttribute( "directorId" ) );
+										if ( movieChild.HasAttribute( "actorIds" ) )
+											movie.Actors = ToPersonList( movieChild.GetAttribute( "actorIds" ), result );
+										else
+											movie.Actors = ToPersonListByName( movieChild.GetAttribute( "actors" ), result, defaultStatus, TVTPersonFunction.Actor );
+
+										if ( movieChild.HasAttribute( "directorId" ) )
+											movie.Director = result.GetPersonByStringId( movieChild.GetAttribute( "directorId" ) );
+										else
+											movie.Director = GetPersonByNameOrCreate( movieChild.GetAttribute( "director" ), result, defaultStatus, TVTPersonFunction.Actor );
+
 										movie.Country = movieChild.GetAttribute( "country" );
 										movie.Year = movieChild.GetAttributeInteger( "year" );
 										movie.MainGenreRaw = movieChild.GetAttributeInteger( "genre" );
@@ -385,6 +449,54 @@ namespace TVTower.Xml
 			return result;
 		}
 
+		private List<TVTPerson> ToPersonListByName( string names, ITVTowerDatabase<TVTMovieExtended> database, TVTDataStatus defaultStatus, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
+		{
+			var result = new List<TVTPerson>();
+			if ( !string.IsNullOrEmpty( names ) )
+			{
+				var array = names.Split( ',' );
+				foreach ( var aValue in array )
+				{
+					var personName = aValue.Trim();
+
+					var person = database.GetPersonByName( personName );
+					if ( person == null )
+					{
+						person = new TVTPerson();
+						person.GenerateGuid();
+						person.DataStatus = defaultStatus;
+						person.Name = personName;
+						person.Functions.Add( functionForNew );
+						database.AddPerson( person );
+					}
+
+					result.Add( person );
+				}
+			}
+			return result;
+		}
+
+		private TVTPerson GetPersonByNameOrCreate( string name, ITVTowerDatabase<TVTMovieExtended> database, TVTDataStatus defaultStatus, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
+		{
+			if ( !string.IsNullOrEmpty( name ) )
+			{
+				var person = database.GetPersonByName( name );
+
+				if ( person == null )
+				{
+					person = new TVTPerson();
+					person.GenerateGuid();
+					person.DataStatus = defaultStatus;
+					person.Name = name;
+					person.Functions.Add( functionForNew );
+					database.AddPerson( person );
+				}
+				return person;
+			}
+			else
+				return null;
+		}
+
 		private List<TVTMovieFlags> ToFlagList( string value )
 		{
 			var result = new List<TVTMovieFlags>();
@@ -407,6 +519,7 @@ namespace TVTower.Xml
 		{
 			if ( version <= 2 ) //Alte BlitzMax-Datenbank
 			{
+				movie.GenreOldVersion = movie.MainGenreRaw;
 				GenreConverter( movie );
 			}
 			else
@@ -480,7 +593,7 @@ namespace TVTower.Xml
 					break;
 				case 17:  //show
 					movie.MainGenre = TVTGenre.Show;
-					movie.ShowGenre = TVTShowGenre.None;
+					movie.ShowGenre = TVTShowGenre.Undefined;
 					break;
 				case 18:  //monumental
 					movie.MainGenre = TVTGenre.Monumental;

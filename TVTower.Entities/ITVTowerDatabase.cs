@@ -18,5 +18,6 @@ namespace TVTower.Entities
 		TVTPerson GetPersonById( Guid id );
 		TVTPerson GetPersonByStringId( string id );
 		TVTPerson GetPersonByTmdbId( int tmdbId );
+		TVTPerson GetPersonByName( string name );
 	}
 }

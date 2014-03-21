@@ -3,6 +3,6 @@ namespace TVTower.Entities
 {
 	public enum TVTReportageGenre
 	{
-		None
+		Undefined = 0
 	}
 }

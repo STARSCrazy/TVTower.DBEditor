@@ -45,6 +45,7 @@
     <Compile Include="Entities\TVTMovie.cs" />
     <Compile Include="Entities\TVTMovieExtended.cs" />
     <Compile Include="Entities\TVTPerson.cs" />
+    <Compile Include="Enums\TVTDataStatus.cs" />
     <Compile Include="Enums\TVTPersonGender.cs" />
     <Compile Include="Enums\TVTPersonFunction.cs" />
     <Compile Include="Enums\TVTPressureGroup.cs" />
