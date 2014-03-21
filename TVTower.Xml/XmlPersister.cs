@@ -264,7 +264,12 @@ namespace TVTower.Xml
 			dataNode.AddAttribute( "time", movie.LiveHour.ToString() );
 
 			if ( dbVersion != DatabaseVersion.V2 )
+			{
 				dataNode.AddAttribute( "flags", movie.Flags.ToContentString( " " ) );
+				dataNode.AddAttribute( "target_groups", movie.TargetGroups.ToContentString( " " ) );
+				dataNode.AddAttribute( "pro_pressure_groups", movie.ProPressureGroups.ToContentString( " " ) );
+				dataNode.AddAttribute( "contra_pressure_groups", movie.ContraPressureGroups.ToContentString( " " ) );
+			}
 
 			dataNode.AddAttribute( "price", movie.PriceRate.ToString() );
 			dataNode.AddAttribute( "critics", movie.CriticsRate.ToString() );
@@ -419,6 +424,9 @@ namespace TVTower.Xml
 										movie.ViewersRate = movieChild.GetAttributeInteger( "speed" );
 										movie.BoxOfficeRate = movieChild.GetAttributeInteger( "outcome" );
 										movie.Flags = ToFlagList( movieChild.GetAttribute( "flags" ) );
+										movie.TargetGroups = ToTargetGroupList( movieChild.GetAttribute( "target_groups" ) );
+										movie.ProPressureGroups = ToPressureGroupList( movieChild.GetAttribute( "pro_pressure_groups" ) );
+										movie.ContraPressureGroups = ToPressureGroupList( movieChild.GetAttribute( "contra_pressure_groups" ) );
 										break;
 								}
 							}
@@ -497,16 +505,52 @@ namespace TVTower.Xml
 				return null;
 		}
 
-		private List<TVTMovieFlags> ToFlagList( string value )
+		private List<TVTMovieFlag> ToFlagList( string value )
 		{
-			var result = new List<TVTMovieFlags>();
+			var result = new List<TVTMovieFlag>();
 			if ( !string.IsNullOrEmpty( value ) )
 			{
 				var array = value.Split( ' ' );
 				foreach ( var aValue in array )
 				{
-					TVTMovieFlags outFlag;
-					if ( Enum.TryParse<TVTMovieFlags>( aValue, out outFlag ) )
+					TVTMovieFlag outFlag;
+					if ( Enum.TryParse<TVTMovieFlag>( aValue, out outFlag ) )
+					{
+						result.Add( outFlag );
+					}
+				}
+			}
+			return result;
+		}
+
+		private List<TVTTargetGroup> ToTargetGroupList( string value )
+		{
+			var result = new List<TVTTargetGroup>();
+			if ( !string.IsNullOrEmpty( value ) )
+			{
+				var array = value.Split( ' ' );
+				foreach ( var aValue in array )
+				{
+					TVTTargetGroup outFlag;
+					if ( Enum.TryParse<TVTTargetGroup>( aValue, out outFlag ) )
+					{
+						result.Add( outFlag );
+					}
+				}
+			}
+			return result;
+		}
+
+		private List<TVTPressureGroup> ToPressureGroupList( string value )
+		{
+			var result = new List<TVTPressureGroup>();
+			if ( !string.IsNullOrEmpty( value ) )
+			{
+				var array = value.Split( ' ' );
+				foreach ( var aValue in array )
+				{
+					TVTPressureGroup outFlag;
+					if ( Enum.TryParse<TVTPressureGroup>( aValue, out outFlag ) )
 					{
 						result.Add( outFlag );
 					}
@@ -559,34 +603,34 @@ namespace TVTower.Xml
 					break;
 				case 8:  //live
 					movie.MainGenre = TVTGenre.Reportage;
-					movie.Flags.Add( TVTMovieFlags.Live );
+					movie.Flags.Add( TVTMovieFlag.Live );
 					break;
 				case 9:  //kidsmovie
 					movie.MainGenre = TVTGenre.Family;
-					movie.Flags.Add( TVTMovieFlags.TG_Children );
+					movie.TargetGroups.Add( TVTTargetGroup.Children );
 					break;
 				case 10:  //cartoon
 					movie.MainGenre = TVTGenre.Animation;
-					movie.Flags.Add( TVTMovieFlags.Animation );
+					movie.Flags.Add( TVTMovieFlag.Animation );
 					break;
 				case 11:  //music
 					movie.MainGenre = TVTGenre.Music;
-					movie.Flags.Add( TVTMovieFlags.Music );
+					movie.Flags.Add( TVTMovieFlag.Music );
 					break;
 				case 12:  //sport
 					movie.MainGenre = TVTGenre.Sport;
-					movie.Flags.Add( TVTMovieFlags.Sport );
+					movie.Flags.Add( TVTMovieFlag.Sport );
 					break;
 				case 13:  //culture
 					movie.MainGenre = TVTGenre.Documentary;
-					movie.Flags.Add( TVTMovieFlags.Culture );
+					movie.Flags.Add( TVTMovieFlag.Culture );
 					break;
 				case 14:  //fantasy
 					movie.MainGenre = TVTGenre.Fantasy;
 					break;
 				case 15:  //yellow press
 					movie.MainGenre = TVTGenre.Reportage;
-					movie.Flags.Add( TVTMovieFlags.YellowPress );
+					movie.Flags.Add( TVTMovieFlag.YellowPress );
 					break;
 				case 16:  //news
 					movie.MainGenre = TVTGenre.Reportage;
@@ -597,15 +641,15 @@ namespace TVTower.Xml
 					break;
 				case 18:  //monumental
 					movie.MainGenre = TVTGenre.Monumental;
-					movie.Flags.Add( TVTMovieFlags.Cult );
+					movie.Flags.Add( TVTMovieFlag.Cult );
 					break;
 				case 19:  //fillers
 					movie.MainGenre = TVTGenre.Undefined;
-					movie.Flags.Add( TVTMovieFlags.Trash );
+					movie.Flags.Add( TVTMovieFlag.Trash );
 					break;
 				case 20:  //paid programing
 					movie.MainGenre = TVTGenre.Commercial;
-					movie.Flags.Add( TVTMovieFlags.Paid );
+					movie.Flags.Add( TVTMovieFlag.Paid );
 					break;
 				default:
 					throw new Exception();

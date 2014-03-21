@@ -20,7 +20,10 @@ namespace TVTower.Entities
 		public int Blocks { get; set; }					//1 - 5
 		public int? LiveHour { get; set; }				//0 - 23
 
-		public List<TVTMovieFlags> Flags { get; set; }
+		public List<TVTMovieFlag> Flags { get; set; }
+		public List<TVTTargetGroup> TargetGroups { get; set; }
+		public List<TVTPressureGroup> ProPressureGroups { get; set; }
+		public List<TVTPressureGroup> ContraPressureGroups { get; set; }
 
 		public string ImdbId { get; set; }				//IMDb = Internet Movie Database
 		public int? TmdbId { get; set; }					//The Movie DB		
@@ -28,15 +31,13 @@ namespace TVTower.Entities
 
 		public string ImageUrl { get; set; }			//Von hier kann die Bildquelle geladen werden
 
-		public TVTDataStatus DataStatus { get; set; }
-
 		//Für Serien
 		public bool IsSeries { get; set; }
 		public List<TVTEpisode> Episodes { get; set; }
 
 		public TVTMovie()
 		{
-			Flags = new List<TVTMovieFlags>();
+			Flags = new List<TVTMovieFlag>();
 		}
 	}
 }

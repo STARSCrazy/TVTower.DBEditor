@@ -40,17 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\TVTAdvertising.cs" />
     <Compile Include="Entities\TVTEntity.cs" />
     <Compile Include="Entities\TVTEpisode.cs" />
     <Compile Include="Entities\TVTMovie.cs" />
     <Compile Include="Entities\TVTMovieExtended.cs" />
     <Compile Include="Entities\TVTPerson.cs" />
+    <Compile Include="Enums\TVTTargetGroup.cs" />
     <Compile Include="Enums\TVTDataStatus.cs" />
     <Compile Include="Enums\TVTPersonGender.cs" />
     <Compile Include="Enums\TVTPersonFunction.cs" />
     <Compile Include="Enums\TVTPressureGroup.cs" />
     <Compile Include="Enums\TVTGenre.cs" />
-    <Compile Include="Enums\TVTMovieFlags.cs" />
+    <Compile Include="Enums\TVTMovieFlag.cs" />
     <Compile Include="Enums\TVTReportageGenre.cs" />
     <Compile Include="Enums\TVTShowGenre.cs" />
     <Compile Include="ITVTowerDatabase.cs" />

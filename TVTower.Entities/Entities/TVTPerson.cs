@@ -30,10 +30,6 @@ namespace TVTower.Entities
 
 		public string Country { get; set; }
 
-		public TVTDataStatus DataStatus { get; set; }
-
-
-
 		public int MovieRegistrations { get; set; }
 
 		public int ProfessionSkill { get; set; }		//0 - 100	Für Regisseur, Musiker und Intellektueller: Wie gut kann er sein Handwerk	

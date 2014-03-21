@@ -1,24 +1,24 @@
 ﻿
 namespace TVTower.Entities
 {
-	public enum TVTMovieFlags
+	public enum TVTMovieFlag
 	{
-		TG_Children,
-		TG_Teenagers,
-		TG_HouseWifes,
-		TG_Employees,
-		TG_Unemployed,
-		TG_Manager,
-		TG_Pensioners,
-		TG_Women,
-		TG_Men,
+		//TG_Children,
+		//TG_Teenagers,
+		//TG_HouseWifes,
+		//TG_Employees,
+		//TG_Unemployed,
+		//TG_Manager,
+		//TG_Pensioners,
+		//TG_Women,
+		//TG_Men,
 
-		PG_SmokerLobby,
-		PG_AntiSmoker,
-		PG_ArmsLobby,
-		PG_Pacifists,
-		PG_Capitalists,
-		PG_Communists,
+		//PG_SmokerLobby,
+		//PG_AntiSmoker,
+		//PG_ArmsLobby,
+		//PG_Pacifists,
+		//PG_Capitalists,
+		//PG_Communists,
 
 		Live,			//Genereller Quotenbonus!
 		Music,

@@ -40,48 +40,56 @@ namespace TVTower.Import
 		public const int GENRE_SHOW = 17;
 		public const int IGNORE_GENRE = -1000;
 
-		private List<TVTMovieFlags> GetFlags( int movieDbGenreId )
+		private List<TVTMovieFlag> GetFlags( int movieDbGenreId )
 		{
-			var result = new List<TVTMovieFlags>();
+			var result = new List<TVTMovieFlag>();
 
 			switch ( movieDbGenreId )
 			{
 				case 16: //Animation = 86					
-					result.Add( TVTMovieFlags.Animation );
+					result.Add( TVTMovieFlag.Animation );
 					break;
-				case 10751: //Familie = 117
-					result.Add( TVTMovieFlags.TG_Children );
-					result.Add( TVTMovieFlags.TG_Employees );
-					result.Add( TVTMovieFlags.TG_HouseWifes );
-					result.Add( TVTMovieFlags.TG_Pensioners );
-					break;
-				case 10762: //Kids = 2
-					result.Add( TVTMovieFlags.TG_Children );
-					break;
-				case 10595: //Holiday = 14
-					result.Add( TVTMovieFlags.TG_HouseWifes );
-					result.Add( TVTMovieFlags.TG_Pensioners );
-					break;
-				case 36: //Historie = 40
-					result.Add( TVTMovieFlags.TG_Pensioners );
-					break;
-				//case 10769: //Foreign = 77
-				//    result.Add( TVTMovieFlags.Manager );
-				//    break;
 				case 9805: //Sport = 2				
 				case 10757: //Sport Film = 9
-					result.Add( TVTMovieFlags.Sport );
+					result.Add( TVTMovieFlag.Sport );
 					break;
 				case 10755: //Short = 6								
-					result.Add( TVTMovieFlags.Culture );
+					result.Add( TVTMovieFlag.Culture );
 					break;
 				case 10753: //Film noir = Eigentlich Drama oder Krimi = 9
 				case 10754: //Neo-noir = 2
-					result.Add( TVTMovieFlags.Culture );
+					result.Add( TVTMovieFlag.Culture );
 					break;
 				case 10402: //Musik = 24
 				case 22: //Musical = 11
-					result.Add( TVTMovieFlags.Music );
+					result.Add( TVTMovieFlag.Music );
+					break;
+			}
+
+			return result;
+		}
+
+		private List<TVTTargetGroup> GetTargetGroups( int movieDbGenreId )
+		{
+			var result = new List<TVTTargetGroup>();
+
+			switch ( movieDbGenreId )
+			{
+				case 10751: //Familie = 117
+					result.Add( TVTTargetGroup.Children );
+					result.Add( TVTTargetGroup.Employees );
+					result.Add( TVTTargetGroup.HouseWifes );
+					result.Add( TVTTargetGroup.Pensioners );
+					break;
+				case 10762: //Kids = 2
+					result.Add( TVTTargetGroup.Children );
+					break;
+				case 10595: //Holiday = 14
+					result.Add( TVTTargetGroup.HouseWifes );
+					result.Add( TVTTargetGroup.Pensioners );
+					break;
+				case 36: //Historie = 40
+					result.Add( TVTTargetGroup.Pensioners );
 					break;
 			}
 
