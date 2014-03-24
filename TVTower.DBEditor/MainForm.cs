@@ -143,7 +143,7 @@ namespace TVTower.DBEditor
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );
-				database.AddMovies( tempDatabase.GetAllMovies() );
+				database.AddMovies( tempDatabase.GetAllMovies( true ) );
 			}
 		}
 
@@ -158,7 +158,7 @@ namespace TVTower.DBEditor
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );
-				database.AddMovies( tempDatabase.GetAllMovies() );
+				database.AddMovies( tempDatabase.GetAllMovies( true ) );
 			}
 		}
 

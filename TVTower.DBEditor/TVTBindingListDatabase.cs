@@ -54,10 +54,20 @@ namespace TVTower.DBEditor
 				AddPerson( person );
 		}
 
-		public IEnumerable<T> GetAllMovies()
+		public IEnumerable<T> GetAllMovies( bool withSeries = false )
 		{
 			var result = new List<T>();
-			result.AddRange( MovieData );
+			if ( withSeries )
+				result.AddRange( MovieData );
+			else
+				result.AddRange( MovieData.Where( x => !x.IsSeries ) );
+			return result;
+		}
+
+		public IEnumerable<T> GetAllSeries()
+		{
+			var result = new List<T>();
+			result.AddRange( MovieData.Where( x => x.IsSeries ) );
 			return result;
 		}
 

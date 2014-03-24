@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using TVTower.Entities;
+using TVTower.Xml.Persister;
 
 namespace TVTower.Xml
 {
@@ -304,6 +304,7 @@ namespace TVTower.Xml
 			TVTDataStatus defaultStatus = TVTDataStatus.FakeWithRefId;
 
 			var doc = new XmlDocument();
+
 			doc.Load( filename );
 
 			var versionElement = doc.GetElementsByTagName( "version" );
@@ -324,240 +325,75 @@ namespace TVTower.Xml
 				}
 			}
 
-			var allMovies = doc.GetElementsByTagName( "allmovies" );
-
-			foreach ( XmlNode xmlMovie in allMovies )
 			{
-				foreach ( XmlNode childNode in xmlMovie.ChildNodes )
+				var allMovies = doc.GetElementsByTagName( "allmovies" );
+				var movieExtPersister = new TVTMoviePersister<TVTMovieExtended>();
+
+				foreach ( XmlNode xmlMovie in allMovies )
 				{
-					var movie = new TVTMovieExtended();
-					if ( version == 2 )
+					foreach ( XmlNode childNode in xmlMovie.ChildNodes )
 					{
-						movie.GenerateGuid();
-						movie.DataStatus = defaultStatus;
-					}
+						var movie = new TVTMovieExtended();
+						if ( version == 2 )
+						{
+							movie.GenerateGuid();
+							movie.DataStatus = defaultStatus;
+						}
 
-					switch ( childNode.Name )
-					{
-						case "movie":
+						switch ( childNode.Name )
+						{
+							case "movie":
+								movieExtPersister.Load( childNode, movie, result );
+								break;
+						}
 
-							foreach ( XmlLinkedNode attrib in childNode.Attributes )
-							{
-								switch ( attrib.Name )
-								{
-									case "id":
-										movie.Id = Guid.Parse( attrib.GetElementValue() );
-										break;
-									case "status":
-										movie.DataStatus = (TVTDataStatus)Enum.Parse( typeof( TVTDataStatus ), attrib.GetElementValue() );
-										break;
-								}
-							}
-
-							foreach ( XmlLinkedNode movieChild in childNode.ChildNodes )
-							{
-								switch ( movieChild.Name )
-								{
-									case "title":
-										movie.TitleDE = movieChild.GetElementValue();
-										break;
-									case "title_de":
-										movie.TitleDE = movieChild.GetElementValue();
-										break;
-									case "title_en":
-										movie.TitleEN = movieChild.GetElementValue();
-										break;
-
-									case "original_title":
-										movie.OriginalTitleDE = movieChild.GetElementValue();
-										break;
-									case "original_title_de":
-										movie.OriginalTitleDE = movieChild.GetElementValue();
-										break;
-									case "original_title_en":
-										movie.OriginalTitleEN = movieChild.GetElementValue();
-										break;
-
-									case "description":
-										movie.DescriptionDE = movieChild.GetElementValue();
-										break;
-									case "description_de":
-										movie.DescriptionDE = movieChild.GetElementValue();
-										break;
-									case "description_en":
-										movie.DescriptionEN = movieChild.GetElementValue();
-										break;
-									case "description_tmdb":
-										movie.DescriptionMovieDB = movieChild.GetElementValue();
-										break;
-
-
-									case "tmdb_id":
-										movie.TmdbId = int.Parse( movieChild.GetElementValue() );
-										break;
-									case "imdb_id":
-										movie.ImdbId = movieChild.GetElementValue();
-										break;
-									case "image_url":
-										movie.ImageUrl = movieChild.GetElementValue();
-										break;
-									case "data":
-										//movie.Actors = movieChild.GetAttribute( "actors" );
-										if ( movieChild.HasAttribute( "actorIds" ) )
-											movie.Actors = ToPersonList( movieChild.GetAttribute( "actorIds" ), result );
-										else
-											movie.Actors = ToPersonListByName( movieChild.GetAttribute( "actors" ), result, defaultStatus, TVTPersonFunction.Actor );
-
-										if ( movieChild.HasAttribute( "directorId" ) )
-											movie.Director = result.GetPersonByStringId( movieChild.GetAttribute( "directorId" ) );
-										else
-											movie.Director = GetPersonByNameOrCreate( movieChild.GetAttribute( "director" ), result, defaultStatus, TVTPersonFunction.Actor );
-
-										movie.Country = movieChild.GetAttribute( "country" );
-										movie.Year = movieChild.GetAttributeInteger( "year" );
-										movie.MainGenreRaw = movieChild.GetAttributeInteger( "genre" );
-										movie.SubGenreRaw = movieChild.GetAttributeInteger( "subgenre" );
-										movie.Blocks = movieChild.GetAttributeInteger( "blocks" );
-										movie.LiveHour = movieChild.GetAttributeInteger( "time" );
-										movie.PriceRate = movieChild.GetAttributeInteger( "price" );
-										movie.CriticsRate = movieChild.GetAttributeInteger( "critics" );
-										movie.ViewersRate = movieChild.GetAttributeInteger( "speed" );
-										movie.BoxOfficeRate = movieChild.GetAttributeInteger( "outcome" );
-										movie.Flags = ToFlagList( movieChild.GetAttribute( "flags" ) );
-										movie.TargetGroups = ToTargetGroupList( movieChild.GetAttribute( "target_groups" ) );
-										movie.ProPressureGroups = ToPressureGroupList( movieChild.GetAttribute( "pro_pressure_groups" ) );
-										movie.ContraPressureGroups = ToPressureGroupList( movieChild.GetAttribute( "contra_pressure_groups" ) );
-										break;
-								}
-							}
-
-							break;
-					}
-
-					ConvertOldMovieData( movie, version );
-					result.AddMovie( movie );
-				}
-			}
-			return result;
-		}
-
-		private List<TVTPerson> ToPersonList( string value, ITVTowerDatabase<TVTMovieExtended> database )
-		{
-			var result = new List<TVTPerson>();
-			if ( !string.IsNullOrEmpty( value ) )
-			{
-				var array = value.Split( ';' );
-				foreach ( var aValue in array )
-				{
-					var person = database.GetPersonById( Guid.Parse( aValue ) );
-					if ( person != null )
-						result.Add( person );
-				}
-			}
-			return result;
-		}
-
-		private List<TVTPerson> ToPersonListByName( string names, ITVTowerDatabase<TVTMovieExtended> database, TVTDataStatus defaultStatus, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
-		{
-			var result = new List<TVTPerson>();
-			if ( !string.IsNullOrEmpty( names ) )
-			{
-				var array = names.Split( ',' );
-				foreach ( var aValue in array )
-				{
-					var personName = aValue.Trim();
-
-					var person = database.GetPersonByName( personName );
-					if ( person == null )
-					{
-						person = new TVTPerson();
-						person.GenerateGuid();
-						person.DataStatus = defaultStatus;
-						person.Name = personName;
-						person.Functions.Add( functionForNew );
-						database.AddPerson( person );
-					}
-
-					result.Add( person );
-				}
-			}
-			return result;
-		}
-
-		private TVTPerson GetPersonByNameOrCreate( string name, ITVTowerDatabase<TVTMovieExtended> database, TVTDataStatus defaultStatus, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
-		{
-			if ( !string.IsNullOrEmpty( name ) )
-			{
-				var person = database.GetPersonByName( name );
-
-				if ( person == null )
-				{
-					person = new TVTPerson();
-					person.GenerateGuid();
-					person.DataStatus = defaultStatus;
-					person.Name = name;
-					person.Functions.Add( functionForNew );
-					database.AddPerson( person );
-				}
-				return person;
-			}
-			else
-				return null;
-		}
-
-		private List<TVTMovieFlag> ToFlagList( string value )
-		{
-			var result = new List<TVTMovieFlag>();
-			if ( !string.IsNullOrEmpty( value ) )
-			{
-				var array = value.Split( ' ' );
-				foreach ( var aValue in array )
-				{
-					TVTMovieFlag outFlag;
-					if ( Enum.TryParse<TVTMovieFlag>( aValue, out outFlag ) )
-					{
-						result.Add( outFlag );
+						ConvertOldMovieData( movie, version );
+						result.AddMovie( movie );
 					}
 				}
 			}
-			return result;
-		}
 
-		private List<TVTTargetGroup> ToTargetGroupList( string value )
-		{
-			var result = new List<TVTTargetGroup>();
-			if ( !string.IsNullOrEmpty( value ) )
+
 			{
-				var array = value.Split( ' ' );
-				foreach ( var aValue in array )
+				var allSeries = doc.GetElementsByTagName( "allseries" );
+				var seriesPersister = new TVTSeriesMoviePersister<TVTMovie>();
+
+				foreach ( XmlNode xmlSeries in allSeries )
 				{
-					TVTTargetGroup outFlag;
-					if ( Enum.TryParse<TVTTargetGroup>( aValue, out outFlag ) )
+					foreach ( XmlNode childNode in xmlSeries.ChildNodes )
 					{
-						result.Add( outFlag );
+						var movie = new TVTMovieExtended();
+						if ( version == 2 )
+						{
+							movie.GenerateGuid();
+							movie.DataStatus = defaultStatus;
+						}
+
+						switch ( childNode.Name )
+						{
+							case "serie":
+								seriesPersister.Load( childNode, movie, result );
+								break;
+						}
+
+						ConvertOldMovieData( movie, version );
+						result.AddMovie( movie );
 					}
 				}
 			}
+
+			//var allSeries = doc.GetElementsByTagName( "allseries" );
+
 			return result;
 		}
 
-		private List<TVTPressureGroup> ToPressureGroupList( string value )
-		{
-			var result = new List<TVTPressureGroup>();
-			if ( !string.IsNullOrEmpty( value ) )
-			{
-				var array = value.Split( ' ' );
-				foreach ( var aValue in array )
-				{
-					TVTPressureGroup outFlag;
-					if ( Enum.TryParse<TVTPressureGroup>( aValue, out outFlag ) )
-					{
-						result.Add( outFlag );
-					}
-				}
-			}
-			return result;
-		}
+
+
+
+
+
+
+
 
 		private void ConvertOldMovieData( TVTMovieExtended movie, int version )
 		{

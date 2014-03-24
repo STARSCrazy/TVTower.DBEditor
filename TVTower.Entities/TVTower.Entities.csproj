@@ -55,7 +55,7 @@
     <Compile Include="Enums\TVTMovieFlag.cs" />
     <Compile Include="Enums\TVTReportageGenre.cs" />
     <Compile Include="Enums\TVTShowGenre.cs" />
-    <Compile Include="ITVTowerDatabase.cs" />
+    <Compile Include="ITVTDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
