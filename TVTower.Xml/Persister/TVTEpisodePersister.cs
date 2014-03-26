@@ -6,9 +6,12 @@ namespace TVTower.Xml.Persister
 	public class TVTEpisodePersister<T> : TVTEntityPersister<T>
 		where T : TVTEpisode
 	{
-		public override void Load( XmlNode xmlNode, T episode, ITVTDatabase database )
+		public override void Load( XmlNode xmlNode, T episode, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
-			base.Load( xmlNode, episode, database );
+			base.Load( xmlNode, episode, database, dbVersion, dataStructure );
+
+			var nameParser = new TVTNameAndDescriptionPersister();
+			nameParser.Load( xmlNode, episode.Name, database, dbVersion, dataStructure );
 
 			foreach ( var movieChild in xmlNode.ChildNodes )
 			{
@@ -18,26 +21,6 @@ namespace TVTower.Xml.Persister
 
 					switch ( linkedNode.Name )
 					{
-						case "title":
-							episode.TitleDE = linkedNode.GetElementValue();
-							break;
-						case "title_de":
-							episode.TitleDE = linkedNode.GetElementValue();
-							break;
-						case "title_en":
-							episode.TitleEN = linkedNode.GetElementValue();
-							break;
-
-						case "description":
-							episode.DescriptionDE = linkedNode.GetElementValue();
-							break;
-						case "description_de":
-							episode.DescriptionDE = linkedNode.GetElementValue();
-							break;
-						case "description_en":
-							episode.DescriptionEN = linkedNode.GetElementValue();
-							break;
-
 						case "data":
 							episode.BettyBonus = linkedNode.GetAttributeInteger( "betty" );
 							episode.PriceRate = linkedNode.GetAttributeInteger( "price" );
@@ -50,36 +33,20 @@ namespace TVTower.Xml.Persister
 			}
 		}
 
-		//public override void Save( XmlNode xmlNode, T episode, DatabaseVersion dbVersion, DataStructure dataStructure )
-		//{
-		//    base.Save( xmlNode, episode, dbVersion, dataStructure );
+		public override void Save( XmlNode xmlNode, T episode, DatabaseVersion dbVersion, DataStructure dataStructure )
+		{
+			base.Save( xmlNode, episode, dbVersion, dataStructure );
 
-		//    switch ( dataStructure )
-		//    {
-		//        case DataStructure.Full:
-		//            xmlNode.AddElement( "title_de", episode.TitleDE );
-		//            xmlNode.AddElement( "title_en", episode.TitleEN );
-		//            xmlNode.AddElement( "description_de", episode.DescriptionDE );
-		//            xmlNode.AddElement( "description_en", episode.DescriptionEN );
-		//            break;
-		//        case DataStructure.FakeData:
-		//            if ( dbVersion == DatabaseVersion.V2 )
-		//            {
-		//                xmlNode.AddElement( "title", episode.TitleDE );
-		//                xmlNode.AddElement( "description", episode.DescriptionDE );
-		//            }
-		//            else
-		//            {
-		//                xmlNode.AddElement( "title_de", episode.TitleDE );
-		//                xmlNode.AddElement( "title_en", episode.TitleEN );
-		//                xmlNode.AddElement( "description_de", episode.DescriptionDE );
-		//                xmlNode.AddElement( "description_en", episode.DescriptionEN );
-		//            }
-		//            break;
-		//        case DataStructure.OriginalData:
-		//            break;
-		//    }
-		//}
+			var nameParser = new TVTNameAndDescriptionPersister();
+			nameParser.Save( xmlNode, episode.Name, dbVersion, dataStructure );
+
+			if ( (int)dbVersion > 2 )
+				xmlNode.AddAttribute( "betty", episode.BettyBonus.ToString() );
+
+			xmlNode.AddAttribute( "price", episode.PriceRate.ToString() );
+			xmlNode.AddAttribute( "critics", episode.CriticsRate.ToString() );
+			xmlNode.AddAttribute( "speed", episode.ViewersRate.ToString() );
+			xmlNode.AddAttribute( "outcome", episode.BoxOfficeRate.ToString() );
+		}
 	}
 }
-;

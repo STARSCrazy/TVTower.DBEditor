@@ -4,14 +4,13 @@ using TVTower.Entities;
 
 namespace TVTower.Xml.Persister
 {
-	public class TVTSeriesMoviePersister<T> : TVTMoviePersister<T>
-		where T : TVTMovie
+	public class TVTSeriesMoviePersister : TVTMoviePersister
 	{
 		TVTDataStatus defaultStatus = TVTDataStatus.Fake;
 
-		public override void Load( XmlNode xmlNode, T movie, ITVTDatabase database )
+		public override void Load( XmlNode xmlNode, TVTMovie movie, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
-			base.Load( xmlNode, movie, database );
+			base.Load( xmlNode, movie, database, dbVersion, dataStructure );
 
 			movie.IsSeries = true;
 			movie.Episodes = new List<TVTEpisode>();
@@ -24,8 +23,9 @@ namespace TVTower.Xml.Persister
 				{
 					case "episode":
 						var episode = new TVTEpisode();
+						episode.Name = new TVTNameAndDescription();
 						episode.EpisodeNumber = movieChild.GetAttributeInteger( "number" );
-						episodePersister.Load( movieChild, episode, database );
+						episodePersister.Load( movieChild, episode, database, dbVersion, dataStructure );
 						movie.Episodes.Add( episode );
 						break;
 				}

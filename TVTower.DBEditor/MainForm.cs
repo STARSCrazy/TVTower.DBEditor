@@ -12,7 +12,7 @@ namespace TVTower.DBEditor
 	{
 		//private SortedBindingList<TVTMovieExtended> movieDataList;
 		//private SortedBindingList<TVTPerson> personDataList;
-		private TVTBindingListDatabase<TVTMovieExtended> database;
+		private TVTBindingListDatabase database;
 
 		private Thread WorkerThread;
 		private System.Windows.Forms.Timer timer;
@@ -22,10 +22,10 @@ namespace TVTower.DBEditor
 		{
 			InitializeComponent();
 
-			database = new TVTBindingListDatabase<TVTMovieExtended>();
+			database = new TVTBindingListDatabase();
 			database.Initialize();
 
-			var movieDataList = new SortedBindingList<TVTMovieExtended>();
+			var movieDataList = new SortedBindingList<TVTMovie>();
 
 			// Allow new parts to be added, but not removed once committed.        
 			movieDataList.AllowNew = true;
@@ -70,11 +70,11 @@ namespace TVTower.DBEditor
 		{
 			if ( movieDataGrid.SelectedRows.Count == 2 )
 			{
-				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTMovieExtended;
-				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTMovieExtended;
+				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTMovie;
+				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTMovie;
 
-				TVTMovieExtended imported = null;
-				TVTMovieExtended fake = null;
+				TVTMovie imported = null;
+				TVTMovie fake = null;
 
 				if ( movie1.TmdbId > 0 )
 				{
@@ -97,13 +97,13 @@ namespace TVTower.DBEditor
 				if ( fake == null )
 					throw new Exception();
 
-				imported.TitleDE = fake.TitleDE;
-				imported.DescriptionDE = fake.DescriptionDE;
+				imported.Name.FakeTitleDE = fake.Name.FakeTitleDE;
+				imported.Name.FakeDescriptionDE = fake.Name.OriginalDescriptionDE;
 
-				imported.PriceRateOld = fake.PriceRate;
-				imported.CriticRateOld = fake.CriticsRate;
-				imported.SpeedRateOld = fake.SpeedRateOld;
-				imported.BoxOfficeRateOld = fake.BoxOfficeRateOld;
+				imported.MovieAdditional.PriceRateOld = fake.PriceRate;
+				imported.MovieAdditional.CriticRateOld = fake.CriticsRate;
+				imported.MovieAdditional.SpeedRateOld = fake.ViewersRate;
+				imported.MovieAdditional.BoxOfficeRateOld = fake.BoxOfficeRate;
 
 				foreach ( var actor in imported.Actors )
 				{
@@ -139,7 +139,7 @@ namespace TVTower.DBEditor
 				database.Initialize();
 
 				XmlPersister persister = new XmlPersister();
-				var tempDatabase = new TVTBindingListDatabase<TVTMovieExtended>();
+				var tempDatabase = new TVTBindingListDatabase();
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );
@@ -154,7 +154,7 @@ namespace TVTower.DBEditor
 			if ( openFileDialog.ShowDialog() == DialogResult.OK )
 			{
 				XmlPersister persister = new XmlPersister();
-				var tempDatabase = new TVTBindingListDatabase<TVTMovieExtended>();
+				var tempDatabase = new TVTBindingListDatabase();
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );
@@ -208,11 +208,11 @@ namespace TVTower.DBEditor
 		{
 			if ( movieDataGrid.SelectedRows.Count == 2 )
 			{
-				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTMovieExtended;
-				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTMovieExtended;
+				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTMovie;
+				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTMovie;
 
-				TVTMovieExtended imported = null;
-				TVTMovieExtended fake = null;
+				TVTMovie imported = null;
+				TVTMovie fake = null;
 
 				if ( movie1.TmdbId > 0 )
 				{
@@ -235,13 +235,13 @@ namespace TVTower.DBEditor
 				if ( fake == null )
 					throw new Exception();
 
-				imported.TitleDE = fake.TitleDE;
-				imported.DescriptionDE = fake.DescriptionDE;
+				imported.Name.FakeTitleDE = fake.Name.FakeTitleDE;
+				imported.Name.FakeDescriptionDE = fake.Name.FakeDescriptionDE;
 
-				imported.PriceRateOld = fake.PriceRate;
-				imported.CriticRateOld = fake.CriticsRate;
-				imported.SpeedRateOld = fake.SpeedRateOld;
-				imported.BoxOfficeRateOld = fake.BoxOfficeRateOld;
+				imported.MovieAdditional.PriceRateOld = fake.PriceRate;
+				imported.MovieAdditional.CriticRateOld = fake.CriticsRate;
+				imported.MovieAdditional.SpeedRateOld = fake.ViewersRate;
+				imported.MovieAdditional.BoxOfficeRateOld = fake.BoxOfficeRate;
 
 				foreach ( var actor in imported.Actors )
 				{

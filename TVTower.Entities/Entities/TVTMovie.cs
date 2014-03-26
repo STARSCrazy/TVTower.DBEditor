@@ -35,6 +35,8 @@ namespace TVTower.Entities
 		public bool IsSeries { get; set; }
 		public List<TVTEpisode> Episodes { get; set; }
 
+		public TVTMovieAdditional MovieAdditional { get; set; }
+
 		public TVTMovie()
 		{
 			Flags = new List<TVTMovieFlag>();

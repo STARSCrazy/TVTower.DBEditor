@@ -7,22 +7,25 @@ namespace TVTower.Xml.Persister
 	public class TVTEntityPersister<T>
 		where T : TVTEntity
 	{
-		public virtual void Load( XmlNode xmlNode, T entity, ITVTDatabase database )
+		public virtual void Load( XmlNode xmlNode, T entity, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
-			foreach ( var attrib in xmlNode.Attributes )
+			if ( (int)dbVersion > 2 )
 			{
-				if ( attrib is XmlLinkedNode )
+				foreach ( var attrib in xmlNode.Attributes )
 				{
-					var attribLinked = (XmlLinkedNode)attrib;
-
-					switch ( attribLinked.Name )
+					if ( attrib is XmlLinkedNode )
 					{
-						case "id":
-							entity.Id = Guid.Parse( attribLinked.GetElementValue() );
-							break;
-						case "status":
-							entity.DataStatus = (TVTDataStatus)Enum.Parse( typeof( TVTDataStatus ), attribLinked.GetElementValue() );
-							break;
+						var attribLinked = (XmlLinkedNode)attrib;
+
+						switch ( attribLinked.Name )
+						{
+							case "id":
+								entity.Id = Guid.Parse( attribLinked.GetElementValue() );
+								break;
+							case "status":
+								entity.DataStatus = (TVTDataStatus)Enum.Parse( typeof( TVTDataStatus ), attribLinked.GetElementValue() );
+								break;
+						}
 					}
 				}
 			}
@@ -30,7 +33,7 @@ namespace TVTower.Xml.Persister
 
 		public virtual void Save( XmlNode xmlNode, T entity, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
-			if ( dbVersion != DatabaseVersion.V2 )
+			if ( (int)dbVersion > 2 )
 			{
 				xmlNode.AddAttribute( "id", entity.Id.ToString() );
 				xmlNode.AddAttribute( "status", entity.DataStatus.ToString() );

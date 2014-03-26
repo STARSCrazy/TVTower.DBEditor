@@ -1,24 +1,8 @@
 ﻿
 namespace TVTower.Entities
 {
-	public class TVTMovieExtended : TVTMovie
+	public class TVTMovieAdditional
 	{
-		public TVTMovieExtended()
-			: base()
-		{
-		}
-
-		public string OriginalTitleDE { get; set; }
-
-		public string OriginalTitleEN { get; set; }
-
-		public string OriginalDescriptionDE { get; set; }
-
-		public string OriginalDescriptionEN { get; set; }
-
-		public string DescriptionMovieDB { get; set; }
-
-
 		public int MainGenreRaw { get; set; }
 
 		public int SubGenreRaw { get; set; }

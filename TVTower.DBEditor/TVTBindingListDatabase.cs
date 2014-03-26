@@ -5,22 +5,21 @@ using TVTower.Entities;
 
 namespace TVTower.DBEditor
 {
-	public class TVTBindingListDatabase<T> : ITVTowerDatabase<T>
-		where T : TVTMovie
+	public class TVTBindingListDatabase : ITVTDatabase
 	{
-		public SortedBindingList<T> MovieData { get; set; }
+		public SortedBindingList<TVTMovie> MovieData { get; set; }
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
 
 		public void Initialize()
 		{
 			if ( MovieData == null )
-				MovieData = new SortedBindingList<T>();
+				MovieData = new SortedBindingList<TVTMovie>();
 
 			if ( PersonData == null )
 				PersonData = new SortedBindingList<TVTPerson>();
 		}
 
-		public void SetMovieBindingList( SortedBindingList<T> movieData )
+		public void SetMovieBindingList( SortedBindingList<TVTMovie> movieData )
 		{
 			this.MovieData = movieData;
 		}
@@ -32,12 +31,12 @@ namespace TVTower.DBEditor
 
 		#region ITVTowerDatabase Members
 
-		public void AddMovie( T movie )
+		public void AddMovie( TVTMovie movie )
 		{
 			MovieData.Add( movie );
 		}
 
-		public void AddMovies( IEnumerable<T> movies )
+		public void AddMovies( IEnumerable<TVTMovie> movies )
 		{
 			foreach ( var movie in movies )
 				AddMovie( movie );
@@ -54,9 +53,9 @@ namespace TVTower.DBEditor
 				AddPerson( person );
 		}
 
-		public IEnumerable<T> GetAllMovies( bool withSeries = false )
+		public IEnumerable<TVTMovie> GetAllMovies( bool withSeries = false )
 		{
-			var result = new List<T>();
+			var result = new List<TVTMovie>();
 			if ( withSeries )
 				result.AddRange( MovieData );
 			else
@@ -64,9 +63,9 @@ namespace TVTower.DBEditor
 			return result;
 		}
 
-		public IEnumerable<T> GetAllSeries()
+		public IEnumerable<TVTMovie> GetAllSeries()
 		{
-			var result = new List<T>();
+			var result = new List<TVTMovie>();
 			result.AddRange( MovieData.Where( x => x.IsSeries ) );
 			return result;
 		}

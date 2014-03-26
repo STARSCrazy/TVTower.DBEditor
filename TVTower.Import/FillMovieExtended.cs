@@ -9,11 +9,11 @@ namespace TVTower.Import
 {
 	public class FillMovieExtended
 	{
-		public void LoadDetailsFromTmDB( MovieImporter importer, TVTMovieExtended movie, MovieResult tmdbMovie )
+		public void LoadDetailsFromTmDB( MovieImporter importer, TVTMovie movie, MovieResult tmdbMovie )
 		{
 			movie.TmdbId = tmdbMovie.id;
-			movie.TitleDE = tmdbMovie.title;
-			movie.TitleEN = tmdbMovie.original_title;
+			movie.Name.OriginalTitleDE = tmdbMovie.title;
+			movie.Name.OriginalTitleEN = tmdbMovie.original_title;
 
 			var tmdbMovieDetails = importer.GetTmdbDetails( movie );
 			movie.ImdbId = tmdbMovieDetails.imdb_id;
@@ -31,14 +31,14 @@ namespace TVTower.Import
 
 
 
-			movie.OriginalTitleDE = tmdbMovie.title;
-			movie.OriginalTitleEN = tmdbMovieDetails.original_title;
-			movie.DescriptionMovieDB = tmdbMovieDetails.tagline;
+			movie.Name.OriginalTitleDE = tmdbMovie.title;
+			movie.Name.OriginalTitleEN = tmdbMovieDetails.original_title;
+			movie.Name.DescriptionMovieDB = tmdbMovieDetails.tagline;
 			movie.TmdbId = tmdbMovie.id;
 			movie.ImdbId = tmdbMovieDetails.imdb_id;
 			movie.ImageUrl = @"https://d3gtl9l2a4fn1j.cloudfront.net/t/p/original" + tmdbMovieDetails.backdrop_path;
-			movie.Budget = tmdbMovieDetails.budget;
-			movie.Revenue = tmdbMovieDetails.revenue;
+			movie.MovieAdditional.Budget = tmdbMovieDetails.budget;
+			movie.MovieAdditional.Revenue = tmdbMovieDetails.revenue;
 
 
 			var castCounter = 1;
@@ -108,7 +108,7 @@ namespace TVTower.Import
 			//boxOfficeRate = 13;
 		}
 
-		public void calcRating( MovieImporter importer, TVTMovieExtended movie )
+		public void calcRating( MovieImporter importer, TVTMovie movie )
 		{
 			var tmdbMovieDetails = importer.GetTmdbDetails( movie );
 			var tomatoeDetails = importer.GetTomatoeDetails( movie );

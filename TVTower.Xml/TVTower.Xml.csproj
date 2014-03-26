@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Persister\TVTNameAndDescriptionPersister.cs" />
     <Compile Include="Persister\TVTSeriesMoviePersister.cs" />
     <Compile Include="Persister\TVTMovieExtendedPersister.cs" />
     <Compile Include="Persister\TVTMoviePersister.cs" />

@@ -9,11 +9,11 @@ namespace TVTower.Import
 {
 	public class MovieImporter
 	{
-		public ITVTowerDatabase<TVTMovieExtended> Database { get; set; }
+		public ITVTDatabase Database { get; set; }
 		//public SortedBindingList<TVTMovieExtended> MovieSource { get; set; }
 		//public SortedBindingList<TVTPerson> PersonSource { get; set; }
 
-		public List<TVTMovieExtended> Result { get; set; }
+		public List<TVTMovie> Result { get; set; }
 
 
 		public Dictionary<int, TmdbMovie> ImdbMovies { get; set; }
@@ -25,7 +25,7 @@ namespace TVTower.Import
 			RottenTomatoeMovies = new Dictionary<int, TomatoMovie>();
 		}
 
-		public TmdbMovie GetMovieResult( TVTMovieExtended movie )
+		public TmdbMovie GetMovieResult( TVTMovie movie )
 		{
 			if ( movie.TmdbId.HasValue )
 				return ImdbMovies[movie.TmdbId.Value];
@@ -93,13 +93,13 @@ namespace TVTower.Import
 			var resultList = GenerateTVTMovies( movieExport );
 			foreach ( var entry in resultList )
 			{
-				Console.WriteLine( "Add result '{0}'", entry.TitleDE );
-				MovieStatistics.Add( entry.Year, entry.Budget, entry.Revenue );
+				Console.WriteLine( "Add result '{0}'", entry.Name.OriginalTitleDE );
+				MovieStatistics.Add( entry.Year, entry.MovieAdditional.Budget, entry.MovieAdditional.Revenue );
 			}
 
 			foreach ( var entry in resultList )
 			{
-				Console.WriteLine( "Calc rating '{0}'", entry.TitleDE );
+				Console.WriteLine( "Calc rating '{0}'", entry.Name.OriginalTitleDE );
 				if ( !_shouldStop )
 				{
 					fillMovies.calcRating( this, entry );
@@ -118,14 +118,14 @@ namespace TVTower.Import
 			_shouldStop = true;
 		}
 
-		private List<TVTMovieExtended> GenerateTVTMovies( List<MovieResult> TmdbList )
+		private List<TVTMovie> GenerateTVTMovies( List<MovieResult> TmdbList )
 		{
-			var result = new List<TVTMovieExtended>();
+			var result = new List<TVTMovie>();
 			var filler = new FillMovieExtended();
 
 			foreach ( var entry in TmdbList )
 			{
-				var movie = new TVTMovieExtended();
+				var movie = new TVTMovie();
 				Console.WriteLine( "Load details '{0}'", entry.title );
 				filler.LoadDetailsFromTmDB( this, movie, entry );
 				result.Add( movie );
@@ -239,7 +239,7 @@ namespace TVTower.Import
 			return country;
 		}
 
-		public TmdbMovie GetTmdbDetails( TVTMovieExtended movie )
+		public TmdbMovie GetTmdbDetails( TVTMovie movie )
 		{
 			if ( !movie.TmdbId.HasValue )
 				throw new Exception();
@@ -255,7 +255,7 @@ namespace TVTower.Import
 			}
 		}
 
-		public TomatoMovie GetTomatoeDetails( TVTMovieExtended movie )
+		public TomatoMovie GetTomatoeDetails( TVTMovie movie )
 		{
 			if ( movie.RottenTomatoesId.HasValue && RottenTomatoeMovies.ContainsKey( movie.RottenTomatoesId.Value ) )
 				return RottenTomatoeMovies[movie.RottenTomatoesId.Value];
