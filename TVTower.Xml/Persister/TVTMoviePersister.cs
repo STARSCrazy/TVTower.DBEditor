@@ -152,13 +152,13 @@ namespace TVTower.Xml.Persister
 
 
 
-			if ( (int)dbVersion > 2 )
-				xmlNode.AddAttribute( "betty", episode.BettyBonus.ToString() );
+            //if ( (int)dbVersion > 2 )
+            //    xmlNode.AddAttribute( "betty", episode.BettyBonus.ToString() );
 
-			xmlNode.AddAttribute( "price", episode.PriceRate.ToString() );
-			xmlNode.AddAttribute( "critics", episode.CriticsRate.ToString() );
-			xmlNode.AddAttribute( "speed", episode.ViewersRate.ToString() );
-			xmlNode.AddAttribute( "outcome", episode.BoxOfficeRate.ToString() );
+            //xmlNode.AddAttribute( "price", episode.PriceRate.ToString() );
+            //xmlNode.AddAttribute( "critics", episode.CriticsRate.ToString() );
+            //xmlNode.AddAttribute( "speed", episode.ViewersRate.ToString() );
+            //xmlNode.AddAttribute( "outcome", episode.BoxOfficeRate.ToString() );
 		}
 
 		private List<TVTPerson> ToPersonList( string value, ITVTDatabase database )

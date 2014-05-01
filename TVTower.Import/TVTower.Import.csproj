@@ -31,9 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\External\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp">
-      <HintPath>External\RestSharp.dll</HintPath>
+      <HintPath>..\External\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,16 +44,23 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WatTmdb, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="WatTmdb">
+      <HintPath>..\External\WatTmdb.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FillMovieExtended.cs" />
-    <Compile Include="GenreChecker.cs" />
-    <Compile Include="Importer.cs" />
-    <Compile Include="MovieStatistics.cs" />
+    <Compile Include="MadTV\Extensions.cs" />
+    <Compile Include="MadTV\MadTVEncoding.cs" />
+    <Compile Include="MadTV\MadTVMovieImporter.cs" />
+    <Compile Include="MadTV\MadTVImport.cs" />
+    <Compile Include="MadTV\MadTVMovie.cs" />
+    <Compile Include="WebImport\FillMovieExtended.cs" />
+    <Compile Include="WebImport\GenreChecker.cs" />
+    <Compile Include="WebImport\Importer.cs" />
+    <Compile Include="WebImport\MovieStatistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestChecker.cs" />
-    <Compile Include="ServiceApi.cs" />
+    <Compile Include="WebImport\RequestChecker.cs" />
+    <Compile Include="WebImport\ServiceApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CherryTomato\CherryTomato.csproj">
@@ -68,17 +77,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="External\Newtonsoft.Json.dll" />
-    <Content Include="External\Newtonsoft.Json.pdb" />
-    <Content Include="External\Newtonsoft.Json.xml" />
-    <Content Include="External\WatTmdb.dll" />
-    <Content Include="External\WatTmdb.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="servicecodes.key">
+    <None Include="WebImport\servicecodes.key">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
