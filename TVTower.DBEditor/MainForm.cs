@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using TVTower.Entities;
 using TVTower.Import;
 using TVTower.Xml;
+using TVTower.Importer.MadTV;
 
 namespace TVTower.DBEditor
 {
@@ -265,6 +266,12 @@ namespace TVTower.DBEditor
 		private void btnSaveAll_Click( object sender, EventArgs e )
 		{
 			miSaveAll_Click( sender, e );
+		}
+
+		private void miImportFromMadTVDB_Click( object sender, EventArgs e )
+		{
+			var import = new MadTVImport();
+			import.ImportMovies( "SOURCE1.RSC", 478040, "SOURCE1.RSC", 439856 );
 		}
 	}
 }
