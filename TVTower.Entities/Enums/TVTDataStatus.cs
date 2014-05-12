@@ -5,6 +5,7 @@ namespace TVTower.Entities
 	{
 		Fake,
 		FakeWithRefId,
+		Original,
 		OriginalWithRefId
 	}
 }

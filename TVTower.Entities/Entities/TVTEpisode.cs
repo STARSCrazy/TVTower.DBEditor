@@ -5,13 +5,18 @@ namespace TVTower.Entities
 	{
 		public int? EpisodeNumber { get; set; }
 
-		//public string TitleDE { get; set; }
-		//public string TitleEN { get; set; }
+        public string TitleDE { get; set; }
+        public string TitleEN { get; set; }
+        public string DescriptionDE { get; set; }
+        public string DescriptionEN { get; set; }
 
-		//public string DescriptionDE { get; set; }
-		//public string DescriptionEN { get; set; }
+        public string FakeTitleDE { get; set; }
+        public string FakeTitleEN { get; set; }
+        public string FakeDescriptionDE { get; set; }
+        public string FakeDescriptionEN { get; set; }
 
-		public TVTNameAndDescription Name { get; set; }
+        public string DescriptionMovieDB { get; set; }
+
 
 		public int BettyBonus { get; set; }		//0 - 10
 		public int PriceRate { get; set; }		//0 - 255

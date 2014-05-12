@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7321A2E6-0174-41BA-B915-0D89135FFD94}</ProjectGuid>
+    <ProjectGuid>{CBA79910-0D80-4E84-AAB6-92DE2A99C74D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TVTower.Entities</RootNamespace>
-    <AssemblyName>TVTower.Entities</AssemblyName>
+    <RootNamespace>TVTower.SQL</RootNamespace>
+    <AssemblyName>TVTower.SQL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,24 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Additional\TVTMovieAdditional.cs" />
-    <Compile Include="Entities\TVTAdvertising.cs" />
-    <Compile Include="Entities\TVTEntity.cs" />
-    <Compile Include="Entities\TVTEpisode.cs" />
-    <Compile Include="Entities\TVTMovie.cs" />
-    <Compile Include="Entities\TVTPerson.cs" />
-    <Compile Include="Enums\TVTTargetGroup.cs" />
-    <Compile Include="Enums\TVTDataStatus.cs" />
-    <Compile Include="Enums\TVTPersonGender.cs" />
-    <Compile Include="Enums\TVTPersonFunction.cs" />
-    <Compile Include="Enums\TVTPressureGroup.cs" />
-    <Compile Include="Enums\TVTGenre.cs" />
-    <Compile Include="Enums\TVTMovieFlag.cs" />
-    <Compile Include="Enums\TVTReportageGenre.cs" />
-    <Compile Include="Enums\TVTShowGenre.cs" />
-    <Compile Include="Helper\EntityHelper.cs" />
-    <Compile Include="ITVTDatabase.cs" />
+    <Compile Include="TVTSQLSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TVTCommands.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TVTower.Entities\TVTower.Entities.csproj">
+      <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>
+      <Name>TVTower.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

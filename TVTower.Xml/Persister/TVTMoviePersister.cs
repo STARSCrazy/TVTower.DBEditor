@@ -35,7 +35,7 @@ namespace TVTower.Xml.Persister
 						if ( movieChild.HasAttribute( "directorId" ) )
 							movie.Director = database.GetPersonByStringId( movieChild.GetAttribute( "directorId" ) );
 						else
-							movie.Director = GetPersonByNameOrCreate( movieChild.GetAttribute( "director" ), database, defaultStatus, TVTPersonFunction.Actor );
+							movie.Director = GetPersonByNameOrCreate( movieChild.GetAttribute( "director" ), database, defaultStatus, TVTPersonFunction.Director );
 
 						movie.Country = movieChild.GetAttribute( "country" );
 						movie.Year = movieChild.GetAttributeInteger( "year" );
@@ -78,8 +78,8 @@ namespace TVTower.Xml.Persister
 			if ( dbVersion == DatabaseVersion.V2 )
 			{
 				//altes Format
-				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.Name ).ToContentString( ", " ) );
-				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.Name : "" );
+				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.FakeFullName ).ToContentString( ", " ) );
+				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.FakeFullName : "" );
 			}
 			else
 			{
@@ -92,9 +92,9 @@ namespace TVTower.Xml.Persister
 				xmlNode.AppendChild( referencesNode );
 
 				//neues Format
-				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.Name ).ToContentString( ", " ) );
+				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.FakeFullName ).ToContentString( ", " ) );
 				dataNode.AddAttribute( "actor_ids", movie.Actors.Select( x => x.Id ).ToContentString( ";" ) );
-				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.Name : "" );
+				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.FakeFullName : "" );
 				dataNode.AddAttribute( "director_id", movie.Director != null ? movie.Director.Id.ToString() : "" );
 			}
 
@@ -177,6 +177,7 @@ namespace TVTower.Xml.Persister
 			return result;
 		}
 
+        [Obsolete("Gibt ne neue Variant emit gleichem Namen.")]
 		private List<TVTPerson> ToPersonListByName( string names, ITVTDatabase database, TVTDataStatus defaultStatus, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
 		{
 			var result = new List<TVTPerson>();
@@ -193,7 +194,7 @@ namespace TVTower.Xml.Persister
 						person = new TVTPerson();
 						person.GenerateGuid();
 						person.DataStatus = defaultStatus;
-						person.Name = personName;
+						person.ConvertFakeFullname(personName);
 						person.Functions.Add( functionForNew );
 						database.AddPerson( person );
 					}
@@ -215,7 +216,7 @@ namespace TVTower.Xml.Persister
 					person = new TVTPerson();
 					person.GenerateGuid();
 					person.DataStatus = defaultStatus;
-					person.Name = name;
+					person.ConvertFakeFullname(name);
 					person.Functions.Add( functionForNew );
 					database.AddPerson( person );
 				}

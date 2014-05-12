@@ -93,13 +93,13 @@ namespace TVTower.Import
 			var resultList = GenerateTVTMovies( movieExport );
 			foreach ( var entry in resultList )
 			{
-				Console.WriteLine( "Add result '{0}'", entry.Name.OriginalTitleDE );
+				Console.WriteLine( "Add result '{0}'", entry.TitleDE );
 				MovieStatistics.Add( entry.Year, entry.MovieAdditional.Budget, entry.MovieAdditional.Revenue );
 			}
 
 			foreach ( var entry in resultList )
 			{
-				Console.WriteLine( "Calc rating '{0}'", entry.Name.OriginalTitleDE );
+				Console.WriteLine( "Calc rating '{0}'", entry.TitleDE );
 				if ( !_shouldStop )
 				{
 					fillMovies.calcRating( this, entry );
@@ -140,7 +140,7 @@ namespace TVTower.Import
 			if ( person == null )
 			{
 				person = new TVTPerson();
-				person.OriginalName = cast.name;
+				person.ConvertFullname(cast.name);
 				person.TmdbId = cast.id;
 				person.Functions.Add(TVTPersonFunction.Actor);
 				person.OtherInfo = cast.character;
@@ -160,7 +160,7 @@ namespace TVTower.Import
 			if ( person == null )
 			{
 				person = new TVTPerson();
-				person.OriginalName = crew.name;
+                person.ConvertFullname(crew.name);
 				person.TmdbId = crew.id;
 				person.Functions.Add(TVTPersonFunction.Director);
 				person.OtherInfo = crew.job + "/" + crew.department;

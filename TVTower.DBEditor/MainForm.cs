@@ -98,8 +98,8 @@ namespace TVTower.DBEditor
 				if ( fake == null )
 					throw new Exception();
 
-				imported.Name.FakeTitleDE = fake.Name.FakeTitleDE;
-				imported.Name.FakeDescriptionDE = fake.Name.OriginalDescriptionDE;
+				imported.FakeTitleDE = fake.FakeTitleDE;
+				imported.FakeDescriptionDE = fake.DescriptionDE;
 
 				imported.MovieAdditional.PriceRateOld = fake.PriceRate;
 				imported.MovieAdditional.CriticRateOld = fake.CriticsRate;
@@ -109,7 +109,7 @@ namespace TVTower.DBEditor
 				foreach ( var actor in imported.Actors )
 				{
 					if ( string.IsNullOrEmpty( actor.Info ) )
-						actor.Info = fake.Actors.Select( x => x.Name ).ToContentString( " | " );
+						actor.Info = fake.Actors.Select( x => x.FakeFullName ).ToContentString( " | " );
 					else
 						actor.Info = actor.Info + " | " + fake.Actors;
 				}
@@ -117,9 +117,9 @@ namespace TVTower.DBEditor
 
 				var director = imported.Director;
 				if ( string.IsNullOrEmpty( director.Info ) )
-					director.Info = fake.Director.Name;
+					director.Info = fake.Director.FakeFullName;
 				else
-					director.Info = director.Info + " | " + fake.Director.Name;
+					director.Info = director.Info + " | " + fake.Director.FakeFullName;
 
 				database.MovieData.Remove( fake );
 			}
@@ -236,8 +236,8 @@ namespace TVTower.DBEditor
 				if ( fake == null )
 					throw new Exception();
 
-				imported.Name.FakeTitleDE = fake.Name.FakeTitleDE;
-				imported.Name.FakeDescriptionDE = fake.Name.FakeDescriptionDE;
+				imported.FakeTitleDE = fake.FakeTitleDE;
+				imported.FakeDescriptionDE = fake.FakeDescriptionDE;
 
 				imported.MovieAdditional.PriceRateOld = fake.PriceRate;
 				imported.MovieAdditional.CriticRateOld = fake.CriticsRate;
@@ -247,7 +247,7 @@ namespace TVTower.DBEditor
 				foreach ( var actor in imported.Actors )
 				{
 					if ( string.IsNullOrEmpty( actor.Info ) )
-						actor.Info = fake.Actors.Select( x => x.Name ).ToContentString( " | " );
+						actor.Info = fake.Actors.Select( x => x.FakeFullName ).ToContentString( " | " );
 					else
 						actor.Info = actor.Info + " | " + fake.Actors;
 				}
@@ -255,9 +255,9 @@ namespace TVTower.DBEditor
 
 				var director = imported.Director;
 				if ( string.IsNullOrEmpty( director.Info ) )
-					director.Info = fake.Director.Name;
+					director.Info = fake.Director.FakeFullName;
 				else
-					director.Info = director.Info + " | " + fake.Director.Name;
+					director.Info = director.Info + " | " + fake.Director.FakeFullName;
 
 				database.MovieData.Remove( fake );
 			}

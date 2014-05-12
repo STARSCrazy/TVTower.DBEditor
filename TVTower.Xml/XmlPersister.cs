@@ -100,13 +100,13 @@ namespace TVTower.Xml
 			switch ( dataStructure )
 			{
 				case DataStructure.Full:
-					personNode.AddElement( "name", person.Name );
+					personNode.AddElement( "name", person.FakeFullName );
 					break;
 				case DataStructure.FakeData:
-					personNode.AddElement( "name", person.Name );
+					personNode.AddElement( "name", person.FakeFullName );
 					break;
 				case DataStructure.OriginalData:
-					personNode.AddElement( "name", person.OriginalName );
+					personNode.AddElement( "name", person.FullName );
 					break;
 			}
 
@@ -130,7 +130,7 @@ namespace TVTower.Xml
 			if ( dataStructure == DataStructure.Full )
 			{
 				XmlNode additionalNode = doc.CreateElement( "additional" );
-				additionalNode.AddAttribute( "original_name", person.OriginalName );
+				additionalNode.AddAttribute( "original_name", person.FullName );
 				additionalNode.AddAttribute( "place_of_birth", person.PlaceOfBirth );
 				additionalNode.AddAttribute( "info", person.Info );
 				additionalNode.AddAttribute( "movieRegistrations", person.MovieRegistrations.ToString() );
@@ -336,7 +336,6 @@ namespace TVTower.Xml
 					foreach ( XmlNode childNode in xmlMovie.ChildNodes )
 					{
 						var movie = new TVTMovie();
-						movie.Name = new TVTNameAndDescription();
 						movie.MovieAdditional = new TVTMovieAdditional();
 						if ( version == 2 )
 						{
@@ -367,7 +366,6 @@ namespace TVTower.Xml
 					foreach ( XmlNode childNode in xmlSeries.ChildNodes )
 					{
 						var movie = new TVTMovie();
-						movie.Name = new TVTNameAndDescription();
 						movie.MovieAdditional = new TVTMovieAdditional();
 						if ( version == 2 )
 						{

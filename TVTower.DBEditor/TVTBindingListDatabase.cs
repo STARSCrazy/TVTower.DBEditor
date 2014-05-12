@@ -98,7 +98,11 @@ namespace TVTower.DBEditor
 
 		public TVTPerson GetPersonByName( string name )
 		{
-			return PersonData.FirstOrDefault( x => x.Name.Trim() == name.Trim() );
+            var result = PersonData.FirstOrDefault(x => x.FullName != null ? x.FullName.Trim() == name.Trim() : false);
+            if (result != null)
+                return result;
+            else
+                return PersonData.FirstOrDefault(x => x.FakeFullName != null ? x.FakeFullName.Trim() == name.Trim() : false);
 		}
 
 		#endregion

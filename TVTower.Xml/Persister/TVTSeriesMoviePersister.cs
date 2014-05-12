@@ -23,7 +23,6 @@ namespace TVTower.Xml.Persister
 				{
 					case "episode":
 						var episode = new TVTEpisode();
-						episode.Name = new TVTNameAndDescription();
 						episode.EpisodeNumber = movieChild.GetAttributeInteger( "number" );
 						episodePersister.Load( movieChild, episode, database, dbVersion, dataStructure );
 						movie.Episodes.Add( episode );
