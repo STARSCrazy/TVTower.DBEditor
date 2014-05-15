@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="MovieOldV2.cs" />
     <Compile Include="MovieOldV2Converter.cs" />
+    <Compile Include="PersonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

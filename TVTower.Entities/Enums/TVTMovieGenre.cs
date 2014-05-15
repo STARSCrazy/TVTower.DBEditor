@@ -1,7 +1,7 @@
 ﻿
 namespace TVTower.Entities
 {
-	public enum TVTGenre
+	public enum TVTMovieGenre
 	{
 		Undefined = 0,
 		Adventure = 1,

@@ -106,20 +106,20 @@ namespace TVTower.DBEditor
 				imported.MovieAdditional.SpeedRateOld = fake.ViewersRate;
 				imported.MovieAdditional.BoxOfficeRateOld = fake.BoxOfficeRate;
 
-				foreach ( var actor in imported.Participants )
-				{
-					if ( string.IsNullOrEmpty( actor.Info ) )
-						actor.Info = fake.Participants.Select( x => x.FakeFullName ).ToContentString( " | " );
-					else
-						actor.Info = actor.Info + " | " + fake.Participants;
-				}
+				//foreach ( var actor in imported.Participants )
+				//{
+				//    if ( string.IsNullOrEmpty( actor.Info ) )
+				//        actor.Info = fake.Participants.Select( x => x.FakeFullName ).ToContentString( " | " );
+				//    else
+				//        actor.Info = actor.Info + " | " + fake.Participants;
+				//}
 
 
-				var director = imported.Director;
-				if ( string.IsNullOrEmpty( director.Info ) )
-					director.Info = fake.Director.FakeFullName;
-				else
-					director.Info = director.Info + " | " + fake.Director.FakeFullName;
+				//var director = imported.Director;
+				//if ( string.IsNullOrEmpty( director.Info ) )
+				//    director.Info = fake.Director.FakeFullName;
+				//else
+				//    director.Info = director.Info + " | " + fake.Director.FakeFullName;
 
 				database.MovieData.Remove( fake );
 			}
@@ -244,20 +244,20 @@ namespace TVTower.DBEditor
 				imported.MovieAdditional.SpeedRateOld = fake.ViewersRate;
 				imported.MovieAdditional.BoxOfficeRateOld = fake.BoxOfficeRate;
 
-				foreach ( var actor in imported.Participants )
-				{
-					if ( string.IsNullOrEmpty( actor.Info ) )
-						actor.Info = fake.Participants.Select( x => x.FakeFullName ).ToContentString( " | " );
-					else
-						actor.Info = actor.Info + " | " + fake.Participants;
-				}
+				//foreach ( var actor in imported.Participants )
+				//{
+				//    if ( string.IsNullOrEmpty( actor.Info ) )
+				//        actor.Info = fake.Participants.Select( x => x.FakeFullName ).ToContentString( " | " );
+				//    else
+				//        actor.Info = actor.Info + " | " + fake.Participants;
+				//}
 
 
-				var director = imported.Director;
-				if ( string.IsNullOrEmpty( director.Info ) )
-					director.Info = fake.Director.FakeFullName;
-				else
-					director.Info = director.Info + " | " + fake.Director.FakeFullName;
+				//var director = imported.Director;
+				//if ( string.IsNullOrEmpty( director.Info ) )
+				//    director.Info = fake.Director.FakeFullName;
+				//else
+				//    director.Info = director.Info + " | " + fake.Director.FakeFullName;
 
 				database.MovieData.Remove( fake );
 			}

@@ -10,8 +10,8 @@ namespace TVTower.Entities
 		public int Year { get; set; }					//YYYY   = 1900+
 		public int ValidUntilYear { get; set; }			//YYYY   = 1900+ für Live-Events
 
-		public TVTGenre MainGenre { get; set; }
-		public TVTGenre SubGenre { get; set; }
+		public TVTMovieGenre MainGenre { get; set; }
+		public TVTMovieGenre SubGenre { get; set; }
 		public TVTShowGenre ShowGenre { get; set; }
 		public TVTReportageGenre ReportageGenre { get; set; }
 		public TVTEventGenre EventGenre { get; set; }
