@@ -3,9 +3,7 @@ namespace TVTower.Entities
 {
 	public enum TVTDataStatus
 	{
-		Fake,
-		FakeWithRefId,
-		Original,
-		OriginalWithRefId
+        Incomplete,       //Vorschlag
+        Complete   //Vorschlag
 	}
 }

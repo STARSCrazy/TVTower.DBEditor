@@ -3,50 +3,50 @@ using TVTower.Entities;
 
 namespace TVTower.Xml.Persister
 {
-	public class TVTEpisodePersister<T> : TVTEntityPersister<T>
-		where T : TVTEpisode
-	{
-		public override void Load( XmlNode xmlNode, T episode, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
-		{
-			base.Load( xmlNode, episode, database, dbVersion, dataStructure );
+    public class TVTEpisodePersister<T> : TVTEntityPersister<T>
+        where T : TVTEpisode
+    {
+        public override void Load(XmlNode xmlNode, T episode, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure)
+        {
+            base.Load(xmlNode, episode, database, dbVersion, dataStructure);
 
-			foreach ( var movieChild in xmlNode.ChildNodes )
-			{
-				if ( movieChild is XmlLinkedNode )
-				{
-					var linkedNode = (XmlLinkedNode)movieChild;
+            foreach (var movieChild in xmlNode.ChildNodes)
+            {
+                if (movieChild is XmlLinkedNode)
+                {
+                    var linkedNode = (XmlLinkedNode)movieChild;
 
                     LoadNames(linkedNode, episode, dbVersion, dataStructure);
 
-					switch ( linkedNode.Name )
-					{
-						case "data":
-							episode.BettyBonus = linkedNode.GetAttributeInteger( "betty" );
-							episode.PriceRate = linkedNode.GetAttributeInteger( "price" );
-							episode.CriticsRate = linkedNode.GetAttributeInteger( "critics" );
-							episode.ViewersRate = linkedNode.GetAttributeInteger( "speed" );
-							episode.BoxOfficeRate = linkedNode.GetAttributeInteger( "outcome" );
-							break;
-					}                    
-				}
-			}
-		}
+                    switch (linkedNode.Name)
+                    {
+                        case "data":
+                            episode.BettyBonus = linkedNode.GetAttributeInteger("betty");
+                            episode.PriceMod = linkedNode.GetAttributeInteger("price");
+                            episode.CriticsRate = linkedNode.GetAttributeInteger("critics");
+                            episode.ViewersRate = linkedNode.GetAttributeInteger("speed");
+                            episode.BoxOfficeRate = linkedNode.GetAttributeInteger("outcome");
+                            break;
+                    }
+                }
+            }
+        }
 
 
-		public override void Save( XmlNode xmlNode, T episode, DatabaseVersion dbVersion, DataStructure dataStructure )
-		{
-			base.Save( xmlNode, episode, dbVersion, dataStructure );
+        public override void Save(XmlNode xmlNode, T episode, DatabaseVersion dbVersion, DataStructure dataStructure)
+        {
+            base.Save(xmlNode, episode, dbVersion, dataStructure);
 
             SaveNames(xmlNode, episode, dbVersion, dataStructure);
 
-			if ( (int)dbVersion > 2 )
-				xmlNode.AddAttribute( "betty", episode.BettyBonus.ToString() );
+            if ((int)dbVersion > 2)
+                xmlNode.AddAttribute("betty", episode.BettyBonus.ToString());
 
-			xmlNode.AddAttribute( "price", episode.PriceRate.ToString() );
-			xmlNode.AddAttribute( "critics", episode.CriticsRate.ToString() );
-			xmlNode.AddAttribute( "speed", episode.ViewersRate.ToString() );
-			xmlNode.AddAttribute( "outcome", episode.BoxOfficeRate.ToString() );
-		}
+            xmlNode.AddAttribute("price", episode.PriceMod.ToString());
+            xmlNode.AddAttribute("critics", episode.CriticsRate.ToString());
+            xmlNode.AddAttribute("speed", episode.ViewersRate.ToString());
+            xmlNode.AddAttribute("outcome", episode.BoxOfficeRate.ToString());
+        }
 
 
         private void LoadNames(XmlLinkedNode linkedNode, T episode, DatabaseVersion dbVersion, DataStructure dataStructure)
@@ -68,16 +68,10 @@ namespace TVTower.Xml.Persister
                     break;
                 case "description":
                 case "description_de":
-                    if (dataStructure == DataStructure.FakeData)
-                        episode.FakeDescriptionDE = linkedNode.GetElementValue();
-                    else
-                        episode.DescriptionDE = linkedNode.GetElementValue();
+                    episode.DescriptionDE = linkedNode.GetElementValue();
                     break;
                 case "description_en":
-                    if (dataStructure == DataStructure.FakeData)
-                        episode.FakeDescriptionEN = linkedNode.GetElementValue();
-                    else
-                        episode.DescriptionEN = linkedNode.GetElementValue();
+                    episode.DescriptionEN = linkedNode.GetElementValue();
                     break;
             }
         }
@@ -87,15 +81,11 @@ namespace TVTower.Xml.Persister
             if (dbVersion == DatabaseVersion.V2)
             {
                 if (dataStructure == DataStructure.FakeData)
-                {
                     xmlNode.AddElement("title", episode.FakeTitleDE);
-                    xmlNode.AddElement("description", episode.FakeDescriptionDE);
-                }
                 else
-                {
                     xmlNode.AddElement("title", episode.TitleDE);
-                    xmlNode.AddElement("description", episode.DescriptionDE);
-                }
+
+                xmlNode.AddElement("description", episode.DescriptionDE);
             }
             else if (dbVersion == DatabaseVersion.V3)
             {
@@ -111,18 +101,16 @@ namespace TVTower.Xml.Persister
 
                 xmlNode.AddElement("fake_title_de", episode.FakeTitleDE);
                 xmlNode.AddElement("fake_title_en", episode.FakeTitleEN);
-                xmlNode.AddElement("fake_description_de", episode.FakeDescriptionDE);
-                xmlNode.AddElement("fake_description_en", episode.FakeDescriptionDE);
 
                 xmlNode.AddElement("original_title_de", episode.TitleDE);
                 xmlNode.AddElement("original_title_en", episode.TitleEN);
-                xmlNode.AddElement("original_description_de", episode.DescriptionDE);
-                xmlNode.AddElement("original_description_en", episode.DescriptionDE);
+                xmlNode.AddElement("description_de", episode.DescriptionDE);
+                xmlNode.AddElement("description_en", episode.DescriptionDE);
 
                 xmlNode.AddElement("description_movie_db", episode.DescriptionMovieDB);
 
                 xmlNode.AppendChild(additionalNode);
             }
         }
-	}
+    }
 }

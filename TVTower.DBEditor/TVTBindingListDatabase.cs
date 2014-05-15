@@ -7,19 +7,19 @@ namespace TVTower.DBEditor
 {
 	public class TVTBindingListDatabase : ITVTDatabase
 	{
-		public SortedBindingList<TVTMovie> MovieData { get; set; }
+		public SortedBindingList<TVTProgramme> MovieData { get; set; }
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
 
 		public void Initialize()
 		{
 			if ( MovieData == null )
-				MovieData = new SortedBindingList<TVTMovie>();
+				MovieData = new SortedBindingList<TVTProgramme>();
 
 			if ( PersonData == null )
 				PersonData = new SortedBindingList<TVTPerson>();
 		}
 
-		public void SetMovieBindingList( SortedBindingList<TVTMovie> movieData )
+		public void SetMovieBindingList( SortedBindingList<TVTProgramme> movieData )
 		{
 			this.MovieData = movieData;
 		}
@@ -31,12 +31,12 @@ namespace TVTower.DBEditor
 
 		#region ITVTowerDatabase Members
 
-		public void AddMovie( TVTMovie movie )
+		public void AddMovie( TVTProgramme movie )
 		{
 			MovieData.Add( movie );
 		}
 
-		public void AddMovies( IEnumerable<TVTMovie> movies )
+		public void AddMovies( IEnumerable<TVTProgramme> movies )
 		{
 			foreach ( var movie in movies )
 				AddMovie( movie );
@@ -53,20 +53,20 @@ namespace TVTower.DBEditor
 				AddPerson( person );
 		}
 
-		public IEnumerable<TVTMovie> GetAllMovies( bool withSeries = false )
+		public IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false )
 		{
-			var result = new List<TVTMovie>();
+			var result = new List<TVTProgramme>();
 			if ( withSeries )
 				result.AddRange( MovieData );
 			else
-				result.AddRange( MovieData.Where( x => !x.IsSeries ) );
+				result.AddRange( MovieData.Where( x => x.ProgrammeType != TVTProgrammeType.Series ) );
 			return result;
 		}
 
-		public IEnumerable<TVTMovie> GetAllSeries()
+		public IEnumerable<TVTProgramme> GetAllSeries()
 		{
-			var result = new List<TVTMovie>();
-			result.AddRange( MovieData.Where( x => x.IsSeries ) );
+			var result = new List<TVTProgramme>();
+            result.AddRange(MovieData.Where(x => x.ProgrammeType == TVTProgrammeType.Series));
 			return result;
 		}
 

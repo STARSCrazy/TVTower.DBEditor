@@ -26,7 +26,7 @@ namespace TVTower.DBEditor
 			database = new TVTBindingListDatabase();
 			database.Initialize();
 
-			var movieDataList = new SortedBindingList<TVTMovie>();
+			var movieDataList = new SortedBindingList<TVTProgramme>();
 
 			// Allow new parts to be added, but not removed once committed.        
 			movieDataList.AllowNew = true;
@@ -71,11 +71,11 @@ namespace TVTower.DBEditor
 		{
 			if ( movieDataGrid.SelectedRows.Count == 2 )
 			{
-				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTMovie;
-				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTMovie;
+				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTProgramme;
+				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTProgramme;
 
-				TVTMovie imported = null;
-				TVTMovie fake = null;
+				TVTProgramme imported = null;
+				TVTProgramme fake = null;
 
 				if ( movie1.TmdbId > 0 )
 				{
@@ -99,19 +99,19 @@ namespace TVTower.DBEditor
 					throw new Exception();
 
 				imported.FakeTitleDE = fake.FakeTitleDE;
-				imported.FakeDescriptionDE = fake.DescriptionDE;
+				imported.DescriptionDE = fake.DescriptionDE;
 
-				imported.MovieAdditional.PriceRateOld = fake.PriceRate;
+				imported.MovieAdditional.PriceRateOld = fake.PriceMod;
 				imported.MovieAdditional.CriticRateOld = fake.CriticsRate;
 				imported.MovieAdditional.SpeedRateOld = fake.ViewersRate;
 				imported.MovieAdditional.BoxOfficeRateOld = fake.BoxOfficeRate;
 
-				foreach ( var actor in imported.Actors )
+				foreach ( var actor in imported.Participants )
 				{
 					if ( string.IsNullOrEmpty( actor.Info ) )
-						actor.Info = fake.Actors.Select( x => x.FakeFullName ).ToContentString( " | " );
+						actor.Info = fake.Participants.Select( x => x.FakeFullName ).ToContentString( " | " );
 					else
-						actor.Info = actor.Info + " | " + fake.Actors;
+						actor.Info = actor.Info + " | " + fake.Participants;
 				}
 
 
@@ -209,11 +209,11 @@ namespace TVTower.DBEditor
 		{
 			if ( movieDataGrid.SelectedRows.Count == 2 )
 			{
-				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTMovie;
-				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTMovie;
+				var movie1 = movieDataGrid.SelectedRows[0].DataBoundItem as TVTProgramme;
+				var movie2 = movieDataGrid.SelectedRows[1].DataBoundItem as TVTProgramme;
 
-				TVTMovie imported = null;
-				TVTMovie fake = null;
+				TVTProgramme imported = null;
+				TVTProgramme fake = null;
 
 				if ( movie1.TmdbId > 0 )
 				{
@@ -237,19 +237,19 @@ namespace TVTower.DBEditor
 					throw new Exception();
 
 				imported.FakeTitleDE = fake.FakeTitleDE;
-				imported.FakeDescriptionDE = fake.FakeDescriptionDE;
+				imported.DescriptionDE = fake.DescriptionDE;
 
-				imported.MovieAdditional.PriceRateOld = fake.PriceRate;
+				imported.MovieAdditional.PriceRateOld = fake.PriceMod;
 				imported.MovieAdditional.CriticRateOld = fake.CriticsRate;
 				imported.MovieAdditional.SpeedRateOld = fake.ViewersRate;
 				imported.MovieAdditional.BoxOfficeRateOld = fake.BoxOfficeRate;
 
-				foreach ( var actor in imported.Actors )
+				foreach ( var actor in imported.Participants )
 				{
 					if ( string.IsNullOrEmpty( actor.Info ) )
-						actor.Info = fake.Actors.Select( x => x.FakeFullName ).ToContentString( " | " );
+						actor.Info = fake.Participants.Select( x => x.FakeFullName ).ToContentString( " | " );
 					else
-						actor.Info = actor.Info + " | " + fake.Actors;
+						actor.Info = actor.Info + " | " + fake.Participants;
 				}
 
 

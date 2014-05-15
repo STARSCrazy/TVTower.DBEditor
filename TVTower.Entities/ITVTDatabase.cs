@@ -5,14 +5,14 @@ namespace TVTower.Entities
 {
 	public interface ITVTDatabase
 	{
-		void AddMovie( TVTMovie movie );
-		void AddMovies( IEnumerable<TVTMovie> movies );
+		void AddMovie( TVTProgramme movie );
+		void AddMovies( IEnumerable<TVTProgramme> movies );
 
 		void AddPerson( TVTPerson person );
 		void AddPeople( IEnumerable<TVTPerson> people );
 
-		IEnumerable<TVTMovie> GetAllMovies( bool withSeries = false );
-		IEnumerable<TVTMovie> GetAllSeries();
+		IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false );
+		IEnumerable<TVTProgramme> GetAllSeries();
 		IEnumerable<TVTPerson> GetAllPeople();
 
 		TVTPerson GetPersonById( Guid id );

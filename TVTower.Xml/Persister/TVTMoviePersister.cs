@@ -6,11 +6,11 @@ using TVTower.Entities;
 
 namespace TVTower.Xml.Persister
 {
-	public class TVTMoviePersister : TVTEpisodePersister<TVTMovie>
+	public class TVTMoviePersister : TVTEpisodePersister<TVTProgramme>
 	{
-		TVTDataStatus defaultStatus = TVTDataStatus.Fake;
+		TVTDataContent defaultStatus = TVTDataContent.Fake;
 
-		public override void Load( XmlNode xmlNode, TVTMovie movie, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
+		public override void Load( XmlNode xmlNode, TVTProgramme movie, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
 			base.Load( xmlNode, movie, database, dbVersion, dataStructure );
 
@@ -28,9 +28,9 @@ namespace TVTower.Xml.Persister
 						break;
 					case "data":
 						if ( movieChild.HasAttribute( "actorIds" ) )
-							movie.Actors = ToPersonList( movieChild.GetAttribute( "actorIds" ), database );
+							movie.Participants = ToPersonList( movieChild.GetAttribute( "actorIds" ), database );
 						else
-							movie.Actors = ToPersonListByName( movieChild.GetAttribute( "actors" ), database, defaultStatus, TVTPersonFunction.Actor );
+							movie.Participants = ToPersonListByName( movieChild.GetAttribute( "actors" ), database, defaultStatus, TVTPersonFunction.Actor );
 
 						if ( movieChild.HasAttribute( "directorId" ) )
 							movie.Director = database.GetPersonByStringId( movieChild.GetAttribute( "directorId" ) );
@@ -52,7 +52,7 @@ namespace TVTower.Xml.Persister
 			}
 		}
 
-		public override void Save( XmlNode xmlNode, TVTMovie movie, DatabaseVersion dbVersion, DataStructure dataStructure )
+		public override void Save( XmlNode xmlNode, TVTProgramme movie, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
 			base.Save( xmlNode, movie, dbVersion, dataStructure );
 
@@ -78,7 +78,7 @@ namespace TVTower.Xml.Persister
 			if ( dbVersion == DatabaseVersion.V2 )
 			{
 				//altes Format
-				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.FakeFullName ).ToContentString( ", " ) );
+				dataNode.AddAttribute( "actors", movie.Participants.Select( x => x.FakeFullName ).ToContentString( ", " ) );
 				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.FakeFullName : "" );
 			}
 			else
@@ -92,8 +92,8 @@ namespace TVTower.Xml.Persister
 				xmlNode.AppendChild( referencesNode );
 
 				//neues Format
-				dataNode.AddAttribute( "actors", movie.Actors.Select( x => x.FakeFullName ).ToContentString( ", " ) );
-				dataNode.AddAttribute( "actor_ids", movie.Actors.Select( x => x.Id ).ToContentString( ";" ) );
+				dataNode.AddAttribute( "actors", movie.Participants.Select( x => x.FakeFullName ).ToContentString( ", " ) );
+				dataNode.AddAttribute( "actor_ids", movie.Participants.Select( x => x.Id ).ToContentString( ";" ) );
 				dataNode.AddAttribute( "director", movie.Director != null ? movie.Director.FakeFullName : "" );
 				dataNode.AddAttribute( "director_id", movie.Director != null ? movie.Director.Id.ToString() : "" );
 			}
@@ -178,7 +178,7 @@ namespace TVTower.Xml.Persister
 		}
 
         [Obsolete("Gibt ne neue Variant emit gleichem Namen.")]
-		private List<TVTPerson> ToPersonListByName( string names, ITVTDatabase database, TVTDataStatus defaultStatus, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
+		private List<TVTPerson> ToPersonListByName( string names, ITVTDatabase database, TVTDataContent defaultType, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
 		{
 			var result = new List<TVTPerson>();
 			if ( !string.IsNullOrEmpty( names ) )
@@ -193,7 +193,7 @@ namespace TVTower.Xml.Persister
 					{
 						person = new TVTPerson();
 						person.GenerateGuid();
-						person.DataStatus = defaultStatus;
+						person.DataContent = defaultType;
 						person.ConvertFakeFullname(personName);
 						person.Functions.Add( functionForNew );
 						database.AddPerson( person );
@@ -205,7 +205,7 @@ namespace TVTower.Xml.Persister
 			return result;
 		}
 
-		private TVTPerson GetPersonByNameOrCreate( string name, ITVTDatabase database, TVTDataStatus defaultStatus, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
+		private TVTPerson GetPersonByNameOrCreate( string name, ITVTDatabase database, TVTDataContent defaultType, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
 		{
 			if ( !string.IsNullOrEmpty( name ) )
 			{
@@ -215,7 +215,7 @@ namespace TVTower.Xml.Persister
 				{
 					person = new TVTPerson();
 					person.GenerateGuid();
-					person.DataStatus = defaultStatus;
+					person.DataContent = defaultType;
 					person.ConvertFakeFullname(name);
 					person.Functions.Add( functionForNew );
 					database.AddPerson( person );

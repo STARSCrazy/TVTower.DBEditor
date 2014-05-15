@@ -51,6 +51,10 @@
     <Compile Include="MySQLTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TVTower.Converter\TVTower.Converter.csproj">
+      <Project>{AFD86351-F554-4DBA-9505-76D6E4008279}</Project>
+      <Name>TVTower.Converter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TVTower.DBEditor\TVTower.DBEditor.csproj">
       <Project>{CADB51F1-127E-4732-9A59-BA2CBDB9FAB1}</Project>
       <Name>TVTower.DBEditor</Name>

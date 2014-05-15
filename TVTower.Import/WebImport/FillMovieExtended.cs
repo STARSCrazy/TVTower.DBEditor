@@ -9,7 +9,7 @@ namespace TVTower.Import
 {
 	public class FillMovieExtended
 	{
-		public void LoadDetailsFromTmDB( MovieImporter importer, TVTMovie movie, MovieResult tmdbMovie )
+		public void LoadDetailsFromTmDB( MovieImporter importer, TVTProgramme movie, MovieResult tmdbMovie )
 		{
 			movie.TmdbId = tmdbMovie.id;
 			movie.TitleDE = tmdbMovie.title;
@@ -43,7 +43,7 @@ namespace TVTower.Import
 
 			var castCounter = 1;
 
-			movie.Actors = new List<TVTPerson>();
+			movie.Participants = new List<TVTPerson>();
 			foreach ( var cast in tmdbMovieCast.cast )
 			{
 				if ( castCounter > 3 )
@@ -51,7 +51,7 @@ namespace TVTower.Import
 
 				var person = importer.RegisterActor( cast );
 				if ( person != null )
-					movie.Actors.Add( person );
+					movie.Participants.Add( person );
 
 				castCounter++;
 			}
@@ -108,7 +108,7 @@ namespace TVTower.Import
 			//boxOfficeRate = 13;
 		}
 
-		public void calcRating( MovieImporter importer, TVTMovie movie )
+		public void calcRating( MovieImporter importer, TVTProgramme movie )
 		{
 			var tmdbMovieDetails = importer.GetTmdbDetails( movie );
 			var tomatoeDetails = importer.GetTomatoeDetails( movie );

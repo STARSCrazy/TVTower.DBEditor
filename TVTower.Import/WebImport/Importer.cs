@@ -13,7 +13,7 @@ namespace TVTower.Import
 		//public SortedBindingList<TVTMovieExtended> MovieSource { get; set; }
 		//public SortedBindingList<TVTPerson> PersonSource { get; set; }
 
-		public List<TVTMovie> Result { get; set; }
+		public List<TVTProgramme> Result { get; set; }
 
 
 		public Dictionary<int, TmdbMovie> ImdbMovies { get; set; }
@@ -25,7 +25,7 @@ namespace TVTower.Import
 			RottenTomatoeMovies = new Dictionary<int, TomatoMovie>();
 		}
 
-		public TmdbMovie GetMovieResult( TVTMovie movie )
+		public TmdbMovie GetMovieResult( TVTProgramme movie )
 		{
 			if ( movie.TmdbId.HasValue )
 				return ImdbMovies[movie.TmdbId.Value];
@@ -118,14 +118,14 @@ namespace TVTower.Import
 			_shouldStop = true;
 		}
 
-		private List<TVTMovie> GenerateTVTMovies( List<MovieResult> TmdbList )
+		private List<TVTProgramme> GenerateTVTMovies( List<MovieResult> TmdbList )
 		{
-			var result = new List<TVTMovie>();
+			var result = new List<TVTProgramme>();
 			var filler = new FillMovieExtended();
 
 			foreach ( var entry in TmdbList )
 			{
-				var movie = new TVTMovie();
+				var movie = new TVTProgramme();
 				Console.WriteLine( "Load details '{0}'", entry.title );
 				filler.LoadDetailsFromTmDB( this, movie, entry );
 				result.Add( movie );
@@ -239,7 +239,7 @@ namespace TVTower.Import
 			return country;
 		}
 
-		public TmdbMovie GetTmdbDetails( TVTMovie movie )
+		public TmdbMovie GetTmdbDetails( TVTProgramme movie )
 		{
 			if ( !movie.TmdbId.HasValue )
 				throw new Exception();
@@ -255,7 +255,7 @@ namespace TVTower.Import
 			}
 		}
 
-		public TomatoMovie GetTomatoeDetails( TVTMovie movie )
+		public TomatoMovie GetTomatoeDetails( TVTProgramme movie )
 		{
 			if ( movie.RottenTomatoesId.HasValue && RottenTomatoeMovies.ContainsKey( movie.RottenTomatoesId.Value ) )
 				return RottenTomatoeMovies[movie.RottenTomatoesId.Value];

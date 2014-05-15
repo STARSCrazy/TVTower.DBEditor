@@ -53,6 +53,10 @@
     <Compile Include="XmlPersister.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TVTower.Converter\TVTower.Converter.csproj">
+      <Project>{AFD86351-F554-4DBA-9505-76D6E4008279}</Project>
+      <Name>TVTower.Converter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TVTower.Entities\TVTower.Entities.csproj">
       <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>
       <Name>TVTower.Entities</Name>

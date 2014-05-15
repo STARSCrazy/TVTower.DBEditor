@@ -44,10 +44,14 @@
     <Compile Include="Entities\TVTAdvertising.cs" />
     <Compile Include="Entities\TVTEntity.cs" />
     <Compile Include="Entities\TVTEpisode.cs" />
-    <Compile Include="Entities\TVTMovie.cs" />
+    <Compile Include="Entities\TVTProgramme.cs" />
     <Compile Include="Entities\TVTPerson.cs" />
-    <Compile Include="Enums\TVTTargetGroup.cs" />
+    <Compile Include="Enums\TVTEventGenre.cs" />
+    <Compile Include="Enums\TVTProgrammeType.cs" />
+    <Compile Include="Enums\TVTDataType.cs" />
     <Compile Include="Enums\TVTDataStatus.cs" />
+    <Compile Include="Enums\TVTTargetGroup.cs" />
+    <Compile Include="Enums\TVTDataContent.cs" />
     <Compile Include="Enums\TVTPersonGender.cs" />
     <Compile Include="Enums\TVTPersonFunction.cs" />
     <Compile Include="Enums\TVTPressureGroup.cs" />

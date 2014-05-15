@@ -44,7 +44,8 @@ namespace TVTower.UnitTests
 
             using (var connection = TVTSQLSession.GetSession())
             {
-                TVTCommands.LoadMovies(database, connection);
+                var movies = TVTCommands.LoadMoviesOldV2(connection);
+
             }
 
             var t = 1;

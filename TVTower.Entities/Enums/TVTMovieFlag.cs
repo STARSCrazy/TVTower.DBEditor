@@ -21,13 +21,13 @@ namespace TVTower.Entities
 		//PG_Communists,
 
 		Live,			//Genereller Quotenbonus!
-		Music,
-		Sport,
+//		Music,
+//		Sport,
 		Animation,		//Bonus bei Kindern / Jugendlichen. Malues bei Rentnern / Managern.
 		Culture,		//Bonus bei Betty und bei Managern
 		Cult,			//Verringert die Nachteile des Filmalters. Bonus bei Rentnern. Höhere Serientreue bei Serien.
 		Trash,			//Bonus bei Arbeitslosen und Hausfrauen. Malus bei Arbeitnehmern und Managern. Trash läuft morgens und mittags gut => Bonus!
-		YellowPress,
+//		YellowPress,
 		BMovie,			//Nochmal deutlich verringerter Preis. Verringert die Nachteile des Filmalters. Bonus bei Jugendlichen. Malus bei allen anderen Zielgruppen. Bonus in der Nacht!
 		FSK18,			//Kleiner Bonus für Jugendliche, Arbeitnehmer, Arbeitslose, (Männer). Kleiner Malus für Kinder, Hausfrauen, Rentner, (Frauen).
 		Paid,			//Call-In-Shows

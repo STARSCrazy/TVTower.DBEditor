@@ -5,8 +5,17 @@ namespace TVTower.Entities
 	public class TVTEntity
 	{
 		public Guid Id { get; set; }
+        public string AltId { get; set; }
 
-		public TVTDataStatus DataStatus { get; set; }
+        public TVTDataType DataType { get; set; }
+		public TVTDataContent DataContent { get; set; }
+        public TVTDataStatus DataStatusDE { get; set; }
+        public TVTDataStatus DataStatusEN { get; set; }
+
+        public bool ApprovedDE { get; set; }
+        public bool ApprovedEN { get; set; }
+
+        public object Tag { get; set; }
 
 		public void GenerateGuid()
 		{

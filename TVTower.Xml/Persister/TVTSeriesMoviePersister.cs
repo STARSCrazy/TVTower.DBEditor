@@ -6,13 +6,13 @@ namespace TVTower.Xml.Persister
 {
 	public class TVTSeriesMoviePersister : TVTMoviePersister
 	{
-		TVTDataStatus defaultStatus = TVTDataStatus.Fake;
+		TVTDataContent defaultStatus = TVTDataContent.Fake;
 
-		public override void Load( XmlNode xmlNode, TVTMovie movie, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
+		public override void Load( XmlNode xmlNode, TVTProgramme movie, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
 			base.Load( xmlNode, movie, database, dbVersion, dataStructure );
 
-			movie.IsSeries = true;
+            movie.ProgrammeType = TVTProgrammeType.Series;
 			movie.Episodes = new List<TVTEpisode>();
 
 			var episodePersister = new TVTEpisodePersister<TVTEpisode>();
@@ -23,7 +23,7 @@ namespace TVTower.Xml.Persister
 				{
 					case "episode":
 						var episode = new TVTEpisode();
-						episode.EpisodeNumber = movieChild.GetAttributeInteger( "number" );
+						episode.EpisodeIndex = movieChild.GetAttributeInteger( "index" );
 						episodePersister.Load( movieChild, episode, database, dbVersion, dataStructure );
 						movie.Episodes.Add( episode );
 						break;

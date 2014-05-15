@@ -22,8 +22,8 @@ namespace TVTower.Xml.Persister
 							case "id":
 								entity.Id = Guid.Parse( attribLinked.GetElementValue() );
 								break;
-							case "status":
-								entity.DataStatus = (TVTDataStatus)Enum.Parse( typeof( TVTDataStatus ), attribLinked.GetElementValue() );
+                            case "type":
+								entity.DataContent = (TVTDataContent)Enum.Parse( typeof( TVTDataContent ), attribLinked.GetElementValue() );
 								break;
 						}
 					}
@@ -36,7 +36,7 @@ namespace TVTower.Xml.Persister
 			if ( (int)dbVersion > 2 )
 			{
 				xmlNode.AddAttribute( "id", entity.Id.ToString() );
-				xmlNode.AddAttribute( "status", entity.DataStatus.ToString() );
+				xmlNode.AddAttribute( "type", entity.DataContent.ToString() );
 			}
 		}
 	}

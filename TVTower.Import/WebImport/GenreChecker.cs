@@ -51,7 +51,7 @@ namespace TVTower.Import
 					break;
 				case 9805: //Sport = 2				
 				case 10757: //Sport Film = 9
-					result.Add( TVTMovieFlag.Sport );
+					//result.Add( TVTMovieFlag.Sport );
 					break;
 				case 10755: //Short = 6								
 					result.Add( TVTMovieFlag.Culture );
@@ -62,7 +62,7 @@ namespace TVTower.Import
 					break;
 				case 10402: //Musik = 24
 				case 22: //Musical = 11
-					result.Add( TVTMovieFlag.Music );
+					//result.Add( TVTMovieFlag.Music );
 					break;
 			}
 

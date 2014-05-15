@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Xml;
 using TVTower.Entities;
 using TVTower.Xml.Persister;
+using TVTower.Converter;
 
 namespace TVTower.Xml
 {
@@ -93,7 +94,7 @@ namespace TVTower.Xml
 			{
 				personNode.AddAttribute( "id", person.Id.ToString() );
 				if ( dataStructure == DataStructure.Full )
-					personNode.AddAttribute( "status", person.DataStatus.ToString() );
+					personNode.AddAttribute( "type", person.DataContent.ToString() );
 			}
 			element.AppendChild( personNode );
 
@@ -301,7 +302,7 @@ namespace TVTower.Xml
 			var result = database;
 			int version = 0;
 			DatabaseVersion dbVersion = DatabaseVersion.V2;
-			TVTDataStatus defaultStatus = TVTDataStatus.FakeWithRefId;
+			TVTDataContent defaultType = TVTDataContent.FakeWithRefId;
 
 			var doc = new XmlDocument();
 
@@ -323,7 +324,7 @@ namespace TVTower.Xml
 				var exportOptions = doc.GetElementsByTagName( "exportOptions" );
 				if ( bool.Parse( exportOptions[0].GetAttribute( "onlyFakes" ) ) )
 				{
-					defaultStatus = TVTDataStatus.Fake;
+					defaultType = TVTDataContent.Fake;
 				}
 			}
 
@@ -335,12 +336,12 @@ namespace TVTower.Xml
 				{
 					foreach ( XmlNode childNode in xmlMovie.ChildNodes )
 					{
-						var movie = new TVTMovie();
+						var movie = new TVTProgramme();
 						movie.MovieAdditional = new TVTMovieAdditional();
 						if ( version == 2 )
 						{
 							movie.GenerateGuid();
-							movie.DataStatus = defaultStatus;
+							movie.DataContent = defaultType;
 						}
 
 						switch ( childNode.Name )
@@ -365,12 +366,12 @@ namespace TVTower.Xml
 				{
 					foreach ( XmlNode childNode in xmlSeries.ChildNodes )
 					{
-						var movie = new TVTMovie();
+						var movie = new TVTProgramme();
 						movie.MovieAdditional = new TVTMovieAdditional();
 						if ( version == 2 )
 						{
 							movie.GenerateGuid();
-							movie.DataStatus = defaultStatus;
+							movie.DataContent = defaultType;
 						}
 
 						switch ( childNode.Name )
@@ -399,12 +400,12 @@ namespace TVTower.Xml
 
 
 
-		private void ConvertOldMovieData( TVTMovie movie, int version )
+		private void ConvertOldMovieData( TVTProgramme movie, int version )
 		{
 			if ( version <= 2 ) //Alte BlitzMax-Datenbank
 			{
 				movie.MovieAdditional.GenreOldVersion = movie.MovieAdditional.MainGenreRaw;
-				GenreConverter( movie );
+                MovieOldV2Converter.ConvertGenreAndFlags(movie, null);
 			}
 			else
 			{
@@ -413,87 +414,6 @@ namespace TVTower.Xml
 			}
 		}
 
-		private void GenreConverter( TVTMovie movie )
-		{
-			switch ( movie.MovieAdditional.GenreOldVersion )
-			{
-				case 0:  //action
-					movie.MainGenre = TVTGenre.Action;
-					break;
-				case 1:  //thriller
-					movie.MainGenre = TVTGenre.Thriller;
-					break;
-				case 2:  //sci-fi
-					movie.MainGenre = TVTGenre.SciFi;
-					break;
-				case 3:  //comedy
-					movie.MainGenre = TVTGenre.Comedy;
-					break;
-				case 4:  //horror
-					movie.MainGenre = TVTGenre.Horror;
-					break;
-				case 5:  //love
-					movie.MainGenre = TVTGenre.Romance;
-					break;
-				case 6:  //erotic
-					movie.MainGenre = TVTGenre.Erotic;
-					break;
-				case 7:  //western
-					movie.MainGenre = TVTGenre.Western;
-					break;
-				case 8:  //live
-					movie.MainGenre = TVTGenre.Reportage;
-					movie.Flags.Add( TVTMovieFlag.Live );
-					break;
-				case 9:  //kidsmovie
-					movie.MainGenre = TVTGenre.Family;
-					movie.TargetGroups.Add( TVTTargetGroup.Children );
-					break;
-				case 10:  //cartoon
-					movie.MainGenre = TVTGenre.Animation;
-					movie.Flags.Add( TVTMovieFlag.Animation );
-					break;
-				case 11:  //music
-					movie.MainGenre = TVTGenre.Music;
-					movie.Flags.Add( TVTMovieFlag.Music );
-					break;
-				case 12:  //sport
-					movie.MainGenre = TVTGenre.Sport;
-					movie.Flags.Add( TVTMovieFlag.Sport );
-					break;
-				case 13:  //culture
-					movie.MainGenre = TVTGenre.Documentary;
-					movie.Flags.Add( TVTMovieFlag.Culture );
-					break;
-				case 14:  //fantasy
-					movie.MainGenre = TVTGenre.Fantasy;
-					break;
-				case 15:  //yellow press
-					movie.MainGenre = TVTGenre.Reportage;
-					movie.Flags.Add( TVTMovieFlag.YellowPress );
-					break;
-				case 16:  //news
-					movie.MainGenre = TVTGenre.Reportage;
-					break;
-				case 17:  //show
-					movie.MainGenre = TVTGenre.Show;
-					movie.ShowGenre = TVTShowGenre.Undefined;
-					break;
-				case 18:  //monumental
-					movie.MainGenre = TVTGenre.Monumental;
-					movie.Flags.Add( TVTMovieFlag.Cult );
-					break;
-				case 19:  //fillers
-					movie.MainGenre = TVTGenre.Undefined;
-					movie.Flags.Add( TVTMovieFlag.Trash );
-					break;
-				case 20:  //paid programing
-					movie.MainGenre = TVTGenre.Commercial;
-					movie.Flags.Add( TVTMovieFlag.Paid );
-					break;
-				default:
-					throw new Exception();
-			}
-		}
+
 	}
 }
