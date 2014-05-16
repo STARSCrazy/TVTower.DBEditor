@@ -133,9 +133,9 @@ namespace TVTower.Xml
 				XmlNode additionalNode = doc.CreateElement( "additional" );
 				additionalNode.AddAttribute( "original_name", person.FullName );
 				additionalNode.AddAttribute( "place_of_birth", person.PlaceOfBirth );
-				additionalNode.AddAttribute( "info", person.Info );
-				additionalNode.AddAttribute( "movieRegistrations", person.MovieRegistrations.ToString() );
-				additionalNode.AddAttribute( "otherInfo", person.OtherInfo );
+				//additionalNode.AddAttribute( "info", person.Info );
+				//additionalNode.AddAttribute( "movieRegistrations", person.MovieRegistrations.ToString() );
+				//additionalNode.AddAttribute( "otherInfo", person.OtherInfo );
 				personNode.AppendChild( additionalNode );
 			}
 
@@ -144,7 +144,7 @@ namespace TVTower.Xml
 				XmlNode dataNode = doc.CreateElement( "data" );
 				dataNode.AddAttribute( "professionSkill", person.ProfessionSkill.ToString() );
 				dataNode.AddAttribute( "fame", person.Fame.ToString() );
-				dataNode.AddAttribute( "success", person.Success.ToString() );
+				//dataNode.AddAttribute( "success", person.Success.ToString() );
 				dataNode.AddAttribute( "power", person.Power.ToString() );
 				dataNode.AddAttribute( "humor", person.Humor.ToString() );
 				dataNode.AddAttribute( "charisma", person.Charisma.ToString() );
@@ -409,8 +409,8 @@ namespace TVTower.Xml
 			}
 			else
 			{
-				movie.MainGenre = (TVTGenre)movie.MovieAdditional.MainGenreRaw;
-				movie.SubGenre = (TVTGenre)movie.MovieAdditional.SubGenreRaw;
+				movie.MainGenre = (TVTProgrammeGenre)movie.MovieAdditional.MainGenreRaw;
+                movie.SubGenre = (TVTProgrammeGenre)movie.MovieAdditional.SubGenreRaw;
 			}
 		}
 

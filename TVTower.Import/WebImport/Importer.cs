@@ -4,6 +4,7 @@ using System.Linq;
 using CherryTomato.Entities;
 using TVTower.Entities;
 using WatTmdb.V3;
+using TVTower.Converter;
 
 namespace TVTower.Import
 {
@@ -140,10 +141,10 @@ namespace TVTower.Import
 			if ( person == null )
 			{
 				person = new TVTPerson();
-				person.ConvertFullname(cast.name);
+                PersonConverter.ConvertFullname(person, cast.name);
 				person.TmdbId = cast.id;
 				person.Functions.Add(TVTPersonFunction.Actor);
-				person.OtherInfo = cast.character;
+                person.AdditionalInfo = cast.character;
 
 				RegisterPerson( person, cast.id );
 
@@ -160,10 +161,10 @@ namespace TVTower.Import
 			if ( person == null )
 			{
 				person = new TVTPerson();
-                person.ConvertFullname(crew.name);
+                PersonConverter.ConvertFullname(person, crew.name);
 				person.TmdbId = crew.id;
 				person.Functions.Add(TVTPersonFunction.Director);
-				person.OtherInfo = crew.job + "/" + crew.department;
+                person.AdditionalInfo = crew.job + "/" + crew.department;
 
 				RegisterPerson( person, crew.id );
 
@@ -183,7 +184,7 @@ namespace TVTower.Import
 			person.Deathday = personInfo.deathday;
 			person.PlaceOfBirth = personInfo.place_of_birth;
 			person.Country = GetCountryCode( GetCountry( personInfo.place_of_birth ) );
-			person.MovieRegistrations++;
+			//person.MovieRegistrations++;
 		}
 
 		private string GetCountry( string placeOfBirth )

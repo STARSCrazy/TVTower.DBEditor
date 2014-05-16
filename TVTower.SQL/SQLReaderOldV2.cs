@@ -32,6 +32,8 @@ namespace TVTower.SQL
                 return false;
             else if (value == "1")
                 return true;
+            else if (value == "3") //Kompatibilität: Später weg
+                return true;
 
             return bool.Parse(value);
         }

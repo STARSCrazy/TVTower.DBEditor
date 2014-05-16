@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
 using TVTower.SQL;
 using TVTower.DBEditor;
+using TVTower.Converter;
 
 namespace TVTower.UnitTests
 {
@@ -46,7 +47,16 @@ namespace TVTower.UnitTests
             {
                 var movies = TVTCommands.LoadMoviesOldV2(connection);
 
+                MovieOldV2Converter.Convert(movies, database);
+
+                database.RefreshPersonProgrammeCount();
             }
+
+            using (var connection = TVTSQLSession.GetSessionNewDB())
+            {
+                TVTCommands.InsertProgrammes(connection, database.GetAllMovies(true));
+            }
+            
 
             var t = 1;
         }

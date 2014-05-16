@@ -19,5 +19,7 @@ namespace TVTower.Entities
 		TVTPerson GetPersonByStringId( string id );
 		TVTPerson GetPersonByTmdbId( int tmdbId );
 		TVTPerson GetPersonByName( string name );
+
+        void RefreshPersonProgrammeCount();
 	}
 }

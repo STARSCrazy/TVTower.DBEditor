@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVTower.UnitTests", "TVTowe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVTower.Converter", "TVTower.Converter\TVTower.Converter.csproj", "{AFD86351-F554-4DBA-9505-76D6E4008279}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeKnight.Core", "CodeKnight.Core\CodeKnight.Core.csproj", "{A12F5069-3DCE-406A-A9AB-42184F211121}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TVTowerDBEditorSolution.vsmdi
@@ -117,6 +119,16 @@ Global
 		{AFD86351-F554-4DBA-9505-76D6E4008279}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AFD86351-F554-4DBA-9505-76D6E4008279}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AFD86351-F554-4DBA-9505-76D6E4008279}.Release|x86.ActiveCfg = Release|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A12F5069-3DCE-406A-A9AB-42184F211121}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

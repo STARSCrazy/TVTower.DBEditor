@@ -21,8 +21,8 @@ namespace TVTower.Entities.Entities
 
 		public TVTTargetGroup TargetGroup { get; set; }
 
-		public List<TVTMovieGenre> AllowedMovieGenres { get; set; }
-		public List<TVTMovieGenre> ProhibitedMovieGenres { get; set; }
+		public List<TVTProgrammeGenre> AllowedMovieGenres { get; set; }
+		public List<TVTProgrammeGenre> ProhibitedMovieGenres { get; set; }
 		public List<TVTProgrammeType> AllowedProgrammeTypes { get; set; }
 		public List<TVTProgrammeType> ProhibitedProgrammeTypes { get; set; }
 

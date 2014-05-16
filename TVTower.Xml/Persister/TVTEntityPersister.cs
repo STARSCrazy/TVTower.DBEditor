@@ -5,7 +5,7 @@ using TVTower.Entities;
 namespace TVTower.Xml.Persister
 {
 	public class TVTEntityPersister<T>
-		where T : TVTEntity
+		where T : ITVTEntity
 	{
 		public virtual void Load( XmlNode xmlNode, T entity, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{

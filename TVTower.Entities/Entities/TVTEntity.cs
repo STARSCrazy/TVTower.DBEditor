@@ -14,8 +14,10 @@ namespace TVTower.Entities
 
         public bool ApprovedDE { get; set; }
         public bool ApprovedEN { get; set; }
+        public bool Incorrect { get; set; }
 
         public object Tag { get; set; }
+        public string AdditionalInfo { get; set; }        
 
 		public void GenerateGuid()
 		{

@@ -177,9 +177,9 @@ namespace TVTower.Import
 				return genre2;
 		}
 
-		public TVTGenre GetGenre( List<MovieGenre> genres )
+		public TVTProgrammeGenre GetGenre( List<MovieGenre> genres )
 		{
-			return TVTGenre.Undefined;
+            return TVTProgrammeGenre.Undefined;
 		}
 
 		public int GetGenreId( List<MovieGenre> genres )

@@ -46,6 +46,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">
+      <Project>{A12F5069-3DCE-406A-A9AB-42184F211121}</Project>
+      <Name>CodeKnight.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TVTower.Entities\TVTower.Entities.csproj">
       <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>
       <Name>TVTower.Entities</Name>

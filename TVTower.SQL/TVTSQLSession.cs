@@ -18,5 +18,16 @@ namespace TVTower.SQL
             connection.Open();
             return connection;
         }
+
+        public static MySqlConnection GetSessionNewDB()
+        {
+            string myConnectionString = "SERVER=localhost;" +
+                                        "DATABASE=tvtower_new;" +
+                                        "UID=TVTowerUser;" +
+                                        "PASSWORD=123;";
+            var connection = new MySqlConnection(myConnectionString);
+            connection.Open();
+            return connection;
+        }
     }
 }

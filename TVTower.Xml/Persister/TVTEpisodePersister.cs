@@ -4,7 +4,7 @@ using TVTower.Entities;
 namespace TVTower.Xml.Persister
 {
     public class TVTEpisodePersister<T> : TVTEntityPersister<T>
-        where T : TVTEpisode
+        where T : ITVTEpisode
     {
         public override void Load(XmlNode xmlNode, T episode, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure)
         {

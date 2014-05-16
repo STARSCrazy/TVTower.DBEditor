@@ -105,6 +105,29 @@ namespace TVTower.DBEditor
                 return PersonData.FirstOrDefault(x => x.FakeFullName != null ? x.FakeFullName.Trim() == name.Trim() : false);
 		}
 
+        public void RefreshPersonProgrammeCount()
+        {
+            foreach (var person in this.PersonData)
+            {
+                person.ProgrammeCount = 0;
+            }
+
+            foreach(var movie in this.MovieData)
+            {
+                foreach(var person in movie.Participants)
+                {
+                    var currPerson = GetPersonById(person.Id);
+                    currPerson.ProgrammeCount++;                    
+                }
+
+                if (movie.Director != null)
+                {
+                    var currPerson = GetPersonById(movie.Director.Id);
+                    currPerson.ProgrammeCount++;
+                }
+            }            
+        }
+
 		#endregion
 	}
 }

@@ -13,16 +13,17 @@ namespace TVTower.Xml.Persister
 			base.Load( xmlNode, movie, database, dbVersion, dataStructure );
 
             movie.ProgrammeType = TVTProgrammeType.Series;
-			movie.Episodes = new List<TVTEpisode>();
+			movie.Episodes = new List<ITVTEpisode>();
 
-			var episodePersister = new TVTEpisodePersister<TVTEpisode>();
+			var episodePersister = new TVTEpisodePersister<ITVTEpisode>();
 
 			foreach ( XmlLinkedNode movieChild in xmlNode.ChildNodes )
 			{
 				switch ( movieChild.Name )
 				{
 					case "episode":
-						var episode = new TVTEpisode();
+						var episode = new TVTProgramme();
+                        episode.ProgrammeType = TVTProgrammeType.Episode;
 						episode.EpisodeIndex = movieChild.GetAttributeInteger( "index" );
 						episodePersister.Load( movieChild, episode, database, dbVersion, dataStructure );
 						movie.Episodes.Add( episode );

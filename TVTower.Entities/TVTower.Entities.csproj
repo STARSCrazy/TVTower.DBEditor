@@ -44,13 +44,13 @@
     <Compile Include="Entities\TVTNews.cs" />
     <Compile Include="Entities\TVTAdvertising.cs" />
     <Compile Include="Entities\TVTEntity.cs" />
-    <Compile Include="Entities\TVTEpisode.cs" />
+    <Compile Include="Interfaces\ITVTEntity.cs" />
+    <Compile Include="Interfaces\ITVTEpisode.cs" />
     <Compile Include="Entities\TVTProgramme.cs" />
     <Compile Include="Entities\TVTPerson.cs" />
     <Compile Include="Entities\TVTNewsThread.cs" />
     <Compile Include="Enums\TVTNewsTrigger.cs" />
     <Compile Include="Enums\TVTNewsEffect.cs" />
-    <Compile Include="Enums\TVTEventGenre.cs" />
     <Compile Include="Enums\TVTNewsGenre.cs" />
     <Compile Include="Enums\TVTProgrammeType.cs" />
     <Compile Include="Enums\TVTDataType.cs" />
@@ -60,13 +60,17 @@
     <Compile Include="Enums\TVTPersonGender.cs" />
     <Compile Include="Enums\TVTPersonFunction.cs" />
     <Compile Include="Enums\TVTPressureGroup.cs" />
-    <Compile Include="Enums\TVTMovieGenre.cs" />
+    <Compile Include="Enums\TVTProgrammeGenre.cs" />
     <Compile Include="Enums\TVTMovieFlag.cs" />
-    <Compile Include="Enums\TVTReportageGenre.cs" />
-    <Compile Include="Enums\TVTShowGenre.cs" />
     <Compile Include="Helper\EntityHelper.cs" />
     <Compile Include="ITVTDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">
+      <Project>{A12F5069-3DCE-406A-A9AB-42184F211121}</Project>
+      <Name>CodeKnight.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

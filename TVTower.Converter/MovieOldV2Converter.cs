@@ -9,47 +9,40 @@ namespace TVTower.Converter
 	{
 		public static void Convert( List<MovieOldV2> moviesOldV2, ITVTDatabase database )
 		{
-			var seriesEpisodes = new List<TVTEpisode>();
+            var seriesEpisodes = new List<TVTProgramme>();
 
 			foreach ( var movSrc in moviesOldV2 )
 			{
-				TVTProgramme programme = null;
-				TVTEpisode episode = null;
+                TVTProgramme programme = new TVTProgramme();		
 
 				if ( movSrc.parentID == 0 ) //Film
-				{
-					programme = new TVTProgramme();
 					programme.ProgrammeType = TVTProgrammeType.Movie;
-					episode = programme;
-				}
 				else //Serien-Episode       
-				{
-					episode = new TVTEpisode();
-				}
+                    programme.ProgrammeType = TVTProgrammeType.Episode;
 
-				episode.DataContent = TVTDataContent.Undefined;
+                programme.DataContent = TVTDataContent.Undefined;
 				if ( movSrc.custom )
-					episode.DataType = TVTDataType.TVTower;
+                    programme.DataType = TVTDataType.TVTower;
 				else
-					episode.DataType = TVTDataType.Custom;
+                    programme.DataType = TVTDataType.Custom;
 
-				episode.GenerateGuid();
-				episode.AltId = movSrc.id.ToString();
-				episode.TitleDE = movSrc.title;
-				episode.TitleEN = movSrc.titleEnglish;
-				episode.DescriptionDE = movSrc.description;
-				episode.DescriptionEN = movSrc.descriptionEnglish;
-				episode.Participants = GetPersonsByNameOrCreate( database, movSrc.actors, TVTDataContent.Original, TVTPersonFunction.Actor );
-				episode.Director = GetPersonByNameOrCreate( database, movSrc.director, TVTDataContent.Original, TVTPersonFunction.Director );
+                programme.GenerateGuid();
+                programme.AltId = movSrc.id.ToString();
+                programme.TitleDE = movSrc.title;
+                programme.TitleEN = movSrc.titleEnglish;
+                programme.DescriptionDE = movSrc.description;
+                programme.DescriptionEN = movSrc.descriptionEnglish;
+                programme.Participants = GetPersonsByNameOrCreate(database, movSrc.actors, TVTDataContent.Original, TVTPersonFunction.Actor);
+                programme.Director = GetPersonByNameOrCreate(database, movSrc.director, TVTDataContent.Original, TVTPersonFunction.Director);
 
-				episode.PriceMod = ConvertOldToNewValue( movSrc.price );
-				episode.CriticsRate = ConvertOldToNewValue( movSrc.critics );
-				episode.BoxOfficeRate = ConvertOldToNewValue( movSrc.outcome );
-				episode.ViewersRate = ConvertOldToNewValue( movSrc.speed );
+                programme.PriceMod = ConvertOldToNewValue(movSrc.price);
+                programme.CriticsRate = ConvertOldToNewValue(movSrc.critics);
+                programme.BoxOfficeRate = ConvertOldToNewValue(movSrc.outcome);
+                programme.ViewersRate = ConvertOldToNewValue(movSrc.speed);
 
-				episode.ApprovedDE = movSrc.approved;
+                programme.ApprovedDE = movSrc.approved;
 
-				if ( programme != null ) //Film
+				if ( programme.ProgrammeType == TVTProgrammeType.Movie ) //Film
 				{
 					programme.Year = movSrc.year;
 					programme.Country = movSrc.country;
@@ -65,11 +58,11 @@ namespace TVTower.Converter
 
 					database.AddMovie( programme );
 				}
-				else
+                else if (programme.ProgrammeType == TVTProgrammeType.Episode)
 				{
-					episode.EpisodeIndex = movSrc.episode;
-					episode.Tag = movSrc.parentID.ToString();
-					seriesEpisodes.Add( episode );
+                    programme.EpisodeIndex = movSrc.episode;
+                    programme.Tag = movSrc.parentID.ToString();
+                    seriesEpisodes.Add(programme);
 				}
 			}
 
@@ -78,7 +71,13 @@ namespace TVTower.Converter
 			foreach ( var current in seriesEpisodes )
 			{
 				var series = allMovies.FirstOrDefault( x => x.AltId.CompareTo( current.Tag ) == 0 );
-				series.ProgrammeType = TVTProgrammeType.Series;
+                if (series != null)
+                {
+                    series.ProgrammeType = TVTProgrammeType.Series;
+                    current.SeriesMaster = new CodeKnight.Core.WeakReference<TVTProgramme>(series);
+                }
+                else
+                    current.Incorrect = true;
 			}
 		}
 
@@ -92,73 +91,85 @@ namespace TVTower.Converter
 			switch ( movieOld.genre )
 			{
 				case 0:  //action
-					movie.MainGenre = TVTMovieGenre.Action;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Action;
 					break;
 				case 1:  //thriller
-					movie.MainGenre = TVTMovieGenre.Thriller;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Thriller;
 					break;
 				case 2:  //sci-fi
-					movie.MainGenre = TVTMovieGenre.SciFi;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.SciFi;
 					break;
 				case 3:  //comedy
-					movie.MainGenre = TVTMovieGenre.Comedy;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Comedy;
 					break;
 				case 4:  //horror
-					movie.MainGenre = TVTMovieGenre.Horror;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Horror;
 					break;
 				case 5:  //love
-					movie.MainGenre = TVTMovieGenre.Romance;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Romance;
 					break;
 				case 6:  //erotic
-					movie.MainGenre = TVTMovieGenre.Erotic;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Erotic;
 					break;
 				case 7:  //western
-					movie.MainGenre = TVTMovieGenre.Western;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Western;
 					break;
 				case 8:  //live
 					movie.ProgrammeType = TVTProgrammeType.Event;
 					movie.Flags.Add( TVTMovieFlag.Live );
 					break;
 				case 9:  //kidsmovie
-					movie.MainGenre = TVTMovieGenre.Family;
+					movie.MainGenre = TVTProgrammeGenre.Family;
 					movie.TargetGroups.Add( TVTTargetGroup.Children );
 					break;
 				case 10:  //cartoon
-					movie.MainGenre = TVTMovieGenre.Animation;
+					movie.MainGenre = TVTProgrammeGenre.Animation;
 					movie.Flags.Add( TVTMovieFlag.Animation );
 					break;
 				case 11:  //music
 					movie.ProgrammeType = TVTProgrammeType.Event;
-					movie.EventGenre = TVTEventGenre.Music;
+					movie.MainGenre = TVTProgrammeGenre.Music;
 					break;
 				case 12:  //sport
 					movie.ProgrammeType = TVTProgrammeType.Event;
-					movie.EventGenre = TVTEventGenre.Sport;
+                    movie.MainGenre = TVTProgrammeGenre.Sport;
 					break;
 				case 13:  //culture
-					movie.MainGenre = TVTMovieGenre.Documentary;
+					movie.MainGenre = TVTProgrammeGenre.Documentary;
 					movie.Flags.Add( TVTMovieFlag.Culture );
 					break;
 				case 14:  //fantasy
-					movie.MainGenre = TVTMovieGenre.Fantasy;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Fantasy;
 					break;
 				case 15:  //yellow press
 					movie.ProgrammeType = TVTProgrammeType.Reportage;
-					movie.ReportageGenre = TVTReportageGenre.Undefined;
+                    movie.MainGenre = TVTProgrammeGenre.YellowPress;
 					break;
 				case 16:  //news
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
 					movie.ProgrammeType = TVTProgrammeType.Reportage;
 					break;
 				case 17:  //show					
 					movie.ProgrammeType = TVTProgrammeType.Show;
-					movie.ShowGenre = TVTShowGenre.Undefined;
+                    movie.MainGenre = TVTProgrammeGenre.Undefined_Show;
 					break;
 				case 18:  //monumental
-					movie.MainGenre = TVTMovieGenre.Monumental;
+                    movie.ProgrammeType = TVTProgrammeType.Movie;
+					movie.MainGenre = TVTProgrammeGenre.Monumental;
 					movie.Flags.Add( TVTMovieFlag.Cult );
 					break;
 				case 19:  //fillers
-					movie.MainGenre = TVTMovieGenre.Undefined;
+                    movie.ProgrammeType = TVTProgrammeType.Misc;
+					movie.MainGenre = TVTProgrammeGenre.Undefined;
 					movie.Flags.Add( TVTMovieFlag.Trash );
 					break;
 				case 20:  //paid programing
@@ -181,6 +192,7 @@ namespace TVTower.Converter
 					var personName = aValue.Trim();
 
 					var person = GetPersonByNameOrCreate( database, personName, defaultStatus, functionForNew );
+                    if (person != null)
 					result.Add( person );
 				}
 			}

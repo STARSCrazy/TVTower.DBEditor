@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using TVTower.Entities;
+using TVTower.Converter;
 
 namespace TVTower.Xml.Persister
 {
@@ -194,7 +195,7 @@ namespace TVTower.Xml.Persister
 						person = new TVTPerson();
 						person.GenerateGuid();
 						person.DataContent = defaultType;
-						person.ConvertFakeFullname(personName);
+                        PersonConverter.ConvertFakeFullname(person, personName);
 						person.Functions.Add( functionForNew );
 						database.AddPerson( person );
 					}
@@ -216,7 +217,7 @@ namespace TVTower.Xml.Persister
 					person = new TVTPerson();
 					person.GenerateGuid();
 					person.DataContent = defaultType;
-					person.ConvertFakeFullname(name);
+                    PersonConverter.ConvertFakeFullname(person, name);
 					person.Functions.Add( functionForNew );
 					database.AddPerson( person );
 				}
