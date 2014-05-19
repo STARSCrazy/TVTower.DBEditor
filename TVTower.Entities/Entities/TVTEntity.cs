@@ -2,26 +2,39 @@
 
 namespace TVTower.Entities
 {
-	public class TVTEntity
+	public abstract class TVTEntity : ITVTEntity
 	{
 		public Guid Id { get; set; }
         public string AltId { get; set; }
 
         public TVTDataType DataType { get; set; }
-		public TVTDataContent DataContent { get; set; }
-        public TVTDataStatus DataStatusDE { get; set; }
-        public TVTDataStatus DataStatusEN { get; set; }
-
-        public bool ApprovedDE { get; set; }
-        public bool ApprovedEN { get; set; }
-        public bool Incorrect { get; set; }
+        public TVTDataStatus DataStatus { get; set; }
 
         public object Tag { get; set; }
-        public string AdditionalInfo { get; set; }        
+        public string AdditionalInfo { get; set; }
+        public bool Approved { get; set; } //TODO: Kommt wieder weg!
 
 		public void GenerateGuid()
 		{
 			Id = Guid.NewGuid();
 		}
+
+        public virtual TVTDataStatus RefreshStatus()
+        {
+            DataStatus = TVTDataStatus.Complete;
+
+            if (Id == Guid.Empty)
+            {
+                DataStatus = TVTDataStatus.Incorrect;
+                return DataStatus;
+            }
+
+            if (Approved)
+            {
+                DataStatus = TVTDataStatus.Approved;
+            }
+
+            return DataStatus;
+        }
 	}
 }

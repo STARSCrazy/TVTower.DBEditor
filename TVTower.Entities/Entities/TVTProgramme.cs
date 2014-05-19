@@ -3,7 +3,7 @@ using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
-    public class TVTProgramme : TVTEntity, ITVTEpisode
+    public class TVTProgramme : TVTEntity, ITVTProgrammeCore
 	{
 		public TVTProgrammeType ProgrammeType { get; set; }
                 
@@ -14,6 +14,9 @@ namespace TVTower.Entities
 
         public string FakeTitleDE { get; set; }
         public string FakeTitleEN { get; set; }
+
+        public string FakeDescriptionDE { get; set; } //Optional
+        public string FakeDescriptionEN { get; set; } //Optional
 
         public string DescriptionMovieDB { get; set; }
 
@@ -26,14 +29,9 @@ namespace TVTower.Entities
         public int ViewersRate { get; set; }	//0 - 255	-	auch als Speed bekannt.
         public int BoxOfficeRate { get; set; }	//0 - 255	-	auch als Outcome bekannt.     
 
-        public int? EpisodeIndex { get; set; }
-        public WeakReference<TVTProgramme> SeriesMaster { get; set; }
-
-
         //Fields not for episodes
         public string Country { get; set; }				//ISO-3166-1 ALPHA-2    (http://de.wikipedia.org/wiki/ISO-3166-1-Kodierliste)
 		public int Year { get; set; }					//YYYY   = 1900+
-		public int ValidUntilYear { get; set; }			//YYYY   = 1900+ für Live-Events
 
 		public TVTProgrammeGenre MainGenre { get; set; }
 		public TVTProgrammeGenre SubGenre { get; set; }
@@ -62,5 +60,57 @@ namespace TVTower.Entities
 			Flags = new List<TVTMovieFlag>();
             TargetGroups = new List<TVTTargetGroup>();
 		}
+
+        public override TVTDataStatus RefreshStatus()
+        {
+            var baseStatus = base.RefreshStatus();
+            if (baseStatus == TVTDataStatus.Incorrect)
+                return baseStatus;
+
+            if (string.IsNullOrEmpty(Country) ||
+                MainGenre == TVTProgrammeGenre.Undefined ||
+                MainGenre == TVTProgrammeGenre.Undefined_Show ||
+                MainGenre == TVTProgrammeGenre.Undefined_Reportage ||
+                Blocks == 0 ||
+                Year == 0)
+            {
+                DataStatus = TVTDataStatus.Incomplete;
+                return DataStatus;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(TitleDE) &&
+                    !string.IsNullOrEmpty(DescriptionDE) &&
+                    !string.IsNullOrEmpty(FakeTitleDE))
+                {
+                    DataStatus = TVTDataStatus.OnlyDE;
+                    return DataStatus;
+                }
+
+                if (!string.IsNullOrEmpty(TitleEN) &&
+                    !string.IsNullOrEmpty(DescriptionEN) &&
+                    !string.IsNullOrEmpty(FakeTitleEN))
+                {
+                    DataStatus = TVTDataStatus.OnlyEN;
+                    return DataStatus;
+                }
+
+                if (string.IsNullOrEmpty(TitleDE) ||
+                    string.IsNullOrEmpty(DescriptionDE) ||
+                    string.IsNullOrEmpty(TitleEN) ||
+                    string.IsNullOrEmpty(DescriptionEN))
+                {
+                    DataStatus = TVTDataStatus.Incomplete;
+
+                    if (string.IsNullOrEmpty(FakeTitleDE) ||
+                        string.IsNullOrEmpty(FakeTitleEN))
+                    {
+                        DataStatus = TVTDataStatus.NoFakes;
+                    }
+                }
+            }
+
+            return DataStatus;
+        }
 	}
 }

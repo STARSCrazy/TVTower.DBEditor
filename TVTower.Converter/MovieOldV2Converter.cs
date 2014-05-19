@@ -2,73 +2,122 @@
 using System.Collections.Generic;
 using System.Linq;
 using TVTower.Entities;
+using TVTower.Entities.Entities;
 
 namespace TVTower.Converter
 {
 	public static class MovieOldV2Converter
 	{
+        public static void RefreshMovieDescriptions(ITVTDatabase database)
+        {
+            var programme = new List<ITVTProgrammeCore>();
+            programme.AddRange(database.GetAllMovies(true));
+            programme.AddRange(database.GetAllEpisodes());
+
+            foreach (var person in database.GetAllPeople())
+            {
+                var foundProgrammes = programme.Where(x => x.Participants.Contains(person));
+                foreach (var foundProgramme in foundProgrammes)
+                {
+                    var index = foundProgramme.Participants.IndexOf(person);
+
+                    if (person.FullName != " " && foundProgramme.DescriptionDE.Contains(person.FullName))
+                        foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace(person.FullName, string.Format("[{0}|Full]", index));
+
+                    if (!string.IsNullOrEmpty(person.FirstName) && foundProgramme.DescriptionDE.Contains(person.FirstName))
+                        foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace(person.FirstName, string.Format("[{0}|First]", index));
+
+                    if (!string.IsNullOrEmpty(person.LastName) && foundProgramme.DescriptionDE.Contains(person.LastName))
+                        foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace(person.FirstName, string.Format("[{0}|Last]", index));
+
+                    if (!string.IsNullOrEmpty(person.NickName) && foundProgramme.DescriptionDE.Contains(person.NickName))
+                        foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace(person.FirstName, string.Format("[{0}|Nick]", index));
+
+
+                    if (person.FullName != " " && foundProgramme.DescriptionEN.Contains(person.FullName))
+                        foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace(person.FullName, string.Format("[{0}|Full]", index));
+
+                    if (!string.IsNullOrEmpty(person.FirstName) && foundProgramme.DescriptionEN.Contains(person.FirstName))
+                        foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace(person.FirstName, string.Format("[{0}|First]", index));
+
+                    if (!string.IsNullOrEmpty(person.LastName) && foundProgramme.DescriptionEN.Contains(person.LastName))
+                        foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace(person.FirstName, string.Format("[{0}|Last]", index));
+
+                    if (!string.IsNullOrEmpty(person.NickName) && foundProgramme.DescriptionEN.Contains(person.NickName))
+                        foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace(person.FirstName, string.Format("[{0}|Nick]", index));
+                }
+            }
+        }
+
+        private static void ConvertEpisode(MovieOldV2 movieOldV2, ITVTProgrammeCore episode, ITVTDatabase database)
+        {
+            if (movieOldV2.custom)
+                episode.DataType = TVTDataType.TVTower;
+            else
+                episode.DataType = TVTDataType.Custom;
+
+            episode.GenerateGuid();
+            episode.AltId = movieOldV2.id.ToString();
+            episode.TitleDE = movieOldV2.title;
+            episode.TitleEN = movieOldV2.titleEnglish;
+            episode.FakeTitleDE = movieOldV2.titleFake;
+            episode.FakeTitleEN = movieOldV2.titleEnglishFake;            
+            episode.DescriptionDE = movieOldV2.description;
+            episode.DescriptionEN = movieOldV2.descriptionEnglish;
+            episode.Participants = GetPersonsByNameOrCreate(database, movieOldV2.actors, TVTDataContent.Original, TVTPersonFunction.Actor);
+            episode.Director = GetPersonByNameOrCreate(database, movieOldV2.director, TVTDataContent.Original, TVTPersonFunction.Director);
+            
+            //episode.AdditionalInfo = movieOldV2.approved ? "Approved" : null;            
+        }
+
 		public static void Convert( List<MovieOldV2> moviesOldV2, ITVTDatabase database )
 		{
-            var seriesEpisodes = new List<TVTProgramme>();
-
 			foreach ( var movSrc in moviesOldV2 )
 			{
-                TVTProgramme programme = new TVTProgramme();		
+                if (movSrc.parentID == 0) //Film
+                {
+                    var programme = new TVTProgramme();
+                    programme.ProgrammeType = TVTProgrammeType.Movie;
+                    programme.Approved = movSrc.approved;
 
-				if ( movSrc.parentID == 0 ) //Film
-					programme.ProgrammeType = TVTProgrammeType.Movie;
-				else //Serien-Episode       
-                    programme.ProgrammeType = TVTProgrammeType.Episode;
+                    ConvertEpisode(movSrc, programme, database);
 
-                programme.DataContent = TVTDataContent.Undefined;
-				if ( movSrc.custom )
-                    programme.DataType = TVTDataType.TVTower;
-				else
-                    programme.DataType = TVTDataType.Custom;
+                    programme.PriceMod = ConvertOldToNewValue(movSrc.price);
+                    programme.BoxOfficeRate = ConvertOldToNewValue(movSrc.outcome);
 
-                programme.GenerateGuid();
-                programme.AltId = movSrc.id.ToString();
-                programme.TitleDE = movSrc.title;
-                programme.TitleEN = movSrc.titleEnglish;
-                programme.DescriptionDE = movSrc.description;
-                programme.DescriptionEN = movSrc.descriptionEnglish;
-                programme.Participants = GetPersonsByNameOrCreate(database, movSrc.actors, TVTDataContent.Original, TVTPersonFunction.Actor);
-                programme.Director = GetPersonByNameOrCreate(database, movSrc.director, TVTDataContent.Original, TVTPersonFunction.Director);
+                    programme.Year = movSrc.year;
+                    programme.Country = movSrc.country;
+                    programme.Blocks = movSrc.blocks;
 
-                programme.PriceMod = ConvertOldToNewValue(movSrc.price);
-                programme.CriticsRate = ConvertOldToNewValue(movSrc.critics);
-                programme.BoxOfficeRate = ConvertOldToNewValue(movSrc.outcome);
-                programme.ViewersRate = ConvertOldToNewValue(movSrc.speed);
+                    ConvertGenreAndFlags(programme, movSrc);
 
-                programme.ApprovedDE = movSrc.approved;
+                    if (programme.Flags.Contains(TVTMovieFlag.Live) && movSrc.time > 0)
+                        programme.LiveHour = movSrc.time;
 
-				if ( programme.ProgrammeType == TVTProgrammeType.Movie ) //Film
-				{
-					programme.Year = movSrc.year;
-					programme.Country = movSrc.country;
-					programme.Blocks = movSrc.blocks;
+                    if (movSrc.xrated)
+                        programme.Flags.Add(TVTMovieFlag.FSK18);
 
-					ConvertGenreAndFlags( programme, movSrc );
+                    database.AddMovie(programme);
+                }
+                else //Serien-Episode
+                {
+                    var episode = new TVTEpisode();
+                    episode.Approved = movSrc.approved;
+                    ConvertEpisode(movSrc, episode, database);
 
-					if ( programme.Flags.Contains( TVTMovieFlag.Live ) && movSrc.time > 0 )
-						programme.LiveHour = movSrc.time;
+                    episode.Tag = movSrc.parentID.ToString();
 
-					if ( movSrc.xrated )
-						programme.Flags.Add( TVTMovieFlag.FSK18 );
+                    episode.CriticsRate = ConvertOldToNewValue(movSrc.critics);
+                    episode.ViewersRate = ConvertOldToNewValue(movSrc.speed);
+                    episode.EpisodeIndex = movSrc.episode;
 
-					database.AddMovie( programme );
-				}
-                else if (programme.ProgrammeType == TVTProgrammeType.Episode)
-				{
-                    programme.EpisodeIndex = movSrc.episode;
-                    programme.Tag = movSrc.parentID.ToString();
-                    seriesEpisodes.Add(programme);
-				}
+                    database.AddEpisode(episode);
+                }
 			}
 
 			//Nachträglich die Parents auf IsSeries setzen
 			var allMovies = database.GetAllMovies();
-			foreach ( var current in seriesEpisodes )
+            foreach (var current in database.GetAllEpisodes())
 			{
 				var series = allMovies.FirstOrDefault( x => x.AltId.CompareTo( current.Tag ) == 0 );
                 if (series != null)
@@ -77,7 +126,7 @@ namespace TVTower.Converter
                     current.SeriesMaster = new CodeKnight.Core.WeakReference<TVTProgramme>(series);
                 }
                 else
-                    current.Incorrect = true;
+                    current.DataStatus = TVTDataStatus.Incorrect;
 			}
 		}
 
@@ -201,26 +250,25 @@ namespace TVTower.Converter
 
 		public static TVTPerson GetPersonByNameOrCreate( ITVTDatabase database, string name, TVTDataContent defaultType, TVTPersonFunction functionForNew = TVTPersonFunction.Unknown )
 		{
-			if ( !string.IsNullOrEmpty( name ) )
-			{
-				var tempName = name.Split( ',' )[0];
-				var person = database.GetPersonByName( tempName );
+            if ( !string.IsNullOrEmpty( name ) )
+            {
+                var tempName = name.Split( ',' )[0];
+                var person = database.GetPersonByName( tempName );
 
-				if ( person == null )
-				{
-					person = new TVTPerson();
-					person.GenerateGuid();
-					person.DataContent = defaultType;
-					if ( defaultType == TVTDataContent.Fake || defaultType == TVTDataContent.FakeWithRefId )
-						PersonConverter.ConvertFakeFullname( person, tempName );
-					else
-						PersonConverter.ConvertFullname( person, tempName );
-					person.Functions.Add( functionForNew );
-					database.AddPerson( person );
-				}
-				return person;
-			}
-			else
+                if ( person == null )
+                {
+                    person = new TVTPerson();
+                    person.GenerateGuid();
+                    if ( defaultType == TVTDataContent.Fake || defaultType == TVTDataContent.FakeWithRefId )
+                        PersonConverter.ConvertFakeFullname( person, tempName );
+                    else
+                        PersonConverter.ConvertFullname( person, tempName );
+                    person.Functions.Add( functionForNew );
+                    database.AddPerson( person );
+                }
+                return person;
+            }
+            else
 				return null;
 		}
 	}

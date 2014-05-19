@@ -9,13 +9,7 @@ namespace TVTower.Entities
         string AltId { get; set; }
 
         TVTDataType DataType { get; set; }
-        TVTDataContent DataContent { get; set; }
-        TVTDataStatus DataStatusDE { get; set; }
-        TVTDataStatus DataStatusEN { get; set; }
-
-        bool ApprovedDE { get; set; }
-        bool ApprovedEN { get; set; }
-        bool Incorrect { get; set; }
+        TVTDataStatus DataStatus { get; set; }
 
         object Tag { get; set; }
         string AdditionalInfo { get; set; }

@@ -49,12 +49,18 @@ namespace TVTower.UnitTests
 
                 MovieOldV2Converter.Convert(movies, database);
 
+                TVTCommands.LoadFakesForPeople(connection, database.GetAllPeople());
+
+                MovieOldV2Converter.RefreshMovieDescriptions(database);
+
                 database.RefreshPersonProgrammeCount();
+                database.RefreshStatus();
             }
 
             using (var connection = TVTSQLSession.GetSessionNewDB())
             {
                 TVTCommands.InsertProgrammes(connection, database.GetAllMovies(true));
+                TVTCommands.InsertEpisodes(connection, database.GetAllEpisodes());
             }
             
 

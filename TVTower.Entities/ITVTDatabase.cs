@@ -8,11 +8,15 @@ namespace TVTower.Entities
 		void AddMovie( TVTProgramme movie );
 		void AddMovies( IEnumerable<TVTProgramme> movies );
 
+        void AddEpisode(TVTEpisode episode);
+        void AddEpisodes(IEnumerable<TVTEpisode> episodes);
+
 		void AddPerson( TVTPerson person );
 		void AddPeople( IEnumerable<TVTPerson> people );
 
 		IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false );
 		IEnumerable<TVTProgramme> GetAllSeries();
+        IEnumerable<TVTEpisode> GetAllEpisodes();
 		IEnumerable<TVTPerson> GetAllPeople();
 
 		TVTPerson GetPersonById( Guid id );

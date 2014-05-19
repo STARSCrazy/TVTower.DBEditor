@@ -60,7 +60,83 @@ namespace TVTower.SQL
                     Reader.Close();
             }
 
+            //var fakes = new Dictionary<string, string>();
+
+            //Fakes
+            command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM tvt_convert WHERE type = 'title'";
+            Reader = command.ExecuteReader();
+            try
+            {
+                while (Reader.Read())
+                {
+                    var oldValue = Reader.GetString("old");
+                    var newValue = Reader.GetString("new");
+
+                    var foundMovies = result.Where(x => x.title == oldValue);
+                    foreach (var movie in foundMovies)
+                    {
+                        movie.titleFake = newValue;
+                    }
+
+                    foundMovies = result.Where(x => x.titleEnglish == oldValue);
+                    foreach (var movie in foundMovies)
+                    {
+                        movie.titleEnglishFake = newValue;
+                    }
+
+                    foundMovies = result.Where(x => string.IsNullOrEmpty(x.titleFake) && x.title.Contains(oldValue));
+                    foreach (var movie in foundMovies)
+                    {
+                        movie.titleFake = movie.title.Replace(oldValue, newValue);
+                    }
+
+                    foundMovies = result.Where(x => string.IsNullOrEmpty(x.titleEnglishFake) && x.titleEnglish.Contains(oldValue));
+                    foreach (var movie in foundMovies)
+                    {
+                        movie.titleEnglishFake = movie.titleEnglish.Replace(oldValue, newValue);
+                    }
+                }
+            }
+            finally
+            {
+                if (Reader != null && !Reader.IsClosed)
+                    Reader.Close();
+            }
+
             return result;
+        }
+
+        public static void LoadFakesForPeople(MySqlConnection connection, IEnumerable<TVTPerson> people)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM tvt_convert WHERE type = 'actor'";
+            var Reader = command.ExecuteReader();
+            try
+            {
+                while (Reader.Read())
+                {
+                    var oldValue = Reader.GetString("old");
+                    var newValue = Reader.GetString("new");
+
+                    var foundPeople = people.Where(x => x.FullName == oldValue);
+                    foreach (var person in foundPeople)
+                    {
+                        PersonConverter.ConvertFakeFullname(person, newValue);
+                    }
+
+                    foundPeople = people.Where(x => x.FakeFullName == " " && x.FullName.Contains(oldValue));
+                    foreach (var person in foundPeople)
+                    {
+                        PersonConverter.ConvertFakeFullname(person, newValue);
+                    }
+                }
+            }
+            finally
+            {
+                if (Reader != null && !Reader.IsClosed)
+                    Reader.Close();
+            }            
         }
 
         public static void InsertProgrammes(MySqlConnection connection, IEnumerable<TVTProgramme> programmes)
@@ -73,7 +149,6 @@ namespace TVTower.SQL
                 content.Add("programme_type", programme.ProgrammeType);
                 content.Add("country", programme.Country);
                 content.Add("year", programme.Year);
-                content.Add("valid_until", programme.ValidUntilYear);
 
                 content.Add("main_genre", programme.MainGenre);
                 content.Add("sub_genre", programme.SubGenre);
@@ -81,8 +156,8 @@ namespace TVTower.SQL
                 content.Add("blocks", programme.Blocks);
                 content.Add("live_hour", programme.LiveHour);
 
-                content.Add("flags", programme.Flags.ToString()); //TODO
-                content.Add("target_groups", programme.TargetGroups.ToString());
+                content.Add("flags", programme.Flags.ToContentString()); //TODO
+                content.Add("target_groups", programme.TargetGroups.ToContentString());
                 if (programme.ProPressureGroups != null)
                     content.Add("pro_pressure_groups", programme.ProPressureGroups.ToContentString());
                 else
@@ -97,7 +172,7 @@ namespace TVTower.SQL
                 content.Add("tmdb_id", programme.TmdbId);
                 content.Add("rotten_tomatoes_id", programme.RottenTomatoesId);
 
-                content.Add("Image_url", programme.ImageUrl);
+                content.Add("image_url", programme.ImageUrl);
 
 
                 //Episode                
@@ -108,12 +183,14 @@ namespace TVTower.SQL
 
                 content.Add("description_de", programme.DescriptionDE);
                 content.Add("description_en", programme.DescriptionEN);
+                content.Add("fake_description_de", programme.FakeDescriptionDE);
+                content.Add("fake_description_en", programme.FakeDescriptionEN);
 
-                content.Add("episodeIndex", programme.EpisodeIndex);
-                if (programme.SeriesMaster != null && programme.SeriesMaster.IsAlive)
-                    content.Add("series_id", programme.SeriesMaster.TargetGeneric.Id);
-                else
-                    content.Add("series_id", null);
+                //content.Add("episodeIndex", programme.EpisodeIndex);
+                //if (programme.SeriesMaster != null && programme.SeriesMaster.IsAlive)
+                //    content.Add("series_id", programme.SeriesMaster.TargetGeneric.Id);
+                //else
+                //    content.Add("series_id", null);
 
                 content.Add("director_id", programme.Director != null ? programme.Director.Id.ToString() : null);
 
@@ -135,18 +212,11 @@ namespace TVTower.SQL
                 content.Add("critics", programme.CriticsRate);
                 content.Add("viewers", programme.ViewersRate);
                 content.Add("boxoffice", programme.BoxOfficeRate);
-   
+
 
 
                 //Zusatzinfos
-                content.Add("dataType", programme.DataType);
-                content.Add("dataContent", programme.DataContent);
-                content.Add("dataStatusDE", programme.DataStatusDE);
-                content.Add("dataStatusEN", programme.DataStatusEN);
-                content.Add("approvedDE", programme.ApprovedDE);
-                content.Add("approvedEN", programme.ApprovedEN);
-                content.Add("incorrect", programme.Incorrect);
-                content.Add("additionalInfo", programme.AdditionalInfo);
+                AdditionalFields(content, programme);
 
 
                 var command = connection.CreateCommand();
@@ -159,6 +229,130 @@ namespace TVTower.SQL
                 
                 command.ExecuteNonQuery();
             }
+        }
+
+        public static void InsertEpisodes(MySqlConnection connection, IEnumerable<TVTEpisode> episodes)
+        {
+            foreach (var episode in episodes)
+            {
+                var content = new Dictionary<string, object>();
+                content.Add("id", episode.Id);
+
+                //Episode                
+                content.Add("title_de", episode.TitleDE);
+                content.Add("title_en", episode.TitleEN);
+                content.Add("fake_de", episode.FakeTitleDE);
+                content.Add("fake_en", episode.FakeTitleEN);
+
+                content.Add("description_de", episode.DescriptionDE);
+                content.Add("description_en", episode.DescriptionEN);
+                
+                if (episode.SeriesMaster != null && episode.SeriesMaster.IsAlive)
+                    content.Add("series_id", episode.SeriesMaster.TargetGeneric.Id);
+                else
+                    content.Add("series_id", -1);
+                content.Add("episode_index", episode.EpisodeIndex);
+
+                content.Add("director_id", episode.Director != null ? episode.Director.Id.ToString() : null);
+
+                if (episode.Participants != null && episode.Participants.Count > 0)
+                {
+                    for (var i = 0; i < episode.Participants.Count; i++)
+                    {
+                        if (i >= 3)
+                            break;
+
+                        var participant = episode.Participants[i];
+                        if (participant != null)
+                            content.Add("participant" + (i + 1) + "_id", participant.Id);
+                    }
+                }
+
+                content.Add("critics", episode.CriticsRate);
+                content.Add("viewers", episode.ViewersRate);
+
+                //Zusatzinfos
+                AdditionalFields(content, episode);
+
+
+                var command = connection.CreateCommand();
+
+                command.CommandText = "INSERT INTO tvt_episodes (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                foreach (var kvp in content)
+                {
+                    command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
+                }
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void InsertPeople(MySqlConnection connection, IEnumerable<TVTPerson> people)
+        {
+            foreach (var person in people)
+            {
+                var content = new Dictionary<string, object>();
+                content.Add("id", person.Id);
+
+                //Episode                
+                content.Add("first_name", person.FirstName);
+                content.Add("last_name", person.LastName);
+                content.Add("nick_name", person.NickName);
+
+                content.Add("fake_first_name", person.FakeFirstName);
+                content.Add("fake_last_name", person.FakeLastName);
+                content.Add("fake_nick_name", person.FakeNickName);
+
+                content.Add("imdb_id", person.ImdbId);
+                content.Add("tmdb_id", person.TmdbId);
+                content.Add("image_url", person.ImageUrl);
+
+                if (person.Functions != null)
+                    content.Add("functions", person.Functions.ToContentString());
+                else
+                    content.Add("functions", null);
+
+                content.Add("birthday", person.Birthday);
+                content.Add("deathday", person.Deathday);                
+                content.Add("country", person.Country);
+
+                content.Add("fame", person.Fame);
+                content.Add("price_factor", person.PriceFactor);
+
+                content.Add("skill", person.Skill);
+                content.Add("power", person.Power);
+                content.Add("humor", person.Humor);
+                content.Add("charisma", person.Charisma);
+                content.Add("appearance", person.Appearance);
+
+                content.Add("top_genre_1", person.TopGenre1);
+                content.Add("top_genre_2", person.TopGenre2);
+
+                content.Add("programme_count", person.ProgrammeCount);
+
+ 
+                //Zusatzinfos
+                AdditionalFields(content, person);
+
+
+                var command = connection.CreateCommand();
+
+                command.CommandText = "INSERT INTO tvt_people (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                foreach (var kvp in content)
+                {
+                    command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
+                }
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static void AdditionalFields(Dictionary<string, object> content, TVTEntity entity)
+        {
+            content.Add("data_type", entity.DataType);
+            content.Add("data_status", entity.DataStatus);
+            content.Add("approved", entity.Approved);
+            content.Add("additional_info", entity.AdditionalInfo);
         }
     }
 }

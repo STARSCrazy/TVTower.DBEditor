@@ -8,6 +8,7 @@ namespace TVTower.DBEditor
 	public class TVTBindingListDatabase : ITVTDatabase
 	{
 		public SortedBindingList<TVTProgramme> MovieData { get; set; }
+        public SortedBindingList<TVTEpisode> EpisodeData { get; set; }        
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
 
 		public void Initialize()
@@ -15,8 +16,11 @@ namespace TVTower.DBEditor
 			if ( MovieData == null )
 				MovieData = new SortedBindingList<TVTProgramme>();
 
-			if ( PersonData == null )
-				PersonData = new SortedBindingList<TVTPerson>();
+            if (EpisodeData == null)
+                EpisodeData = new SortedBindingList<TVTEpisode>();
+
+            if (PersonData == null)
+                PersonData = new SortedBindingList<TVTPerson>();
 		}
 
 		public void SetMovieBindingList( SortedBindingList<TVTProgramme> movieData )
@@ -41,6 +45,17 @@ namespace TVTower.DBEditor
 			foreach ( var movie in movies )
 				AddMovie( movie );
 		}
+
+        public void AddEpisode(TVTEpisode episode)
+        {
+            EpisodeData.Add(episode);
+        }
+
+        public void AddEpisodes(IEnumerable<TVTEpisode> episodes)
+        {
+            foreach (var episode in episodes)
+                AddEpisode(episode);
+        }
 
 		public void AddPerson( TVTPerson person )
 		{
@@ -69,6 +84,13 @@ namespace TVTower.DBEditor
             result.AddRange(MovieData.Where(x => x.ProgrammeType == TVTProgrammeType.Series));
 			return result;
 		}
+
+        public IEnumerable<TVTEpisode> GetAllEpisodes()
+        {
+            var result = new List<TVTEpisode>();
+            result.AddRange(EpisodeData);
+            return result;
+        }        
 
 		public IEnumerable<TVTPerson> GetAllPeople()
 		{
@@ -125,7 +147,40 @@ namespace TVTower.DBEditor
                     var currPerson = GetPersonById(movie.Director.Id);
                     currPerson.ProgrammeCount++;
                 }
-            }            
+            }
+
+            foreach (var episode in this.EpisodeData)
+            {
+                foreach (var person in episode.Participants)
+                {
+                    var currPerson = GetPersonById(person.Id);
+                    currPerson.ProgrammeCount++;
+                }
+
+                if (episode.Director != null)
+                {
+                    var currPerson = GetPersonById(episode.Director.Id);
+                    currPerson.ProgrammeCount++;
+                }
+            }    
+        }
+
+        public void RefreshStatus()
+        {
+            foreach (var person in this.PersonData)
+            {
+                person.RefreshStatus();
+            }
+
+            foreach (var movie in this.MovieData)
+            {
+                movie.RefreshStatus();
+            }
+
+            foreach (var episode in this.EpisodeData)
+            {
+                episode.RefreshStatus();
+            }  
         }
 
 		#endregion

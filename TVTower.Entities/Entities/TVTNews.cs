@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TVTower.Entities.Enums;
 
-namespace TVTower.Entities.Entities
+namespace TVTower.Entities
 {
 	public class TVTNews : TVTEntity
 	{

@@ -10,6 +10,8 @@ namespace TVTower.Converter
         public int id;
         public string title;
         public string titleEnglish;
+        public string titleFake;
+        public string titleEnglishFake;
         public string description;
         public string descriptionEnglish;
         public string actors;

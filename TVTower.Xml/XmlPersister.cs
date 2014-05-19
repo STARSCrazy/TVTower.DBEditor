@@ -88,74 +88,74 @@ namespace TVTower.Xml
 
 		public XmlNode SetPersonDetailNode( XmlDocument doc, XmlElement element, TVTPerson person, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
-			XmlNode personNode;
+			XmlNode personNode = null;
 
-			personNode = doc.CreateElement( "person" );
-			{
-				personNode.AddAttribute( "id", person.Id.ToString() );
-				if ( dataStructure == DataStructure.Full )
-					personNode.AddAttribute( "type", person.DataContent.ToString() );
-			}
-			element.AppendChild( personNode );
+            //personNode = doc.CreateElement( "person" );
+            //{
+            //    personNode.AddAttribute( "id", person.Id.ToString() );
+            //    if ( dataStructure == DataStructure.Full )
+            //        personNode.AddAttribute( "type", person.DataContent.ToString() );
+            //}
+            //element.AppendChild( personNode );
 
-			switch ( dataStructure )
-			{
-				case DataStructure.Full:
-					personNode.AddElement( "name", person.FakeFullName );
-					break;
-				case DataStructure.FakeData:
-					personNode.AddElement( "name", person.FakeFullName );
-					break;
-				case DataStructure.OriginalData:
-					personNode.AddElement( "name", person.FullName );
-					break;
-			}
+            //switch ( dataStructure )
+            //{
+            //    case DataStructure.Full:
+            //        personNode.AddElement( "name", person.FakeFullName );
+            //        break;
+            //    case DataStructure.FakeData:
+            //        personNode.AddElement( "name", person.FakeFullName );
+            //        break;
+            //    case DataStructure.OriginalData:
+            //        personNode.AddElement( "name", person.FullName );
+            //        break;
+            //}
 
-			personNode.AddElement( "function", person.Functions.ToContentString( ";" ) );
-			personNode.AddElement( "gender", person.Gender.ToString() );
-			personNode.AddElement( "birthday", person.Birthday );
-			personNode.AddElement( "deathday", person.Deathday );
-			personNode.AddElement( "country", person.Country );
+            //personNode.AddElement( "function", person.Functions.ToContentString( ";" ) );
+            //personNode.AddElement( "gender", person.Gender.ToString() );
+            //personNode.AddElement( "birthday", person.Birthday );
+            //personNode.AddElement( "deathday", person.Deathday );
+            //personNode.AddElement( "country", person.Country );
 
-			personNode.AddElement( "image_url", person.ImageUrl );
+            //personNode.AddElement( "image_url", person.ImageUrl );
 
-			XmlNode referencesNode = doc.CreateElement( "references" );
-			referencesNode.AddAttribute( "tmdb_id", person.TmdbId.ToString() );
-			referencesNode.AddAttribute( "imdb_id", person.ImdbId );
-			personNode.AppendChild( referencesNode );
+            //XmlNode referencesNode = doc.CreateElement( "references" );
+            //referencesNode.AddAttribute( "tmdb_id", person.TmdbId.ToString() );
+            //referencesNode.AddAttribute( "imdb_id", person.ImdbId );
+            //personNode.AppendChild( referencesNode );
 
-			//personNode.AddElement( "tmdb_id", person.TmdbId.ToString() );
-			//personNode.AddElement( "imdb_id", person.ImdbId );
-			//personNode.AddElement( "image_url", person.ImageUrl );
+            ////personNode.AddElement( "tmdb_id", person.TmdbId.ToString() );
+            ////personNode.AddElement( "imdb_id", person.ImdbId );
+            ////personNode.AddElement( "image_url", person.ImageUrl );
 
-			if ( dataStructure == DataStructure.Full )
-			{
-				XmlNode additionalNode = doc.CreateElement( "additional" );
-				additionalNode.AddAttribute( "original_name", person.FullName );
-				additionalNode.AddAttribute( "place_of_birth", person.PlaceOfBirth );
-				//additionalNode.AddAttribute( "info", person.Info );
-				//additionalNode.AddAttribute( "movieRegistrations", person.MovieRegistrations.ToString() );
-				//additionalNode.AddAttribute( "otherInfo", person.OtherInfo );
-				personNode.AppendChild( additionalNode );
-			}
+            //if ( dataStructure == DataStructure.Full )
+            //{
+            //    XmlNode additionalNode = doc.CreateElement( "additional" );
+            //    additionalNode.AddAttribute( "original_name", person.FullName );
+            //    additionalNode.AddAttribute( "place_of_birth", person.PlaceOfBirth );
+            //    //additionalNode.AddAttribute( "info", person.Info );
+            //    //additionalNode.AddAttribute( "movieRegistrations", person.MovieRegistrations.ToString() );
+            //    //additionalNode.AddAttribute( "otherInfo", person.OtherInfo );
+            //    personNode.AppendChild( additionalNode );
+            //}
 
-			if ( dataStructure == DataStructure.Full || dataStructure == DataStructure.FakeData || dataStructure == DataStructure.OriginalData )
-			{
-				XmlNode dataNode = doc.CreateElement( "data" );
-				dataNode.AddAttribute( "professionSkill", person.ProfessionSkill.ToString() );
-				dataNode.AddAttribute( "fame", person.Fame.ToString() );
-				//dataNode.AddAttribute( "success", person.Success.ToString() );
-				dataNode.AddAttribute( "power", person.Power.ToString() );
-				dataNode.AddAttribute( "humor", person.Humor.ToString() );
-				dataNode.AddAttribute( "charisma", person.Charisma.ToString() );
-				dataNode.AddAttribute( "eroticAura", person.EroticAura.ToString() );
-				dataNode.AddAttribute( "characterSkill", person.CharacterSkill.ToString() );
-				dataNode.AddAttribute( "scandalizing", person.Scandalizing.ToString() );
-				dataNode.AddAttribute( "priceFactor", person.PriceFactor.ToString() );
-				dataNode.AddAttribute( "topGenre1", person.TopGenre1.ToString() );
-				dataNode.AddAttribute( "topGenre2", person.TopGenre2.ToString() );
-				personNode.AppendChild( dataNode );
-			}
+            //if ( dataStructure == DataStructure.Full || dataStructure == DataStructure.FakeData || dataStructure == DataStructure.OriginalData )
+            //{
+            //    XmlNode dataNode = doc.CreateElement( "data" );
+            //    dataNode.AddAttribute( "professionSkill", person.ProfessionSkill.ToString() );
+            //    dataNode.AddAttribute( "fame", person.Fame.ToString() );
+            //    //dataNode.AddAttribute( "success", person.Success.ToString() );
+            //    dataNode.AddAttribute( "power", person.Power.ToString() );
+            //    dataNode.AddAttribute( "humor", person.Humor.ToString() );
+            //    dataNode.AddAttribute( "charisma", person.Charisma.ToString() );
+            //    dataNode.AddAttribute( "eroticAura", person.EroticAura.ToString() );
+            //    dataNode.AddAttribute( "characterSkill", person.CharacterSkill.ToString() );
+            //    dataNode.AddAttribute( "scandalizing", person.Scandalizing.ToString() );
+            //    dataNode.AddAttribute( "priceFactor", person.PriceFactor.ToString() );
+            //    dataNode.AddAttribute( "topGenre1", person.TopGenre1.ToString() );
+            //    dataNode.AddAttribute( "topGenre2", person.TopGenre2.ToString() );
+            //    personNode.AppendChild( dataNode );
+            //}
 
 			return personNode;
 		}
@@ -299,93 +299,93 @@ namespace TVTower.Xml
 
 		public ITVTDatabase LoadXML( string filename, ITVTDatabase database )
 		{
-			var result = database;
-			int version = 0;
-			DatabaseVersion dbVersion = DatabaseVersion.V2;
-			TVTDataContent defaultType = TVTDataContent.FakeWithRefId;
+            var result = database;
+            //int version = 0;
+            //DatabaseVersion dbVersion = DatabaseVersion.V2;
+            //TVTDataContent defaultType = TVTDataContent.FakeWithRefId;
 
-			var doc = new XmlDocument();
+            //var doc = new XmlDocument();
 
-			doc.Load( filename );
+            //doc.Load( filename );
 
-			var versionElement = doc.GetElementsByTagName( "version" );
-			if ( versionElement[0].HasAttribute( "value" ) )
-			{
-				version = versionElement[0].GetAttributeInteger( "value" );
+            //var versionElement = doc.GetElementsByTagName( "version" );
+            //if ( versionElement[0].HasAttribute( "value" ) )
+            //{
+            //    version = versionElement[0].GetAttributeInteger( "value" );
 
-				if ( version == 1 )
-					throw new NotSupportedException( "database version '1' is not supported." );
-				if ( version == 3 )
-					dbVersion = DatabaseVersion.V3;
-			}
+            //    if ( version == 1 )
+            //        throw new NotSupportedException( "database version '1' is not supported." );
+            //    if ( version == 3 )
+            //        dbVersion = DatabaseVersion.V3;
+            //}
 
-			if ( version == 2 )
-			{
-				var exportOptions = doc.GetElementsByTagName( "exportOptions" );
-				if ( bool.Parse( exportOptions[0].GetAttribute( "onlyFakes" ) ) )
-				{
-					defaultType = TVTDataContent.Fake;
-				}
-			}
+            //if ( version == 2 )
+            //{
+            //    var exportOptions = doc.GetElementsByTagName( "exportOptions" );
+            //    if ( bool.Parse( exportOptions[0].GetAttribute( "onlyFakes" ) ) )
+            //    {
+            //        defaultType = TVTDataContent.Fake;
+            //    }
+            //}
 
-			{
-				var allMovies = doc.GetElementsByTagName( "allmovies" );
-				var movieExtPersister = new TVTMoviePersister();
+            //{
+            //    var allMovies = doc.GetElementsByTagName( "allmovies" );
+            //    var movieExtPersister = new TVTMoviePersister();
 
-				foreach ( XmlNode xmlMovie in allMovies )
-				{
-					foreach ( XmlNode childNode in xmlMovie.ChildNodes )
-					{
-						var movie = new TVTProgramme();
-						movie.MovieAdditional = new TVTMovieAdditional();
-						if ( version == 2 )
-						{
-							movie.GenerateGuid();
-							movie.DataContent = defaultType;
-						}
+            //    foreach ( XmlNode xmlMovie in allMovies )
+            //    {
+            //        foreach ( XmlNode childNode in xmlMovie.ChildNodes )
+            //        {
+            //            var movie = new TVTProgramme();
+            //            movie.MovieAdditional = new TVTMovieAdditional();
+            //            if ( version == 2 )
+            //            {
+            //                movie.GenerateGuid();
+            //                movie.DataContent = defaultType;
+            //            }
 
-						switch ( childNode.Name )
-						{
-							case "movie":
-								movieExtPersister.Load( childNode, movie, result, dbVersion, DataStructure.FakeData ); //TODO
-								break;
-						}
+            //            switch ( childNode.Name )
+            //            {
+            //                case "movie":
+            //                    movieExtPersister.Load( childNode, movie, result, dbVersion, DataStructure.FakeData ); //TODO
+            //                    break;
+            //            }
 
-						ConvertOldMovieData( movie, version );
-						result.AddMovie( movie );
-					}
-				}
-			}
+            //            ConvertOldMovieData( movie, version );
+            //            result.AddMovie( movie );
+            //        }
+            //    }
+            //}
 
 
-			{
-				var allSeries = doc.GetElementsByTagName( "allseries" );
-				var seriesPersister = new TVTSeriesMoviePersister();
+            //{
+            //    var allSeries = doc.GetElementsByTagName( "allseries" );
+            //    var seriesPersister = new TVTSeriesMoviePersister();
 
-				foreach ( XmlNode xmlSeries in allSeries )
-				{
-					foreach ( XmlNode childNode in xmlSeries.ChildNodes )
-					{
-						var movie = new TVTProgramme();
-						movie.MovieAdditional = new TVTMovieAdditional();
-						if ( version == 2 )
-						{
-							movie.GenerateGuid();
-							movie.DataContent = defaultType;
-						}
+            //    foreach ( XmlNode xmlSeries in allSeries )
+            //    {
+            //        foreach ( XmlNode childNode in xmlSeries.ChildNodes )
+            //        {
+            //            var movie = new TVTProgramme();
+            //            movie.MovieAdditional = new TVTMovieAdditional();
+            //            if ( version == 2 )
+            //            {
+            //                movie.GenerateGuid();
+            //                movie.DataContent = defaultType;
+            //            }
 
-						switch ( childNode.Name )
-						{
-							case "serie":
-								seriesPersister.Load( childNode, movie, result, dbVersion, DataStructure.FakeData );
-								break;
-						}
+            //            switch ( childNode.Name )
+            //            {
+            //                case "serie":
+            //                    seriesPersister.Load( childNode, movie, result, dbVersion, DataStructure.FakeData );
+            //                    break;
+            //            }
 
-						ConvertOldMovieData( movie, version );
-						result.AddMovie( movie );
-					}
-				}
-			}
+            //            ConvertOldMovieData( movie, version );
+            //            result.AddMovie( movie );
+            //        }
+            //    }
+            //}
 
 			//var allSeries = doc.GetElementsByTagName( "allseries" );
 

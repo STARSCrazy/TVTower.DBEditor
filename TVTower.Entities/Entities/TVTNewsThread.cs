@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TVTower.Entities.Entities
+namespace TVTower.Entities
 {
 	public class TVTNewsThread
 	{

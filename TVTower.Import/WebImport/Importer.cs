@@ -182,7 +182,7 @@ namespace TVTower.Import
 			person.ImageUrl = @"https://d3gtl9l2a4fn1j.cloudfront.net/t/p/original" + personInfo.profile_path;
 			person.Birthday = personInfo.birthday;
 			person.Deathday = personInfo.deathday;
-			person.PlaceOfBirth = personInfo.place_of_birth;
+			//person.PlaceOfBirth = personInfo.place_of_birth;
 			person.Country = GetCountryCode( GetCountry( personInfo.place_of_birth ) );
 			//person.MovieRegistrations++;
 		}

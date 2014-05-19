@@ -23,11 +23,11 @@ namespace TVTower.Entities
 		public TVTPersonGender Gender { get; set; } //Als Enum?		
 		public string Birthday { get; set; }
 		public string Deathday { get; set; }
-		public string PlaceOfBirth { get; set; }
+		//public string PlaceOfBirth { get; set; }
 		public string Country { get; set; }
 
 
-        public int ProfessionSkill { get; set; }		//0 - 100	Für Regisseur, Musiker und Intellektueller: Wie gut kann er sein Handwerk. Für Schauspieler: Kinokasse +		Kritik +	Tempo +
+        public int Skill { get; set; }		//0 - 100	Für Regisseur, Musiker und Intellektueller: Wie gut kann er sein Handwerk. Für Schauspieler: Kinokasse +		Kritik +	Tempo +
 		public int Fame { get; set; }					//0 - 100	Kinokasse ++							Wie berühmt ist die Person?
 		public int Scandalizing { get; set; }			//0 - 100	Besonders Interessant für Shows und Sonderevents
 		public int PriceFactor { get; set; }
@@ -35,8 +35,8 @@ namespace TVTower.Entities
 		public int Power { get; set; }					//0 - 100	Kinokasse +		Tempo +++		Bonus bei manchen Genre (wie Action)
 		public int Humor { get; set; }					//0 - 100	Kinokasse +		Tempo ++		Bonus bei manchen Genre (wie Komödie)
 		public int Charisma { get; set; }				//0 - 100	Kinokasse +		Kritik ++		Bonus bei manchen Genre (wie Liebe, Drama, Komödie)
-		public int EroticAura { get; set; }				//0 - 100	Kinokasse +++ 	Tempo +			Bonus bei manchen Genre (wie Erotik, Liebe, Action)
-		public int CharacterSkill { get; set; }			//0 - 100	Kinokasse +		Kritik +++		Bonus bei manchen Genre (wie Drama)
+		public int Appearance { get; set; }				//0 - 100	Kinokasse +++ 	Tempo +			Bonus bei manchen Genre (wie Erotik, Liebe, Action)
+		//public int CharacterSkill { get; set; }			//0 - 100	Kinokasse +		Kritik +++		Bonus bei manchen Genre (wie Drama)
 
 		public TVTProgrammeGenre TopGenre1 { get; set; }
         public TVTProgrammeGenre TopGenre2 { get; set; }
@@ -47,5 +47,9 @@ namespace TVTower.Entities
 		{
 			Functions = new List<TVTPersonFunction>();
 		}
+
+        public void RefreshStatus()
+        {
+        }
 	}
 }
