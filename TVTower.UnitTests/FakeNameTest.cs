@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TVTower.Faker;
 
 namespace TVTower.UnitTests
 {
 	[TestClass]
 	public class FakeNameTest
-	{		
-        [TestMethod]
-        public void ConnectTest()
-        {
+	{
+		[TestMethod]
+		public void ConnectTest()
+		{
 			var faker = new FakeName();
 			faker.InitializeData();
 			Assert.AreEqual( "Shtiphan", faker.Fake( "Steven" ) );
@@ -22,7 +18,7 @@ namespace TVTower.UnitTests
 			Assert.AreEqual( "Cuprigg", faker.Fake( "Kubrick" ) );
 
 			Assert.AreEqual( "Ronann", faker.Fake( "Roman" ) );
-			Assert.AreEqual( "Bholansghi", faker.Fake( "Polanski" ) );
+			Assert.AreEqual( "Bollansghi", faker.Fake( "Polanski" ) );
 
 			Assert.AreEqual( "Hanrih", faker.Fake( "Henry" ) );
 			Assert.AreEqual( "Kattamharunn", faker.Fake( "Cutamaran" ) );
@@ -37,8 +33,8 @@ namespace TVTower.UnitTests
 			Assert.AreEqual( "Dytmer", faker.Fake( "Dietmar" ) );
 			Assert.AreEqual( "Hjüpsh", faker.Fake( "Hübsch" ) );
 
-			Assert.AreEqual( "Javith", faker.Fake( "David" ) );
-			Assert.AreEqual( "Liehntsh", faker.Fake( "Lynch" ) );
+			Assert.AreEqual( "Tavit", faker.Fake( "David" ) );
+			Assert.AreEqual( "Lientsh", faker.Fake( "Lynch" ) );
 
 
 			Assert.AreEqual( "Djohnn", faker.Fake( "John" ) );
@@ -52,13 +48,34 @@ namespace TVTower.UnitTests
 
 
 			Assert.AreEqual( "Djohnn", faker.Fake( "John" ) );
-			Assert.AreNotEqual( "Carpenter", faker.Fake( "Carpenter" ) );
+			Assert.AreEqual( "Garbender", faker.Fake( "Carpenter" ) );
 
-			Assert.AreNotEqual( "Richard", faker.Fake( "Richard" ) );
-			Assert.AreNotEqual( "Donner", faker.Fake( "Donner" ) );
+			Assert.AreEqual( "Ricaart", faker.Fake( "Richard" ) );
+			Assert.AreEqual( "Tonnr", faker.Fake( "Donner" ) );
 
-			Assert.AreNotEqual( "Harald", faker.Fake( "Harald" ) );
-			Assert.AreNotEqual( "Reinl", faker.Fake( "Reinl" ) );	
-        }
+			Assert.AreEqual( "Aaralt", faker.Fake( "Harald" ) );
+			Assert.AreEqual( "Raynl", faker.Fake( "Reinl" ) );
+
+
+			Assert.AreEqual( "Gurt", faker.Fake( "Kurt" ) );
+			Assert.AreEqual( "Offmahn", faker.Fake( "Hoffmann" ) );
+
+			Assert.AreEqual( "Guij", faker.Fake( "Guy" ) );
+			Assert.AreEqual( "Hamildon", faker.Fake( "Hamilton" ) );
+
+			Assert.AreEqual( "Kregorih J.", faker.Fake( "Gregory J." ) );
+			Assert.AreEqual( "Poman", faker.Fake( "Bonann" ) );
+
+
+			Assert.AreEqual( "Praian", faker.Fake( "Brian" ) );
+			Assert.AreEqual( "De Balma", faker.Fake( "De Palma" ) );
+
+			Assert.AreEqual( "Zertshio", faker.Fake( "Sergio" ) );
+			Assert.AreEqual( "Lioner", faker.Fake( "Leone" ) );
+
+			Assert.AreEqual( "Frunnzis Fortt", faker.Fake( "Francis Ford" ) );
+			Assert.AreEqual( "Gopbolla", faker.Fake( "Coppola" ) );
+
+		}
 	}
 }
