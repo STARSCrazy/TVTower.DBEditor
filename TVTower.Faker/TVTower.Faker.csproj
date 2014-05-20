@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7321A2E6-0174-41BA-B915-0D89135FFD94}</ProjectGuid>
+    <ProjectGuid>{FCA78D27-0AB4-42C6-8D38-65C764C66B24}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TVTower.Entities</RootNamespace>
-    <AssemblyName>TVTower.Entities</AssemblyName>
+    <RootNamespace>TVTower.Faker</RootNamespace>
+    <AssemblyName>TVTower.Faker</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,41 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Additional\TVTMovieAdditional.cs" />
-    <Compile Include="Entities\TVTResourceSchema.cs" />
-    <Compile Include="Entities\TVTEpisode.cs" />
-    <Compile Include="Entities\TVTNews.cs" />
-    <Compile Include="Entities\TVTAdvertising.cs" />
-    <Compile Include="Entities\TVTEntity.cs" />
-    <Compile Include="Entities\TVTResource.cs" />
-    <Compile Include="Interfaces\ITVTProgrammeCore.cs" />
-    <Compile Include="Interfaces\ITVTEntity.cs" />
-    <Compile Include="Interfaces\ITVTEpisode.cs" />
-    <Compile Include="Entities\TVTProgramme.cs" />
-    <Compile Include="Entities\TVTPerson.cs" />
-    <Compile Include="Entities\TVTNewsThread.cs" />
-    <Compile Include="Enums\TVTNewsTrigger.cs" />
-    <Compile Include="Enums\TVTNewsEffect.cs" />
-    <Compile Include="Enums\TVTNewsGenre.cs" />
-    <Compile Include="Enums\TVTProgrammeType.cs" />
-    <Compile Include="Enums\TVTDataType.cs" />
-    <Compile Include="Enums\TVTDataStatus.cs" />
-    <Compile Include="Enums\TVTTargetGroup.cs" />
-    <Compile Include="Enums\TVTDataContent.cs" />
-    <Compile Include="Enums\TVTPersonGender.cs" />
-    <Compile Include="Enums\TVTPersonFunction.cs" />
-    <Compile Include="Enums\TVTPressureGroup.cs" />
-    <Compile Include="Enums\TVTProgrammeGenre.cs" />
-    <Compile Include="Enums\TVTMovieFlag.cs" />
-    <Compile Include="Helper\EntityHelper.cs" />
-    <Compile Include="ITVTDatabase.cs" />
+    <Compile Include="FakeName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">
-      <Project>{A12F5069-3DCE-406A-A9AB-42184F211121}</Project>
-      <Name>CodeKnight.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

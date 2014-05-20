@@ -59,6 +59,7 @@ namespace TVTower.UnitTests
 
             using (var connection = TVTSQLSession.GetSessionNewDB())
             {
+				TVTCommands.InsertPeople( connection, database.GetAllPeople() );
                 TVTCommands.InsertProgrammes(connection, database.GetAllMovies(true));
                 TVTCommands.InsertEpisodes(connection, database.GetAllEpisodes());
             }
