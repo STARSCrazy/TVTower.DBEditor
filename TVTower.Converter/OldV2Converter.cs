@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using TVTower.Entities;
-using TVTower.Entities.Entities;
 
 namespace TVTower.Converter
 {
-	public static class MovieOldV2Converter
+	public static class OldV2Converter
 	{
         public static void RefreshMovieDescriptions(ITVTDatabase database)
         {
@@ -49,6 +48,78 @@ namespace TVTower.Converter
             }
         }
 
+        public static void FakePersonNames(ITVTDatabase database)
+        {
+            //var syl = new Dictionary<string, int>();
+
+            //foreach (var person in database.GetAllPeople())
+            //{
+            //    var name = person.LastName;
+            //    for (var i = 0; i <= name.Length - 3; i++)
+            //    {
+            //        var currSylKey = name.Substring(i, 3);
+            //        if (!currSylKey.Contains(' '))
+            //        {
+            //            currSylKey = currSylKey.ToLower();
+
+            //            if (syl.ContainsKey(currSylKey))
+            //                syl[currSylKey] = syl[currSylKey] + 1;
+            //            else
+            //                syl.Add(currSylKey, 1);
+            //        }
+            //    }
+            //}
+
+            //var myList = syl.ToList();
+
+            //myList.Sort((firstPair, nextPair) =>
+            //{
+            //    return firstPair.Value.CompareTo(nextPair.Value)*-1;
+            //}
+            //);
+
+            //var i2 = 0;
+            //foreach (var entry in myList)
+            //{
+            //    Console.WriteLine(entry.Key + " = " + entry.Value);
+            //    i2++;
+            //    if (i2 >= 100)
+            //        break;
+            //}
+
+            int count = 0;
+            var faker = new NameFaker();
+            faker.InitializeData();
+
+            foreach (var person in database.GetAllPeople())
+            {
+                if (string.IsNullOrEmpty(person.FakeLastName) || person.LastName == person.FakeLastName)
+                {
+                    var tempFakeName = faker.Fake(person.LastName);
+                    if (tempFakeName != person.LastName)
+                        person.FakeLastName = tempFakeName;
+                    else
+                    {
+                        Console.WriteLine(person.LastName);
+                        count++;
+                    }
+                }
+            }
+            Console.WriteLine("Result: " + count);
+        }
+
+        private static void ConvertCommon(CommonOldV2 common, ITVTNames names, ITVTDatabase database)
+        {
+            names.GenerateGuid();
+            names.AltId = common.id.ToString();
+            names.TitleDE = common.title;
+            names.TitleEN = common.titleEnglish;
+            names.FakeTitleDE = common.titleFake;
+            names.FakeTitleEN = common.titleEnglishFake;            
+            names.DescriptionDE = common.description;
+            names.DescriptionEN = common.descriptionEnglish;      
+        }
+
         private static void ConvertEpisode(MovieOldV2 movieOldV2, ITVTProgrammeCore episode, ITVTDatabase database)
         {
             if (movieOldV2.custom)
@@ -56,14 +127,8 @@ namespace TVTower.Converter
             else
                 episode.DataType = TVTDataType.Custom;
 
-            episode.GenerateGuid();
-            episode.AltId = movieOldV2.id.ToString();
-            episode.TitleDE = movieOldV2.title;
-            episode.TitleEN = movieOldV2.titleEnglish;
-            episode.FakeTitleDE = movieOldV2.titleFake;
-            episode.FakeTitleEN = movieOldV2.titleEnglishFake;            
-            episode.DescriptionDE = movieOldV2.description;
-            episode.DescriptionEN = movieOldV2.descriptionEnglish;
+            ConvertCommon(movieOldV2, episode, database);
+
             episode.Participants = GetPersonsByNameOrCreate(database, movieOldV2.actors, TVTDataContent.Original, TVTPersonFunction.Actor);
             episode.Director = GetPersonByNameOrCreate(database, movieOldV2.director, TVTDataContent.Original, TVTPersonFunction.Director);
             
@@ -130,10 +195,48 @@ namespace TVTower.Converter
 			}
 		}
 
+        public static void Convert(List<AdvertisingOldV2> adsOldV2, ITVTDatabase database)
+        {
+            foreach (var adSrc in adsOldV2)
+            {
+                var ad = new TVTAdvertising();
+
+                ConvertCommon(adSrc, ad, database);
+
+                ad.FlexibleProfit = (adSrc.fixedProfit > 0);
+                ad.MinAudience = ConvertOldToNewValue(adSrc.minAudience);
+                ad.MinImage = ConvertOldToNewValue(adSrc.minImage);
+                ad.Repetitions = adSrc.repetitions;
+                ad.Duration = adSrc.duration;
+                ad.Profit = ConvertProfitPenalty(adSrc.profit, adSrc.fixedProfit > 0, adSrc.fixedProfit);
+                ad.Penalty = ConvertProfitPenalty(adSrc.penalty, adSrc.fixedPenalty > 0, adSrc.fixedPenalty);                
+
+                ad.TargetGroup = ConvertTargetGroup(adSrc.targetgroup);
+
+                database.AddAdvertising(ad);
+            }
+        }
+
 		public static int ConvertOldToNewValue( int oldValue )
 		{
 			return oldValue * 100 / 255;
 		}
+
+        public static int ConvertProfitPenalty(int value, bool isFixValue, int fixValue)
+        {
+            if (isFixValue)
+                return fixValue / 1000;
+            else
+                return value;
+        }
+
+        public static TVTTargetGroup ConvertTargetGroup(int oldTargetGroup)
+        {
+            if (oldTargetGroup >= 0 && oldTargetGroup <= 9)
+                return (TVTTargetGroup)oldTargetGroup;
+            else
+                return TVTTargetGroup.All;
+        }
 
 		public static void ConvertGenreAndFlags( TVTProgramme movie, MovieOldV2 movieOld )
 		{

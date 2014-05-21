@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvertisingOldV2.cs" />
+    <Compile Include="CommonOldV2.cs" />
+    <Compile Include="NameFaker.cs" />
     <Compile Include="MovieOldV2.cs" />
-    <Compile Include="MovieOldV2Converter.cs" />
+    <Compile Include="OldV2Converter.cs" />
     <Compile Include="PersonConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

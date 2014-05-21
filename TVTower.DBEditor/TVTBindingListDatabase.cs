@@ -10,6 +10,7 @@ namespace TVTower.DBEditor
 		public SortedBindingList<TVTProgramme> MovieData { get; set; }
         public SortedBindingList<TVTEpisode> EpisodeData { get; set; }        
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
+        public SortedBindingList<TVTAdvertising> AdvertisingData { get; set; }        
 
 		public void Initialize()
 		{
@@ -21,6 +22,9 @@ namespace TVTower.DBEditor
 
             if (PersonData == null)
                 PersonData = new SortedBindingList<TVTPerson>();
+
+            if (AdvertisingData == null)
+                AdvertisingData = new SortedBindingList<TVTAdvertising>();            
 		}
 
 		public void SetMovieBindingList( SortedBindingList<TVTProgramme> movieData )
@@ -68,6 +72,17 @@ namespace TVTower.DBEditor
 				AddPerson( person );
 		}
 
+        public void AddAdvertising(TVTAdvertising advertising)
+        {
+            AdvertisingData.Add(advertising);
+        }
+
+        public void AddAdvertising(IEnumerable<TVTAdvertising> advertisings)
+        {
+            foreach (var person in advertisings)
+                AddAdvertising(person);
+        }
+
 		public IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false )
 		{
 			var result = new List<TVTProgramme>();
@@ -98,6 +113,13 @@ namespace TVTower.DBEditor
 			result.AddRange( PersonData );
 			return result;
 		}
+
+        public IEnumerable<TVTAdvertising> GetAllAdvertisings()
+        {
+            var result = new List<TVTAdvertising>();
+            result.AddRange(AdvertisingData);
+            return result;
+        }
 
 		public TVTPerson GetPersonById( Guid id )
 		{

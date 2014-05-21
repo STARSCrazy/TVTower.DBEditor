@@ -107,6 +107,54 @@ namespace TVTower.SQL
             return result;
         }
 
+        public static List<AdvertisingOldV2> LoadAdsOldV2(MySqlConnection connection)
+        {
+            var result = new List<AdvertisingOldV2>();
+
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM tvtower.tvt_werbevertraege";
+            var Reader = command.ExecuteReader();
+            try
+            {
+                while (Reader.Read())
+                {
+                    var reader = new SQLReaderOldV2(Reader);
+                    var ad = new AdvertisingOldV2();
+
+                    ad.id = reader.GetInt("id");
+                    ad.title = reader.GetString("title");
+                    ad.titleEnglish = reader.GetString("titleEnglish");
+                    ad.description = reader.GetString("description");
+                    ad.descriptionEnglish = reader.GetString("descriptionEnglish");
+
+                    ad.minAudience = reader.GetInt("minAudience");
+                    ad.minImage = reader.GetInt("minImage");
+                    ad.repetitions = reader.GetInt("repetitions");
+                    ad.fixedPrice = reader.GetInt("fixedPrice");
+                    ad.fixedProfit = reader.GetInt("fixedProfit");
+                    ad.fixedPenalty = reader.GetInt("fixedPenalty");
+                    ad.profit = reader.GetInt("profit");
+                    ad.penalty = reader.GetInt("penalty");
+                    ad.targetgroup = reader.GetInt("targetgroup");
+                    ad.duration = reader.GetInt("duration");
+                    ad.approved = reader.GetBool("approved");
+                    ad.creatorID = reader.GetInt("creatorID");
+                    ad.editorID = reader.GetInt("editorID");
+                    ad.custom = reader.GetBool("custom");
+                    ad.deleted = reader.GetBool("deleted");
+
+                    result.Add(ad);
+                }
+            }
+            finally
+            {
+                if (Reader != null && !Reader.IsClosed)
+                    Reader.Close();
+            }
+
+            return result;
+        }
+
         public static void LoadFakesForPeople(MySqlConnection connection, IEnumerable<TVTPerson> people)
         {
             var command = connection.CreateCommand();
@@ -155,6 +203,7 @@ namespace TVTower.SQL
 
                 content.Add("blocks", programme.Blocks);
                 content.Add("live_hour", programme.LiveHour);
+                content.Add("distribution_channel", programme.DistributionChannel);                
 
                 content.Add("flags", programme.Flags.ToContentString()); //TODO
                 content.Add("target_groups", programme.TargetGroups.ToContentString());
@@ -338,6 +387,83 @@ namespace TVTower.SQL
                 var command = connection.CreateCommand();
 
                 command.CommandText = "INSERT INTO tvt_people (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                foreach (var kvp in content)
+                {
+                    command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
+                }
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void InsertAdvertisings(MySqlConnection connection, IEnumerable<TVTAdvertising> advertisings)
+        {
+            foreach (var ad in advertisings)
+            {
+                var content = new Dictionary<string, object>();
+                content.Add("id", ad.Id);
+                //Episode                
+                content.Add("title_de", ad.TitleDE);
+                content.Add("title_en", ad.TitleEN);
+                content.Add("fake_de", ad.FakeTitleDE);
+                content.Add("fake_en", ad.FakeTitleEN);
+
+                content.Add("description_de", ad.DescriptionDE);
+                content.Add("description_en", ad.DescriptionEN);
+
+                content.Add("infomercial", ad.Infomercial);
+                content.Add("quality", ad.Quality);
+
+                content.Add("flexible_profit", ad.FlexibleProfit);
+                content.Add("min_audience", ad.MinAudience);
+                content.Add("min_image", ad.MinImage);
+                content.Add("repetitions", ad.Repetitions);
+                content.Add("duration", ad.Duration);
+                content.Add("profit", ad.Profit);
+                content.Add("penalty", ad.Penalty);
+                content.Add("target_group", ad.TargetGroup);
+
+
+                if (ad.AllowedGenres != null)
+                    content.Add("allowed_genres", ad.AllowedGenres.ToContentString());
+                else
+                    content.Add("allowed_genres", null);
+
+                if (ad.ProhibitedGenres != null)
+                    content.Add("prohibited_genres", ad.ProhibitedGenres.ToContentString());
+                else
+                    content.Add("prohibited_genres", null);
+
+
+                if (ad.AllowedProgrammeTypes != null)
+                    content.Add("allowed_programme_types", ad.AllowedProgrammeTypes.ToContentString());
+                else
+                    content.Add("allowed_programme_types", null);
+
+                if (ad.ProhibitedProgrammeTypes != null)
+                    content.Add("prohibited_programme_types", ad.ProhibitedProgrammeTypes.ToContentString());
+                else
+                    content.Add("prohibited_programme_types", null);
+
+
+                if (ad.ProPressureGroups != null)
+                    content.Add("pro_pressure_groups", ad.ProPressureGroups.ToContentString());
+                else
+                    content.Add("pro_pressure_groups", null);
+
+                if (ad.ContraPressureGroups != null)
+                    content.Add("contra_pressure_groups", ad.ContraPressureGroups.ToContentString());
+                else
+                    content.Add("contra_pressure_groups", null);
+
+
+                //Zusatzinfos
+                AdditionalFields(content, ad);
+
+
+                var command = connection.CreateCommand();
+
+                command.CommandText = "INSERT INTO tvt_advertisings (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
                 foreach (var kvp in content)
                 {
                     command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);

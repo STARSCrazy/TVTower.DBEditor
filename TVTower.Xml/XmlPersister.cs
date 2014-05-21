@@ -405,7 +405,7 @@ namespace TVTower.Xml
 			if ( version <= 2 ) //Alte BlitzMax-Datenbank
 			{
 				movie.MovieAdditional.GenreOldVersion = movie.MovieAdditional.MainGenreRaw;
-                MovieOldV2Converter.ConvertGenreAndFlags(movie, null);
+                OldV2Converter.ConvertGenreAndFlags(movie, null);
 			}
 			else
 			{

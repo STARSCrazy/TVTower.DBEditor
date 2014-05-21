@@ -32,6 +32,7 @@ namespace TVTower.Entities
         //Fields not for episodes
         public string Country { get; set; }				//ISO-3166-1 ALPHA-2    (http://de.wikipedia.org/wiki/ISO-3166-1-Kodierliste)
 		public int Year { get; set; }					//YYYY   = 1900+
+        public TVTDistributionChannel DistributionChannel { get; set; }
 
 		public TVTProgrammeGenre MainGenre { get; set; }
 		public TVTProgrammeGenre SubGenre { get; set; }
@@ -47,7 +48,6 @@ namespace TVTower.Entities
 		public string ImdbId { get; set; }				//IMDb = Internet Movie Database
 		public int? TmdbId { get; set; }					//The Movie DB		
 		public int? RottenTomatoesId { get; set; }		//rottentomatoes.com
-
 		public string ImageUrl { get; set; }			//Von hier kann die Bildquelle geladen werden
 
 		//Für Serien

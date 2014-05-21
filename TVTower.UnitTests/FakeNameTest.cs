@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TVTower.Faker;
+using TVTower.Converter;
 
 namespace TVTower.UnitTests
 {
@@ -9,7 +9,7 @@ namespace TVTower.UnitTests
 		[TestMethod]
 		public void ConnectTest()
 		{
-			var faker = new FakeName();
+			var faker = new NameFaker();
 			faker.InitializeData();
 			Assert.AreEqual( "Shtiphan", faker.Fake( "Steven" ) );
 			Assert.AreEqual( "Sbylborg", faker.Fake( "Spielberg" ) );

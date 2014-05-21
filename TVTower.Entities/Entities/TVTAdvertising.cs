@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace TVTower.Entities.Entities
+namespace TVTower.Entities
 {
-	public class TVTAdvertising : TVTEntity
+    public class TVTAdvertising : TVTEntity, ITVTNames
 	{
 		public string TitleDE { get; set; }
 		public string TitleEN { get; set; }
@@ -12,17 +12,21 @@ namespace TVTower.Entities.Entities
 		public string FakeTitleDE { get; set; }
 		public string FakeTitleEN { get; set; }
 
+        public bool Infomercial { get; set; }
+        public int Quality { get; set; }        //Wenn als Infomercial gesendet!
+
+        public bool FlexibleProfit { get; set; }
 		public int MinAudience { get; set; }	//0 - 100
 		public int MinImage { get; set; }		//0 - 100
 		public int Repetitions { get; set; }	//0 - 10
+        public int Duration { get; set; }		//0 - 10
 		public int Profit { get; set; }			//0 - 1000
-		public int Penalty { get; set; }		//0 - 1000
-		public int Duration { get; set; }		//0 - 10
+		public int Penalty { get; set; }		//0 - 1000		
 
-		public TVTTargetGroup TargetGroup { get; set; }
+		public TVTTargetGroup TargetGroup { get; set; }        
 
-		public List<TVTProgrammeGenre> AllowedMovieGenres { get; set; }
-		public List<TVTProgrammeGenre> ProhibitedMovieGenres { get; set; }
+		public List<TVTProgrammeGenre> AllowedGenres { get; set; }
+		public List<TVTProgrammeGenre> ProhibitedGenres { get; set; }
 		public List<TVTProgrammeType> AllowedProgrammeTypes { get; set; }
 		public List<TVTProgrammeType> ProhibitedProgrammeTypes { get; set; }
 

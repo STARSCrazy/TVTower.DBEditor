@@ -14,10 +14,14 @@ namespace TVTower.Entities
 		void AddPerson( TVTPerson person );
 		void AddPeople( IEnumerable<TVTPerson> people );
 
+        void AddAdvertising(TVTAdvertising advertising);
+        void AddAdvertising(IEnumerable<TVTAdvertising> advertisings);
+
 		IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false );
 		IEnumerable<TVTProgramme> GetAllSeries();
         IEnumerable<TVTEpisode> GetAllEpisodes();
 		IEnumerable<TVTPerson> GetAllPeople();
+        IEnumerable<TVTAdvertising> GetAllAdvertisings();
 
 		TVTPerson GetPersonById( Guid id );
 		TVTPerson GetPersonByStringId( string id );

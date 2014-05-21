@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TVTower.Faker
+namespace TVTower.Converter
 {
-	public class FakeName
+	public class NameFaker
 	{
 		private List<Syllable> Syllables;
 
@@ -83,9 +83,76 @@ namespace TVTower.Faker
 			Syllables.Add( new Syllable( "gio", "tshio" ) );
 			Syllables.Add( new Syllable( "cis", "zis" ) );
 			Syllables.Add( new Syllable( "ord", "ortt" ) );
+            Syllables.Add(new Syllable("mac", "mak"));
+            Syllables.Add(new Syllable("mc", "mak"));
+            Syllables.Add(new Syllable("ith", "idt"));
+            Syllables.Add(new Syllable("smi", "shmi"));
+            Syllables.Add(new Syllable("tee", "tii"));
+            Syllables.Add(new Syllable("gin", "kin"));
+            Syllables.Add(new Syllable("nis", "iyss"));
+            Syllables.Add(new Syllable("hep", "hib"));
+            Syllables.Add(new Syllable("burn", "bourne"));
+            Syllables.Add(new Syllable("eal", "iil"));
+            Syllables.Add(new Syllable("alo", "aolu"));
+            Syllables.Add(new Syllable("iak", "ijac"));
+            Syllables.Add(new Syllable("nus", "nos"));
+            Syllables.Add(new Syllable("rez", "riecz"));
+
+
+            Syllables.Add( new Syllable( "son", "sun" ) );
+            Syllables.Add( new Syllable( "man", "men" ) );
+            Syllables.Add( new Syllable( "ell", "iel" ) );
+            Syllables.Add( new Syllable( "and", "ent" ) );
+            Syllables.Add( new Syllable( "ber", "pier" ) );
+
+            Syllables.Add( new Syllable( "ing", "jing" ) );
+            Syllables.Add( new Syllable( "ill", "jell" ) );
+            Syllables.Add( new Syllable( "lan", "lon" ) );
+            Syllables.Add( new Syllable( "lle", "lhe" ) );
+            Syllables.Add( new Syllable( "ton", "turn" ) );
+            Syllables.Add( new Syllable( "ers", "ehs" ) );
+            Syllables.Add( new Syllable( "ter", "tjier" ) );
+            Syllables.Add( new Syllable( "der", "ter" ) );
+            Syllables.Add( new Syllable( "har", "er" ) );
+            Syllables.Add( new Syllable( "ger", "kehr" ) );
+            Syllables.Add( new Syllable( "ner", "mehr" ) );
+            Syllables.Add( new Syllable( "her", "hear" ) );
+            Syllables.Add( new Syllable( "all", "ehl" ) );
+            Syllables.Add( new Syllable( "che", "ke" ) );
+            Syllables.Add( new Syllable( "ler", "leer" ) );
+            Syllables.Add( new Syllable( "ann", "amn" ) );
+            Syllables.Add( new Syllable( "ste", "staeh" ) );
+            Syllables.Add( new Syllable( "pla", "bla" ) );
+
+            Syllables.Add(new Syllable("ran", "rehn"));
+            Syllables.Add(new Syllable("nne", "nmee"));
+            Syllables.Add(new Syllable("lin", "lijin"));
+            Syllables.Add(new Syllable("one", "ohme"));
+            Syllables.Add(new Syllable("don", "tjon"));
+            Syllables.Add(new Syllable("kin", "gin"));
+            Syllables.Add(new Syllable("lli", "lai"));
+            Syllables.Add(new Syllable("ore", "jore"));
+            Syllables.Add(new Syllable("ins", "ims"));
+            
+
+
+//ste = 30
+//ran = 25
+//nne = 25
+//lin = 23
+//one = 23
+//don = 22
+//kin = 22
+//lli = 22
+//ore = 21
+//ins = 21
+            
+            
+
+
 			Syllables.Add( new Syllable( "ne", "ner", 3, 3 ) );
 
-			Syllables.Add( new Syllable( "ma", "ga", 4 ) );
+			Syllables.Add( new Syllable( "ma", "ga", 4 ) );            
 			//Syllables.Add( new Syllable( "ne", "neh", 4 ) );
 			//
 
@@ -101,25 +168,31 @@ namespace TVTower.Faker
 
 		public string Fake( string name )
 		{
-			if ( ReplaceIntern( ref name, 1, true ) )
+			if ( ReplaceIntern( ref name, 1, true ) > 0 )
 				return name;
 
-			bool changed2 = ReplaceIntern( ref name, 2, true );
-			bool changed3 = ReplaceIntern( ref name, 3, false );
-			bool changed4 = false;
+			var changed2 = ReplaceIntern( ref name, 2, true );
+            if (changed2 >= 3)
+                return name;
 
-			if ( !changed2 && !changed3 )
-				changed4 = ReplaceIntern( ref name, 4, false );
+            var changed3 = changed2 + ReplaceIntern(ref name, 3, false);
+            if (changed3 >= 3)
+                return name;
 
-			if ( !changed2 && !changed3 && !changed4 )
+            var changed4 = 0;
+
+            if (changed3 < 3)
+                changed4 = changed3 + ReplaceIntern(ref name, 4, false);
+
+            if (changed4 < 3)
 				ReplaceIntern( ref name, 5, false );
 
 			return name;
 		}
 
-		private bool ReplaceIntern( ref string name, int level, bool onlyOne )
+		private int ReplaceIntern( ref string name, int level, bool onlyOne )
 		{
-			var result = false;
+			var result = 0;
 			var lc = name.ToLower();
 			foreach ( var syl in Syllables.Where( x => x.Level == level && x.Part == 2 ) )
 			{
@@ -135,9 +208,9 @@ namespace TVTower.Faker
 					}
 
 					name = name.Replace( key, value );
-					result = true;
+					result++;
 					if ( onlyOne )
-						return true;
+                        return result;
 					else
 						lc = name.ToLower();
 				}
@@ -157,9 +230,9 @@ namespace TVTower.Faker
 					}
 
 					name = name.Replace( key, value );
-					result = true;
+					result++;
 					if ( onlyOne )
-						return true;
+                        return result;
 					else
 						lc = name.ToLower();
 				}

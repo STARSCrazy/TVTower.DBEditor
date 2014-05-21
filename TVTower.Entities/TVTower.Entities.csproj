@@ -47,6 +47,8 @@
     <Compile Include="Entities\TVTAdvertising.cs" />
     <Compile Include="Entities\TVTEntity.cs" />
     <Compile Include="Entities\TVTResource.cs" />
+    <Compile Include="Enums\TVTDistributionChannel.cs" />
+    <Compile Include="Interfaces\ITVTNames.cs" />
     <Compile Include="Interfaces\ITVTProgrammeCore.cs" />
     <Compile Include="Interfaces\ITVTEntity.cs" />
     <Compile Include="Interfaces\ITVTEpisode.cs" />
