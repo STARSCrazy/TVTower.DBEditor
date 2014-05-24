@@ -10,7 +10,8 @@ namespace TVTower.DBEditor
 		public SortedBindingList<TVTProgramme> MovieData { get; set; }
         public SortedBindingList<TVTEpisode> EpisodeData { get; set; }        
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
-        public SortedBindingList<TVTAdvertising> AdvertisingData { get; set; }        
+        public SortedBindingList<TVTAdvertising> AdvertisingData { get; set; }
+        public SortedBindingList<TVTNews> NewsData { get; set; }        
 
 		public void Initialize()
 		{
@@ -24,7 +25,10 @@ namespace TVTower.DBEditor
                 PersonData = new SortedBindingList<TVTPerson>();
 
             if (AdvertisingData == null)
-                AdvertisingData = new SortedBindingList<TVTAdvertising>();            
+                AdvertisingData = new SortedBindingList<TVTAdvertising>();
+
+            if (NewsData == null)
+                NewsData = new SortedBindingList<TVTNews>();                 
 		}
 
 		public void SetMovieBindingList( SortedBindingList<TVTProgramme> movieData )
@@ -83,6 +87,17 @@ namespace TVTower.DBEditor
                 AddAdvertising(person);
         }
 
+        public void AddNews(TVTNews news)
+        {
+            NewsData.Add(news);
+        }
+
+        public void AddNews(IEnumerable<TVTNews> news)
+        {
+            foreach (var currNews in news)
+                AddNews(currNews);
+        }
+
 		public IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false )
 		{
 			var result = new List<TVTProgramme>();
@@ -118,6 +133,13 @@ namespace TVTower.DBEditor
         {
             var result = new List<TVTAdvertising>();
             result.AddRange(AdvertisingData);
+            return result;
+        }
+
+        public IEnumerable<TVTNews> GetAllNews()
+        {
+            var result = new List<TVTNews>();
+            result.AddRange(NewsData);
             return result;
         }
 
@@ -184,7 +206,17 @@ namespace TVTower.DBEditor
                     var currPerson = GetPersonById(episode.Director.Id);
                     currPerson.ProgrammeCount++;
                 }
-            }    
+            }
+
+            foreach (var person in PersonData)
+            {
+                if (person.ProgrammeCount >= 8)
+                    person.Prominence = 1;
+                else if (person.ProgrammeCount >= 4)
+                    person.Prominence = 1;
+                else
+                    person.Prominence = 3;
+            }
         }
 
         public void RefreshStatus()
@@ -202,6 +234,16 @@ namespace TVTower.DBEditor
             foreach (var episode in this.EpisodeData)
             {
                 episode.RefreshStatus();
+            }
+
+            foreach (var advertising in this.AdvertisingData)
+            {
+                advertising.RefreshStatus();
+            }
+
+            foreach (var news in this.NewsData)
+            {
+                news.RefreshStatus();
             }  
         }
 

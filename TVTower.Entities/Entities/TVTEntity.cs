@@ -14,6 +14,9 @@ namespace TVTower.Entities
         public string AdditionalInfo { get; set; }
         public bool Approved { get; set; } //TODO: Kommt wieder weg!
 
+        public string CreatorId { get; set; }
+        public string EditorId { get; set; }
+
 		public void GenerateGuid()
 		{
 			Id = Guid.NewGuid();

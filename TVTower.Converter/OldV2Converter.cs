@@ -108,16 +108,21 @@ namespace TVTower.Converter
             Console.WriteLine("Result: " + count);
         }
 
-        private static void ConvertCommon(CommonOldV2 common, ITVTNames names, ITVTDatabase database)
+        private static void ConvertCommonMinimal(CommonOldV2 common, ITVTNamesBasic names, ITVTDatabase database)
         {
             names.GenerateGuid();
             names.AltId = common.id.ToString();
             names.TitleDE = common.title;
             names.TitleEN = common.titleEnglish;
+            names.DescriptionDE = common.description;
+            names.DescriptionEN = common.descriptionEnglish;
+        }
+
+        private static void ConvertCommon(CommonOldV2 common, ITVTNames names, ITVTDatabase database)
+        {
+            ConvertCommonMinimal(common, names, database);
             names.FakeTitleDE = common.titleFake;
             names.FakeTitleEN = common.titleEnglishFake;            
-            names.DescriptionDE = common.description;
-            names.DescriptionEN = common.descriptionEnglish;      
         }
 
         private static void ConvertEpisode(MovieOldV2 movieOldV2, ITVTProgrammeCore episode, ITVTDatabase database)
@@ -214,6 +219,87 @@ namespace TVTower.Converter
                 ad.TargetGroup = ConvertTargetGroup(adSrc.targetgroup);
 
                 database.AddAdvertising(ad);
+            }
+        }
+
+        public static void Convert(List<NewsOldV2> newsOldV2, ITVTDatabase database)
+        {
+            foreach (var newsSrc in newsOldV2)
+            {
+                var news = new TVTNews();
+
+                ConvertCommonMinimal(newsSrc, news, database);
+
+                if (newsSrc.parentID == 0)
+                {
+                    news.NewsType = TVTNewsType.SingleNews;
+                    news.NewsThreadId = newsSrc.id.ToString();
+                    news.Tag = 0;
+                }
+                else
+                {
+                    news.NewsType = TVTNewsType.FollowingNews;                    
+                    news.NewsThreadId = newsSrc.parentID.ToString();
+                    news.Tag = newsSrc.episode;
+                }
+
+                news.NewsHandling = TVTNewsHandling.FixMessage;
+
+                //PossibleFollower - erst später ermitteln;
+                news.Genre = (TVTNewsGenre)newsSrc.genre;
+
+                news.FixYear = -1;
+                news.AvailableAfterXDays = -1;
+                news.YearRangeFrom = -1;
+                news.YearRangeTo = -1;
+                news.MinHoursAfterPredecessor = -1;
+                news.TimeRangeFrom = -1;
+                news.TimeRangeTo = -1;
+
+                news.Price = ConvertOldToNewValue(newsSrc.price);
+                news.Topicality = ConvertOldToNewValue(newsSrc.topicality);
+
+                news.Resource1Type = null;
+                news.Resource2Type = null;
+                news.Resource3Type = null;
+                news.Resource4Type = null;
+
+                news.Effect = TVTNewsEffect.None;
+
+                database.AddNews(news);
+            }
+
+            var allNews = database.GetAllNews();
+
+            foreach (var news in allNews)
+            {
+                var episode = (int)news.Tag;
+
+                TVTNews follower = allNews.FirstOrDefault(x => x.NewsThreadId == news.NewsThreadId && (int)x.Tag == episode + 1);
+                if (follower != null)
+                {
+                    follower.NewsType = TVTNewsType.FollowingNews;
+                    news.NewsType = TVTNewsType.InitialNewsAutomatic;
+                    follower.Predecessor = news;
+                }
+                else
+                {
+                    if (news.NewsThreadId == news.AltId)
+                        news.NewsType = TVTNewsType.InitialNewsAutomatic;
+                    else
+                        news.NewsType = TVTNewsType.FollowingNews;
+                }
+            }
+
+            foreach (var news in allNews)
+            {
+                if (news.NewsType == TVTNewsType.SingleNews)
+                    news.NewsThreadId = null;
+                else
+                {
+                    TVTNews thread_owner = allNews.FirstOrDefault(x => x.AltId == news.NewsThreadId);
+                    news.NewsThreadId = thread_owner.Id.ToString();
+                }
             }
         }
 

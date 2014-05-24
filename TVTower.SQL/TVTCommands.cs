@@ -155,6 +155,74 @@ namespace TVTower.SQL
             return result;
         }
 
+        public static List<NewsOldV2> LoadNewsOldV2(MySqlConnection connection)
+        {
+            var result = new List<NewsOldV2>();
+
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM tvtower.tvt_nachrichten";
+            var Reader = command.ExecuteReader();
+            try
+            {
+                while (Reader.Read())
+                {
+                    var reader = new SQLReaderOldV2(Reader);
+                    var news = new NewsOldV2();
+
+                    news.id = reader.GetInt("id");
+                    //news.title = reader.GetString("title");
+                    //news.titleEnglish = reader.GetString("titleEnglish");
+                    //news.description = reader.GetString("description");
+                    //news.descriptionEnglish = reader.GetString("descriptionEnglish");
+
+                    news.genre = reader.GetInt("genre");
+                    news.price = reader.GetInt("price");
+                    news.topicality = reader.GetInt("topicality");
+                    news.parentID = reader.GetInt("parentID");
+                    news.approved = reader.GetBool("approved");
+                    news.creatorID = reader.GetInt("creatorID");
+                    news.editorID = reader.GetInt("editorID");
+                    news.episode = reader.GetInt("episode");    
+
+                    result.Add(news);
+                }
+            }
+            finally
+            {
+                if (Reader != null && !Reader.IsClosed)
+                    Reader.Close();
+            }
+
+            command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM tvtower.tvt_nachrichten_lang";
+            Reader = command.ExecuteReader();
+            try
+            {
+                while (Reader.Read())
+                {                    
+                    var reader = new SQLReaderOldV2(Reader);
+
+                    var id = reader.GetInt("news_id");
+
+                    var news = result.FirstOrDefault(x => x.id == id);
+
+                    news.title = reader.GetString("title");
+                    news.description = reader.GetString("text");
+                }
+            }
+            finally
+            {
+                if (Reader != null && !Reader.IsClosed)
+                    Reader.Close();
+            }
+
+
+
+            return result;
+        }
+
+        
+
         public static void LoadFakesForPeople(MySqlConnection connection, IEnumerable<TVTPerson> people)
         {
             var command = connection.CreateCommand();
@@ -473,12 +541,79 @@ namespace TVTower.SQL
             }
         }
 
+        public static void InsertNews(MySqlConnection connection, IEnumerable<TVTNews> newsEnum)
+        {
+            foreach (var news in newsEnum)
+            {
+                var content = new Dictionary<string, object>();
+                content.Add("id", news.Id);
+                //Episode                
+                content.Add("title_de", news.TitleDE);
+                content.Add("title_en", news.TitleEN);
+                content.Add("description_de", news.DescriptionDE);
+                content.Add("description_en", news.DescriptionEN);
+
+                content.Add("type", news.NewsType);
+                content.Add("handling", news.NewsHandling);
+                content.Add("thread_id", news.NewsThreadId);
+                content.Add("genre", news.Genre);
+                content.Add("predecessor", news.Predecessor != null ? news.Predecessor.Id.ToString() : null);
+
+                content.Add("price", news.Price);
+                content.Add("topicality", news.Topicality);
+
+                content.Add("fix_year", news.FixYear);
+                content.Add("available_after_days", news.AvailableAfterXDays);
+                content.Add("year_range_from", news.YearRangeFrom);
+                content.Add("year_range_to", news.YearRangeTo);
+                content.Add("hours_after_predecessor", news.MinHoursAfterPredecessor);
+                content.Add("time_range_from", news.TimeRangeFrom);
+                content.Add("time_range_to", news.TimeRangeTo);
+
+                content.Add("resource_1_type", news.Resource1Type);
+                content.Add("resource_2_type", news.Resource2Type);
+                content.Add("resource_3_type", news.Resource3Type);
+                content.Add("resource_4_type", news.Resource4Type);
+
+                content.Add("effect", news.Effect);
+                content.Add("effect_parameters", news.EffectParameters.ToContentString());
+
+                if (news.ProPressureGroups != null)
+                    content.Add("pro_pressure_groups", news.ProPressureGroups.ToContentString());
+                else
+                    content.Add("pro_pressure_groups", null);
+
+                if (news.ContraPressureGroups != null)
+                    content.Add("contra_pressure_groups", news.ContraPressureGroups.ToContentString());
+                else
+                    content.Add("contra_pressure_groups", null);
+
+
+                //Zusatzinfos
+                AdditionalFields(content, news);
+
+
+                var command = connection.CreateCommand();
+
+                command.CommandText = "INSERT INTO tvt_news (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                foreach (var kvp in content)
+                {
+                    command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
+                }
+
+                command.ExecuteNonQuery();
+            }
+        }        
+
         private static void AdditionalFields(Dictionary<string, object> content, TVTEntity entity)
         {
             content.Add("data_type", entity.DataType);
             content.Add("data_status", entity.DataStatus);
             content.Add("approved", entity.Approved);
             content.Add("additional_info", entity.AdditionalInfo);
+
+            content.Add("creator_id", entity.CreatorId);
+            content.Add("editor_id", entity.EditorId);
         }
     }
 }

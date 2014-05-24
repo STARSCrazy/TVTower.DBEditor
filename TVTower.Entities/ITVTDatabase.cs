@@ -17,11 +17,15 @@ namespace TVTower.Entities
         void AddAdvertising(TVTAdvertising advertising);
         void AddAdvertising(IEnumerable<TVTAdvertising> advertisings);
 
+        void AddNews(TVTNews news);
+        void AddNews(IEnumerable<TVTNews> news);
+
 		IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false );
 		IEnumerable<TVTProgramme> GetAllSeries();
         IEnumerable<TVTEpisode> GetAllEpisodes();
 		IEnumerable<TVTPerson> GetAllPeople();
         IEnumerable<TVTAdvertising> GetAllAdvertisings();
+        IEnumerable<TVTNews> GetAllNews();
 
 		TVTPerson GetPersonById( Guid id );
 		TVTPerson GetPersonByStringId( string id );

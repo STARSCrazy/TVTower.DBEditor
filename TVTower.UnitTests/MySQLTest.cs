@@ -54,12 +54,14 @@ namespace TVTower.UnitTests
                 OldV2Converter.RefreshMovieDescriptions(database);
                 //MovieOldV2Converter.FakePersonNames(database);
 
+                var ads = TVTCommands.LoadAdsOldV2(connection);
+                OldV2Converter.Convert(ads, database);
+
+                var news = TVTCommands.LoadNewsOldV2(connection);
+                OldV2Converter.Convert(news, database);
+
                 database.RefreshPersonProgrammeCount();
                 database.RefreshStatus();
-
-                var ads = TVTCommands.LoadAdsOldV2(connection);
-
-                OldV2Converter.Convert(ads, database);
             }
 
             using (var connection = TVTSQLSession.GetSessionNewDB())
@@ -68,6 +70,7 @@ namespace TVTower.UnitTests
                 TVTCommands.InsertProgrammes(connection, database.GetAllMovies(true));
                 TVTCommands.InsertEpisodes(connection, database.GetAllEpisodes());
                 TVTCommands.InsertAdvertisings(connection, database.GetAllAdvertisings());
+                TVTCommands.InsertNews(connection, database.GetAllNews());
             }
             
 

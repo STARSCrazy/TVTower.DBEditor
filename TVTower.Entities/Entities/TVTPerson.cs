@@ -26,6 +26,7 @@ namespace TVTower.Entities
 		//public string PlaceOfBirth { get; set; }
 		public string Country { get; set; }
 
+        public int Prominence { get; set; } // 1 = Top-Promi, 2 = Promi, 3 = Unbekannte Person
 
         public int Skill { get; set; }		//0 - 100	Für Regisseur, Musiker und Intellektueller: Wie gut kann er sein Handwerk. Für Schauspieler: Kinokasse +		Kritik +	Tempo +
 		public int Fame { get; set; }					//0 - 100	Kinokasse ++							Wie berühmt ist die Person?
@@ -47,9 +48,5 @@ namespace TVTower.Entities
 		{
 			Functions = new List<TVTPersonFunction>();
 		}
-
-        public void RefreshStatus()
-        {
-        }
 	}
 }
