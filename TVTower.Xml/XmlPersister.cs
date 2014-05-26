@@ -59,10 +59,23 @@ namespace TVTower.Xml
 				tvgdb.AppendChild( allpeople );
 
 				foreach ( var person in database.GetAllPeople() )
-				{
-					SetPersonDetailNode( doc, allpeople, person, dbVersion, dataStructure );
+				{                    
+                    SetPersonDetailNode( doc, allpeople, person, dbVersion, dataStructure );
 				}
 			}
+
+            if (((int)dbVersion) >= 3)
+            {
+                var allads = doc.CreateElement("allads");
+                //allpeople.AddElement( "version", CURRENT_VERSION.ToString() );
+                tvgdb.AppendChild(allads);
+
+                foreach (var ad in database.GetAllAdvertisings())
+                {
+                    if (ad.Approved)
+                        SetAdvertisingDetailNode(doc, allads, ad, dbVersion, dataStructure);
+                }
+            }
 
 			var exportOptions = doc.CreateElement( "exportOptions" );
 			exportOptions.AddAttribute( "onlyFakes", (dataStructure == DataStructure.FakeData).ToString().ToLower() );
@@ -85,6 +98,54 @@ namespace TVTower.Xml
 				doc.Save( writer );
 			}
 		}
+
+        public XmlNode SetAdvertisingDetailNode(XmlDocument doc, XmlElement element, TVTAdvertising ad, DatabaseVersion dbVersion, DataStructure dataStructure)
+        {
+            XmlNode adNode = null;
+
+            adNode = doc.CreateElement("ad");
+            {
+                adNode.AddAttribute("id", ad.Id.ToString());
+            }
+            element.AppendChild(adNode);
+
+            adNode.AddElement("title_de", ad.FakeTitleDE);
+            adNode.AddElement("title_en", ad.FakeTitleEN);
+            adNode.AddElement("description_de", ad.FakeDescriptionDE);
+            adNode.AddElement("description_en", ad.FakeDescriptionEN);
+
+            {
+                XmlNode dataNode = doc.CreateElement("data");
+                dataNode.AddAttribute("infomercial", ad.Infomercial ? "1" : "0");
+                dataNode.AddAttribute("quality", ad.Quality.ToString());
+                dataNode.AddAttribute("flexibleprofit", ad.FlexibleProfit ? "1" : "0");
+                dataNode.AddAttribute("minaudience", ad.MinAudience.ToString());
+                dataNode.AddAttribute("minimage", ad.MinImage.ToString());
+                dataNode.AddAttribute("repetitions", ad.Repetitions.ToString());
+                dataNode.AddAttribute("duration", ad.Duration.ToString());
+                dataNode.AddAttribute("profit", ad.Profit.ToString());
+                dataNode.AddAttribute("penalty", ad.Penalty.ToString());
+                dataNode.AddAttribute("targetgroup", ((int)ad.TargetGroup).ToString());
+
+                adNode.AppendChild(dataNode);
+            }
+
+            if (ad.AllowedGenres != null && ad.AllowedGenres.Count > 0 ||
+                ad.ProhibitedGenres != null && ad.ProhibitedGenres.Count > 0 ||
+                ad.AllowedProgrammeTypes != null && ad.AllowedProgrammeTypes.Count > 0 ||
+                ad.ProhibitedProgrammeTypes != null && ad.ProhibitedProgrammeTypes.Count > 0)
+            {
+                XmlNode conditionsNode = doc.CreateElement("conditions");
+                conditionsNode.AddAttribute("allowedgenres", ad.AllowedGenres != null ? ad.AllowedGenres.ToContentString(",") : null);
+                conditionsNode.AddAttribute("prohibitedgenres", ad.ProhibitedGenres != null ? ad.ProhibitedGenres.ToContentString(",") : null);
+                conditionsNode.AddAttribute("allowedprogrammetypes", ad.AllowedProgrammeTypes != null ? ad.AllowedProgrammeTypes.ToContentString(",") : null);
+                conditionsNode.AddAttribute("prohibitedprogrammetypes", ad.ProhibitedProgrammeTypes != null ? ad.ProhibitedProgrammeTypes.ToContentString(",") : null);
+
+                adNode.AppendChild(conditionsNode);
+            }            
+
+            return adNode;
+        }
 
 		public XmlNode SetPersonDetailNode( XmlDocument doc, XmlElement element, TVTPerson person, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{

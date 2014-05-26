@@ -7,6 +7,8 @@ using MySql.Data.MySqlClient;
 using TVTower.SQL;
 using TVTower.DBEditor;
 using TVTower.Converter;
+using TVTower.Entities;
+using TVTower.Xml;
 
 namespace TVTower.UnitTests
 {
@@ -38,26 +40,26 @@ namespace TVTower.UnitTests
         }
 
         [TestMethod]
-        public void LoadMoviesTest()
+        public void ConvertOldToNewDataTest()
         {
             var database = new TVTBindingListDatabase();
             database.Initialize();
 
             using (var connection = TVTSQLSession.GetSession())
             {
-                var movies = TVTCommands.LoadMoviesOldV2(connection);
+                var movies = TVTCommandsV2.LoadMoviesOldV2(connection);
 
                 OldV2Converter.Convert(movies, database);
 
-                TVTCommands.LoadFakesForPeople(connection, database.GetAllPeople());
+                TVTCommandsV2.LoadFakesForPeople(connection, database.GetAllPeople());
 
                 OldV2Converter.RefreshMovieDescriptions(database);
                 //MovieOldV2Converter.FakePersonNames(database);
 
-                var ads = TVTCommands.LoadAdsOldV2(connection);
+                var ads = TVTCommandsV2.LoadAdsOldV2(connection);
                 OldV2Converter.Convert(ads, database);
 
-                var news = TVTCommands.LoadNewsOldV2(connection);
+                var news = TVTCommandsV2.LoadNewsOldV2(connection);
                 OldV2Converter.Convert(news, database);
 
                 database.RefreshPersonProgrammeCount();
@@ -66,17 +68,38 @@ namespace TVTower.UnitTests
 
             using (var connection = TVTSQLSession.GetSessionNewDB())
             {
-				TVTCommands.InsertPeople( connection, database.GetAllPeople() );
-                TVTCommands.InsertProgrammes(connection, database.GetAllMovies(true));
-                TVTCommands.InsertEpisodes(connection, database.GetAllEpisodes());
-                TVTCommands.InsertAdvertisings(connection, database.GetAllAdvertisings());
-                TVTCommands.InsertNews(connection, database.GetAllNews());
+				TVTCommandsV3.InsertPeople( connection, database.GetAllPeople() );
+                TVTCommandsV3.InsertProgrammes2(connection, database.GetAllMovies(true));
+                TVTCommandsV3.InsertEpisodes(connection, database.GetAllEpisodes());
+                TVTCommandsV3.InsertAdvertisings2(connection, database.GetAllAdvertisings());
+                //TVTCommandsV3.InsertAdvertisings(connection, database.GetAllAdvertisings());
+                TVTCommandsV3.InsertNews(connection, database.GetAllNews());
             }
-            
-
-            var t = 1;
         }
 
+        [TestMethod]
+        public void SQLDefinitiontest()
+        {
+            var definition = new SQLDefinition<TVTProgramme>();
+            definition.Add(x => x.FakeTitleDE );
+        }
+
+        [TestMethod]
+        public void CreateXMLTest()
+        {
+            var database = new TVTBindingListDatabase();
+            database.Initialize();
+
+            using (var connection = TVTSQLSession.GetSessionNewDB())
+            {
+				var ads = TVTCommandsV3.ReadAdvertisings( connection );
+                database.AddAdvertisings(ads);
+                int z = 1;
+            }
+
+            var persister = new XmlPersister();
+            persister.SaveXML(database, "ExportTVTDatabaseV3Original.xml", DatabaseVersion.V3, DataStructure.OriginalData);
+        }
 
     }
 }

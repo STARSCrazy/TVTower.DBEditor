@@ -39,5 +39,10 @@ namespace TVTower.Entities
 
             return DataStatus;
         }
+
+        public override string ToString()
+        {
+            return Id.ToString();
+        }
 	}
 }

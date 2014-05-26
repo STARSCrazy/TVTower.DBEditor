@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace CodeKnight.Core
 {
@@ -26,7 +27,7 @@ namespace CodeKnight.Core
             return result;
         }
 
-        public static string ToContentString<T>(this ICollection<T> list, string seperator = ";")
+        public static string ToContentString(this IEnumerable list, string seperator = ";")
         {
             var result = new StringBuilder();
             foreach (var value in list)

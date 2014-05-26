@@ -118,11 +118,21 @@ namespace TVTower.Converter
             names.DescriptionEN = common.descriptionEnglish;
         }
 
-        private static void ConvertCommon(CommonOldV2 common, ITVTNames names, ITVTDatabase database)
+        private static void ConvertCommon(CommonOldV2 common, ITVTNames names, ITVTDatabase database, bool flipFake = false)
         {
             ConvertCommonMinimal(common, names, database);
-            names.FakeTitleDE = common.titleFake;
-            names.FakeTitleEN = common.titleEnglishFake;            
+            if (flipFake)
+            {
+                names.FakeTitleDE = common.title;
+                names.FakeTitleEN = common.titleEnglish;
+                names.TitleDE = common.titleFake;
+                names.TitleEN = common.titleEnglishFake;
+            }
+            else
+            {
+                names.FakeTitleDE = common.titleFake;
+                names.FakeTitleEN = common.titleEnglishFake;
+            }
         }
 
         private static void ConvertEpisode(MovieOldV2 movieOldV2, ITVTProgrammeCore episode, ITVTDatabase database)
@@ -206,7 +216,12 @@ namespace TVTower.Converter
             {
                 var ad = new TVTAdvertising();
 
-                ConvertCommon(adSrc, ad, database);
+                ConvertCommon(adSrc, ad, database, true);
+                ad.FakeDescriptionDE = adSrc.description;
+                ad.FakeDescriptionEN = adSrc.descriptionEnglish;
+                ad.DescriptionDE = null;
+                ad.DescriptionEN = null;
+
 
                 ad.FlexibleProfit = (adSrc.fixedProfit > 0);
                 ad.MinAudience = ConvertOldToNewValue(adSrc.minAudience);
@@ -217,6 +232,8 @@ namespace TVTower.Converter
                 ad.Penalty = ConvertProfitPenalty(adSrc.penalty, adSrc.fixedPenalty > 0, adSrc.fixedPenalty);                
 
                 ad.TargetGroup = ConvertTargetGroup(adSrc.targetgroup);
+
+                ad.Approved = adSrc.approved;
 
                 database.AddAdvertising(ad);
             }

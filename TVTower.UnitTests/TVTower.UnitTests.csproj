@@ -68,6 +68,10 @@
       <Project>{CBA79910-0D80-4E84-AAB6-92DE2A99C74D}</Project>
       <Name>TVTower.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TVTower.Xml\TVTower.Xml.csproj">
+      <Project>{AA190C79-EE0F-4396-BC57-2BFD89B1F242}</Project>
+      <Name>TVTower.Xml</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

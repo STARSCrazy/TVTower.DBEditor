@@ -15,7 +15,7 @@ namespace TVTower.Entities
 		void AddPeople( IEnumerable<TVTPerson> people );
 
         void AddAdvertising(TVTAdvertising advertising);
-        void AddAdvertising(IEnumerable<TVTAdvertising> advertisings);
+        void AddAdvertisings(IEnumerable<TVTAdvertising> advertisings);
 
         void AddNews(TVTNews news);
         void AddNews(IEnumerable<TVTNews> news);

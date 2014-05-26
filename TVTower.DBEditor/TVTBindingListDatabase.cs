@@ -81,7 +81,7 @@ namespace TVTower.DBEditor
             AdvertisingData.Add(advertising);
         }
 
-        public void AddAdvertising(IEnumerable<TVTAdvertising> advertisings)
+        public void AddAdvertisings(IEnumerable<TVTAdvertising> advertisings)
         {
             foreach (var person in advertisings)
                 AddAdvertising(person);

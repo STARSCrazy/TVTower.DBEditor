@@ -11,6 +11,8 @@ namespace TVTower.Entities
 
 		public string FakeTitleDE { get; set; }
 		public string FakeTitleEN { get; set; }
+        public string FakeDescriptionDE { get; set; }
+        public string FakeDescriptionEN { get; set; }
 
         public bool Infomercial { get; set; }
         public int Quality { get; set; }        //Wenn als Infomercial gesendet!
