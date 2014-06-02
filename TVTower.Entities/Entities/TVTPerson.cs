@@ -48,5 +48,27 @@ namespace TVTower.Entities
 		{
 			Functions = new List<TVTPersonFunction>();
 		}
+
+        public override TVTDataStatus RefreshStatus()
+        {
+            var baseStatus = base.RefreshStatus();
+            if (baseStatus == TVTDataStatus.Incorrect)
+                return baseStatus;
+
+            if (string.IsNullOrEmpty(FakeLastName) || LastName == FakeLastName)
+            {
+                DataStatus = TVTDataStatus.NoFakes;
+                return DataStatus;
+            }
+
+            if (DataStatus == TVTDataStatus.Complete)
+            {
+                DataStatus = TVTDataStatus.Approved;
+                Approved = true; //TODO
+                return DataStatus;
+            }
+
+            return DataStatus;
+        }
 	}
 }

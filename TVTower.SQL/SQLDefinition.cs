@@ -19,7 +19,7 @@ namespace TVTower.SQL
             Definition.Add(new SQLDefinitionField(PInfo<T>.Info(expression, false), fieldName, suffix, listIndex));
         }
 
-        public void Add<TProperty>(SQLDefinitionField field)
+        public void Add(SQLDefinitionField field)
         {
             Definition.Add(field);
         }
@@ -56,6 +56,7 @@ namespace TVTower.SQL
                 fieldName = propertyInfo.Name;
             var builder = new StringBuilder();
             bool lastWasUpper = false;
+            bool lastWasNumber = false;
 
             foreach (var currChar in fieldName.ToCharArray())
             {
@@ -66,11 +67,22 @@ namespace TVTower.SQL
                     else
                         builder.Append("_" + currChar.ToString().ToLower());
                     lastWasUpper = true;
+                    lastWasNumber = false;
+                }
+                else if (char.IsNumber(currChar))
+                {
+                    if (builder.Length == 0 || lastWasNumber)
+                        builder.Append(currChar.ToString().ToLower());
+                    else
+                        builder.Append("_" + currChar.ToString().ToLower());                    
+                    lastWasUpper = false;
+                    lastWasNumber = true;
                 }
                 else
                 {
                     builder.Append(currChar);
                     lastWasUpper = false;
+                    lastWasNumber = false;
                 }
             }
             FieldName = builder.ToString();
@@ -106,7 +118,7 @@ namespace TVTower.SQL
                 return PropertyInfo.GetValue(model, null);
         }
 
-        public void Read(MySqlDataReader reader, object model)
+        public virtual void Read(MySqlDataReader reader, object model)
         {
             var value = reader[FieldName];
             if (value is DBNull)
@@ -145,6 +157,27 @@ namespace TVTower.SQL
                 var guid = Guid.Parse(value.ToString());
                 PropertyInfo.SetValue(model, guid, null);
             }
+        }
+    }
+
+    public class SQLDefinitionFieldList<T> : SQLDefinitionField
+    {
+        public SQLDefinitionFieldList(PropertyInfo propertyInfo, string fieldName = null, string suffix = null, int? listIndex = null)
+            : base(propertyInfo, fieldName, suffix, listIndex)
+        {
+        }
+
+        public override void Read(MySqlDataReader reader, object model)
+        {
+            var value = reader[FieldName];
+            if (value is DBNull)
+                value = null;
+
+            var list = new List<T>();
+            var item = Enum.Parse(typeof(T), value.ToString());
+            list.Add((T)item);
+
+            PropertyInfo.SetValue(model, list, null);
         }
     }
 }

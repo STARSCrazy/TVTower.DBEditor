@@ -54,7 +54,7 @@ namespace TVTower.UnitTests
                 TVTCommandsV2.LoadFakesForPeople(connection, database.GetAllPeople());
 
                 OldV2Converter.RefreshMovieDescriptions(database);
-                //MovieOldV2Converter.FakePersonNames(database);
+                OldV2Converter.FakePersonNames(database);
 
                 var ads = TVTCommandsV2.LoadAdsOldV2(connection);
                 OldV2Converter.Convert(ads, database);
@@ -68,7 +68,7 @@ namespace TVTower.UnitTests
 
             using (var connection = TVTSQLSession.GetSessionNewDB())
             {
-				TVTCommandsV3.InsertPeople( connection, database.GetAllPeople() );
+                TVTCommandsV3.InsertPeople2(connection, database.GetAllPeople());
                 TVTCommandsV3.InsertProgrammes2(connection, database.GetAllMovies(true));
                 TVTCommandsV3.InsertEpisodes(connection, database.GetAllEpisodes());
                 TVTCommandsV3.InsertAdvertisings2(connection, database.GetAllAdvertisings());
@@ -94,11 +94,14 @@ namespace TVTower.UnitTests
             {
 				var ads = TVTCommandsV3.ReadAdvertisings( connection );
                 database.AddAdvertisings(ads);
+
+                var people = TVTCommandsV3.ReadPeople(connection);
+                database.AddPeople(people);
                 int z = 1;
             }
 
             var persister = new XmlPersister();
-            persister.SaveXML(database, "ExportTVTDatabaseV3Original.xml", DatabaseVersion.V3, DataStructure.OriginalData);
+            persister.SaveXML(database, "ExportTVTDatabaseV3Original.xml", DatabaseVersion.V3, DataStructure.FakeData);
         }
 
     }

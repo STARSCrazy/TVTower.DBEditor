@@ -213,7 +213,7 @@ namespace TVTower.DBEditor
                 if (person.ProgrammeCount >= 8)
                     person.Prominence = 1;
                 else if (person.ProgrammeCount >= 4)
-                    person.Prominence = 1;
+                    person.Prominence = 2;
                 else
                     person.Prominence = 3;
             }

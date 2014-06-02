@@ -116,6 +116,56 @@ namespace TVTower.SQL
             return definition;
         }
 
+        public static SQLDefinition<TVTPerson> GetPersonSQLDefinition()
+        {
+            var definition = new SQLDefinition<TVTPerson>();
+
+            //AddEntityBaseSQLDefinition(definition);
+
+            definition.Add(x => x.Id);
+
+            definition.Add(x => x.FirstName);
+            definition.Add(x => x.LastName);
+            definition.Add(x => x.NickName);
+
+            definition.Add(x => x.FakeFirstName);
+            definition.Add(x => x.FakeLastName);
+            definition.Add(x => x.FakeNickName);
+
+            definition.Add(x => x.TmdbId);
+            definition.Add(x => x.ImdbId);
+            definition.Add(x => x.ImageUrl);
+            
+            definition.Add(new SQLDefinitionFieldList<TVTPersonFunction>(PInfo<TVTPerson>.Info(x => x.Functions, false)));
+            definition.Add(x => x.Functions);
+            definition.Add(x => x.Gender);
+
+            definition.Add(x => x.Birthday);
+            definition.Add(x => x.Deathday);
+            definition.Add(x => x.Country);
+
+            definition.Add(x => x.Prominence);
+            definition.Add(x => x.Skill);
+            definition.Add(x => x.Fame);
+            definition.Add(x => x.Scandalizing);
+            definition.Add(x => x.PriceFactor);
+
+            definition.Add(x => x.Power);
+            definition.Add(x => x.Humor);
+            definition.Add(x => x.Charisma);
+            definition.Add(x => x.Appearance);
+
+            definition.Add(x => x.TopGenre1);
+            definition.Add(x => x.TopGenre2);
+
+            definition.Add(x => x.ProgrammeCount);
+
+            //Zusatzinfos
+            AdditionalFields2(definition);
+
+            return definition;
+        }
+
         public static List<TVTAdvertising> ReadAdvertisings(MySqlConnection connection)
         {
             var result = new List<TVTAdvertising>();
@@ -138,6 +188,39 @@ namespace TVTower.SQL
                     }
 
                     result.Add(ad);
+                }
+            }
+            finally
+            {
+                if (Reader != null && !Reader.IsClosed)
+                    Reader.Close();
+            }
+
+            return result;
+        }
+
+        public static List<TVTPerson> ReadPeople(MySqlConnection connection)
+        {
+            var result = new List<TVTPerson>();
+            var definition = GetPersonSQLDefinition();
+
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM tvt_people";
+            var Reader = command.ExecuteReader();
+            try
+            {
+                while (Reader.Read())
+                {
+                    var person = new TVTPerson();
+
+                    var enumerator = definition.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        var field = enumerator.Current;
+                        field.Read(Reader, person);
+                    }
+
+                    result.Add(person);
                 }
             }
             finally
@@ -312,6 +395,26 @@ namespace TVTower.SQL
                     command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
                 }
 
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void InsertPeople2(MySqlConnection connection, IEnumerable<TVTPerson> people)
+        {
+            var definition = GetPersonSQLDefinition();
+
+            var sqlCommandText = "INSERT INTO tvt_people (" + definition.GetFieldNames(",") + ") VALUES (" + definition.GetFieldNames(",", "?") + ")";
+
+            foreach (var person in people)
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = sqlCommandText;
+                var enumerator = definition.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    var field = enumerator.Current;
+                    command.Parameters.AddWithValue("?" + field.FieldName, field.GetValue(person));
+                }
                 command.ExecuteNonQuery();
             }
         }
