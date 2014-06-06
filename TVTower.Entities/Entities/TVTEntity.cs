@@ -7,6 +7,8 @@ namespace TVTower.Entities
 		public Guid Id { get; set; }
         public string AltId { get; set; }
 
+        public bool OnlyReference { get; set; }
+
         public TVTDataType DataType { get; set; }
         public TVTDataStatus DataStatus { get; set; }
 

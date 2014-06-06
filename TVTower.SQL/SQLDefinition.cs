@@ -7,6 +7,7 @@ using CodeKnight.Core;
 using System.Reflection;
 using System.Collections;
 using MySql.Data.MySqlClient;
+using TVTower.Converter;
 
 namespace TVTower.SQL
 {
@@ -24,7 +25,7 @@ namespace TVTower.SQL
             Definition.Add(field);
         }
 
-        public string GetFieldNames(string seperator, string prefix = null)
+        public string GetFieldNames(char seperator, string prefix = null)
         {
             if (!string.IsNullOrEmpty(prefix))
             {
@@ -74,7 +75,7 @@ namespace TVTower.SQL
                     if (builder.Length == 0 || lastWasNumber)
                         builder.Append(currChar.ToString().ToLower());
                     else
-                        builder.Append("_" + currChar.ToString().ToLower());                    
+                        builder.Append("_" + currChar.ToString().ToLower());
                     lastWasUpper = false;
                     lastWasNumber = true;
                 }
@@ -121,44 +122,31 @@ namespace TVTower.SQL
         public virtual void Read(MySqlDataReader reader, object model)
         {
             var value = reader[FieldName];
-            if (value is DBNull)
-                value = null;
+            object typeValue;
 
-            if (PropertyInfo.PropertyType == typeof(string))
-            {                
-                PropertyInfo.SetValue(model, value, null);
-            }
-            else if (PropertyInfo.PropertyType == typeof(int))
-            {
-                var valueInt = int.Parse(value.ToString());
-                PropertyInfo.SetValue(model, valueInt, null);
-            }
-            else if (PropertyInfo.PropertyType == typeof(bool))
-            {
-                bool valueBool = false;
-                int intValue = 0;
+            typeValue = DBValueConverter.ConvertDBValueToType(PropertyInfo.PropertyType, value);
 
-                if (int.TryParse(value.ToString(), out intValue))
+            if (PropertyInfo.PropertyType.IsGenericType && PropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                if (typeValue != null)
                 {
-                    if (intValue == 0)
-                        valueBool = false;
-                    else if (intValue == 1)
-                        valueBool = true;
-                    PropertyInfo.SetValue(model, valueBool, null);
-                }
-                else
-                {
-                    valueBool = bool.Parse(value.ToString());
-                    PropertyInfo.SetValue(model, valueBool, null);
+                    var listValue = (IList)typeValue;
+
+                    var propertyList = (IList)PropertyInfo.GetValue(model, null);
+
+                    if (propertyList != null)
+                        propertyList.Add(listValue[0]);
+                    else
+                    {
+                        PropertyInfo.SetValue(model, listValue, null);
+                    }
                 }
             }
-            else if (PropertyInfo.PropertyType == typeof(Guid))
-            {
-                var guid = Guid.Parse(value.ToString());
-                PropertyInfo.SetValue(model, guid, null);
-            }
+            else                
+                PropertyInfo.SetValue(model, typeValue, null);
         }
     }
+
 
     public class SQLDefinitionFieldList<T> : SQLDefinitionField
     {

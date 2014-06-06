@@ -5,8 +5,8 @@ namespace TVTower.Entities
 {
 	public interface ITVTDatabase
 	{
-		void AddMovie( TVTProgramme movie );
-		void AddMovies( IEnumerable<TVTProgramme> movies );
+		void AddProgramme( TVTProgramme movie );
+		void AddProgrammes( IEnumerable<TVTProgramme> movies );
 
         void AddEpisode(TVTEpisode episode);
         void AddEpisodes(IEnumerable<TVTEpisode> episodes);

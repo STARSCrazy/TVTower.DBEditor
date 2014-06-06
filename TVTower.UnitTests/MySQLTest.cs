@@ -92,6 +92,9 @@ namespace TVTower.UnitTests
 
             using (var connection = TVTSQLSession.GetSessionNewDB())
             {
+                var programmes = TVTCommandsV3.ReadProgrammes(connection);
+                database.AddProgrammes(programmes);
+
 				var ads = TVTCommandsV3.ReadAdvertisings( connection );
                 database.AddAdvertisings(ads);
 

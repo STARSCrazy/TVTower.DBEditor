@@ -56,7 +56,7 @@ namespace TVTower.Xml
 				throw new NotSupportedException();
 		}
 
-		public static string ToContentString<T>( this IEnumerable<T> source, string trimmer )
+		public static string ToContentString<T>( this IEnumerable<T> source, char trimmer )
 		{
 			var result = new StringBuilder();
 

@@ -38,7 +38,7 @@ namespace TVTower.DBEditor
 			movieDataList.AllowEdit = true;
 
 			movieDataGrid.DataSource = movieDataList;
-			database.MovieData = movieDataList;
+			database.ProgrammeData = movieDataList;
 
 
 
@@ -121,7 +121,7 @@ namespace TVTower.DBEditor
 				//else
 				//    director.Info = director.Info + " | " + fake.Director.FakeFullName;
 
-				database.MovieData.Remove( fake );
+				database.ProgrammeData.Remove( fake );
 			}
 		}
 
@@ -144,7 +144,7 @@ namespace TVTower.DBEditor
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );
-				database.AddMovies( tempDatabase.GetAllMovies( true ) );
+				database.AddProgrammes( tempDatabase.GetAllMovies( true ) );
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace TVTower.DBEditor
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );
-				database.AddMovies( tempDatabase.GetAllMovies( true ) );
+				database.AddProgrammes( tempDatabase.GetAllMovies( true ) );
 			}
 		}
 
@@ -259,7 +259,7 @@ namespace TVTower.DBEditor
 				//else
 				//    director.Info = director.Info + " | " + fake.Director.FakeFullName;
 
-				database.MovieData.Remove( fake );
+				database.ProgrammeData.Remove( fake );
 			}
 		}
 

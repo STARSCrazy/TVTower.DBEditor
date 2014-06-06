@@ -105,7 +105,7 @@ namespace TVTower.Import
 				{
 					fillMovies.calcRating( this, entry );
 				}
-				Database.AddMovie( entry );
+				Database.AddProgramme( entry );
 			}
 
 			Result = resultList;

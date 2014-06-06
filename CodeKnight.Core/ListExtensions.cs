@@ -27,7 +27,7 @@ namespace CodeKnight.Core
             return result;
         }
 
-        public static string ToContentString(this IEnumerable list, string seperator = ";")
+        public static string ToContentString(this IEnumerable list, char seperator = ';')
         {
             var result = new StringBuilder();
             foreach (var value in list)
@@ -38,6 +38,11 @@ namespace CodeKnight.Core
                 result.Append(value);
             }
             return result.ToString();
+        }
+
+        public static List<string> ToStringList(this string sourceString, char seperator = ';')
+        {
+            return sourceString.Split(seperator).ToList();
         }
     }
 }

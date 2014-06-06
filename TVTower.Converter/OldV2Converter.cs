@@ -100,6 +100,7 @@ namespace TVTower.Converter
                         person.FakeLastName = tempFakeName;
                     else
                     {
+                        person.FakeLastName = tempFakeName.Substring(0, 1) + ".";
                         Console.WriteLine(person.LastName);
                         count++;
                     }
@@ -146,7 +147,7 @@ namespace TVTower.Converter
 
             episode.Participants = GetPersonsByNameOrCreate(database, movieOldV2.actors, TVTDataContent.Original, TVTPersonFunction.Actor);
             episode.Director = GetPersonByNameOrCreate(database, movieOldV2.director, TVTDataContent.Original, TVTPersonFunction.Director);
-            
+
             //episode.AdditionalInfo = movieOldV2.approved ? "Approved" : null;            
         }
 
@@ -162,6 +163,8 @@ namespace TVTower.Converter
 
                     ConvertEpisode(movSrc, programme, database);
 
+                    programme.CriticsRate = ConvertOldToNewValue(movSrc.critics);
+                    programme.ViewersRate = ConvertOldToNewValue(movSrc.speed);
                     programme.PriceMod = ConvertOldToNewValue(movSrc.price);
                     programme.BoxOfficeRate = ConvertOldToNewValue(movSrc.outcome);
 
@@ -177,7 +180,7 @@ namespace TVTower.Converter
                     if (movSrc.xrated)
                         programme.Flags.Add(TVTMovieFlag.FSK18);
 
-                    database.AddMovie(programme);
+                    database.AddProgramme(programme);
                 }
                 else //Serien-Episode
                 {

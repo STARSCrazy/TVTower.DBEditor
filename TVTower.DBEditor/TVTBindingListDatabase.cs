@@ -7,7 +7,7 @@ namespace TVTower.DBEditor
 {
 	public class TVTBindingListDatabase : ITVTDatabase
 	{
-		public SortedBindingList<TVTProgramme> MovieData { get; set; }
+		public SortedBindingList<TVTProgramme> ProgrammeData { get; set; }
         public SortedBindingList<TVTEpisode> EpisodeData { get; set; }        
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
         public SortedBindingList<TVTAdvertising> AdvertisingData { get; set; }
@@ -15,8 +15,8 @@ namespace TVTower.DBEditor
 
 		public void Initialize()
 		{
-			if ( MovieData == null )
-				MovieData = new SortedBindingList<TVTProgramme>();
+			if ( ProgrammeData == null )
+				ProgrammeData = new SortedBindingList<TVTProgramme>();
 
             if (EpisodeData == null)
                 EpisodeData = new SortedBindingList<TVTEpisode>();
@@ -33,7 +33,7 @@ namespace TVTower.DBEditor
 
 		public void SetMovieBindingList( SortedBindingList<TVTProgramme> movieData )
 		{
-			this.MovieData = movieData;
+			this.ProgrammeData = movieData;
 		}
 
 		public void SetPersonBindingList( SortedBindingList<TVTPerson> personData )
@@ -43,15 +43,15 @@ namespace TVTower.DBEditor
 
 		#region ITVTowerDatabase Members
 
-		public void AddMovie( TVTProgramme movie )
+		public void AddProgramme( TVTProgramme movie )
 		{
-			MovieData.Add( movie );
+			ProgrammeData.Add( movie );
 		}
 
-		public void AddMovies( IEnumerable<TVTProgramme> movies )
+		public void AddProgrammes( IEnumerable<TVTProgramme> programmes )
 		{
-			foreach ( var movie in movies )
-				AddMovie( movie );
+			foreach ( var programme in programmes )
+				AddProgramme( programme );
 		}
 
         public void AddEpisode(TVTEpisode episode)
@@ -102,16 +102,16 @@ namespace TVTower.DBEditor
 		{
 			var result = new List<TVTProgramme>();
 			if ( withSeries )
-				result.AddRange( MovieData );
+				result.AddRange( ProgrammeData );
 			else
-				result.AddRange( MovieData.Where( x => x.ProgrammeType != TVTProgrammeType.Series ) );
+				result.AddRange( ProgrammeData.Where( x => x.ProgrammeType != TVTProgrammeType.Series ) );
 			return result;
 		}
 
 		public IEnumerable<TVTProgramme> GetAllSeries()
 		{
 			var result = new List<TVTProgramme>();
-            result.AddRange(MovieData.Where(x => x.ProgrammeType == TVTProgrammeType.Series));
+            result.AddRange(ProgrammeData.Where(x => x.ProgrammeType == TVTProgrammeType.Series));
 			return result;
 		}
 
@@ -178,7 +178,7 @@ namespace TVTower.DBEditor
                 person.ProgrammeCount = 0;
             }
 
-            foreach(var movie in this.MovieData)
+            foreach(var movie in this.ProgrammeData)
             {
                 foreach(var person in movie.Participants)
                 {
@@ -226,7 +226,7 @@ namespace TVTower.DBEditor
                 person.RefreshStatus();
             }
 
-            foreach (var movie in this.MovieData)
+            foreach (var movie in this.ProgrammeData)
             {
                 movie.RefreshStatus();
             }

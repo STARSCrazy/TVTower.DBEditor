@@ -137,7 +137,7 @@ namespace TVTower.SQL
             definition.Add(x => x.ImageUrl);
             
             definition.Add(new SQLDefinitionFieldList<TVTPersonFunction>(PInfo<TVTPerson>.Info(x => x.Functions, false)));
-            definition.Add(x => x.Functions);
+            //definition.Add(x => x.Functions);
             definition.Add(x => x.Gender);
 
             definition.Add(x => x.Birthday);
@@ -166,28 +166,27 @@ namespace TVTower.SQL
             return definition;
         }
 
-        public static List<TVTAdvertising> ReadAdvertisings(MySqlConnection connection)
+        private static List<T> ReadGeneric<T>(MySqlConnection connection, string commandText, SQLDefinition<T> definition)
         {
-            var result = new List<TVTAdvertising>();
-            var definition = GetAdvertisingSQLDefinition();
+            var result = new List<T>();
 
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM tvt_advertisings ORDER BY title_de, fake_title_de";
+            command.CommandText = commandText;
             var Reader = command.ExecuteReader();
             try
             {
                 while (Reader.Read())
                 {
-                    var ad = new TVTAdvertising();
+                    var entity = Activator.CreateInstance<T>();
 
                     var enumerator = definition.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
                         var field = enumerator.Current;
-                        field.Read(Reader, ad);
+                        field.Read(Reader, entity);
                     }
 
-                    result.Add(ad);
+                    result.Add(entity);
                 }
             }
             finally
@@ -199,37 +198,19 @@ namespace TVTower.SQL
             return result;
         }
 
+        public static List<TVTProgramme> ReadProgrammes(MySqlConnection connection)
+        {
+            return ReadGeneric<TVTProgramme>(connection, "SELECT * FROM tvt_programmes", GetProgrammeSQLDefinition());
+        }
+
+        public static List<TVTAdvertising> ReadAdvertisings(MySqlConnection connection)
+        {
+            return ReadGeneric<TVTAdvertising>(connection, "SELECT * FROM tvt_advertisings ORDER BY title_de, fake_title_de", GetAdvertisingSQLDefinition());
+        }
+
         public static List<TVTPerson> ReadPeople(MySqlConnection connection)
         {
-            var result = new List<TVTPerson>();
-            var definition = GetPersonSQLDefinition();
-
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM tvt_people";
-            var Reader = command.ExecuteReader();
-            try
-            {
-                while (Reader.Read())
-                {
-                    var person = new TVTPerson();
-
-                    var enumerator = definition.GetEnumerator();
-                    while (enumerator.MoveNext())
-                    {
-                        var field = enumerator.Current;
-                        field.Read(Reader, person);
-                    }
-
-                    result.Add(person);
-                }
-            }
-            finally
-            {
-                if (Reader != null && !Reader.IsClosed)
-                    Reader.Close();
-            }
-
-            return result;
+            return ReadGeneric<TVTPerson>(connection, "SELECT * FROM tvt_people", GetPersonSQLDefinition());
         }
 
         private static void AdditionalFields2<T>(SQLDefinition<T> definition)
@@ -248,7 +229,7 @@ namespace TVTower.SQL
         {
             var definition = GetProgrammeSQLDefinition();
 
-            var sqlCommandText = "INSERT INTO tvt_programmes (" + definition.GetFieldNames(",") + ") VALUES (" + definition.GetFieldNames(",", "?") + ")";
+            var sqlCommandText = "INSERT INTO tvt_programmes (" + definition.GetFieldNames(',') + ") VALUES (" + definition.GetFieldNames(',', "?") + ")";
 
             foreach (var programme in programmes)
             {
@@ -333,7 +314,7 @@ namespace TVTower.SQL
 
         //        var command = connection.CreateCommand();
                 
-        //        command.CommandText = "INSERT INTO tvt_movies (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+        //        command.CommandText = "INSERT INTO tvt_movies (" + content.Keys.ToContentString(',') + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(',') + ")";
         //        foreach (var kvp in content)
         //        {
         //            command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
@@ -389,7 +370,7 @@ namespace TVTower.SQL
 
                 var command = connection.CreateCommand();
 
-                command.CommandText = "INSERT INTO tvt_episodes (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                command.CommandText = "INSERT INTO tvt_episodes (" + content.Keys.ToContentString(',') + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(',') + ")";
                 foreach (var kvp in content)
                 {
                     command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
@@ -403,7 +384,7 @@ namespace TVTower.SQL
         {
             var definition = GetPersonSQLDefinition();
 
-            var sqlCommandText = "INSERT INTO tvt_people (" + definition.GetFieldNames(",") + ") VALUES (" + definition.GetFieldNames(",", "?") + ")";
+            var sqlCommandText = "INSERT INTO tvt_people (" + definition.GetFieldNames(',') + ") VALUES (" + definition.GetFieldNames(',', "?") + ")";
 
             foreach (var person in people)
             {
@@ -469,7 +450,7 @@ namespace TVTower.SQL
 
                 var command = connection.CreateCommand();
 
-                command.CommandText = "INSERT INTO tvt_people (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                command.CommandText = "INSERT INTO tvt_people (" + content.Keys.ToContentString(',') + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(',') + ")";
                 foreach (var kvp in content)
                 {
                     command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
@@ -485,7 +466,7 @@ namespace TVTower.SQL
             {
                 var definition = GetAdvertisingSQLDefinition();
 
-                var sqlCommandText = "INSERT INTO tvt_advertisings (" + definition.GetFieldNames(",") + ") VALUES (" + definition.GetFieldNames(",", "?") + ")";
+                var sqlCommandText = "INSERT INTO tvt_advertisings (" + definition.GetFieldNames(',') + ") VALUES (" + definition.GetFieldNames(',', "?") + ")";
 
                 foreach (var advertising in advertisings)
                 {
@@ -568,7 +549,7 @@ namespace TVTower.SQL
 
                 var command = connection.CreateCommand();
 
-                command.CommandText = "INSERT INTO tvt_advertisings (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                command.CommandText = "INSERT INTO tvt_advertisings (" + content.Keys.ToContentString(',') + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(',') + ")";
                 foreach (var kvp in content)
                 {
                     command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
@@ -632,7 +613,7 @@ namespace TVTower.SQL
 
                 var command = connection.CreateCommand();
 
-                command.CommandText = "INSERT INTO tvt_news (" + content.Keys.ToContentString(",") + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(",") + ")";
+                command.CommandText = "INSERT INTO tvt_news (" + content.Keys.ToContentString(',') + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(',') + ")";
                 foreach (var kvp in content)
                 {
                     command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);

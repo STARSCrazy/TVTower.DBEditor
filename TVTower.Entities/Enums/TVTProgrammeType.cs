@@ -2,14 +2,15 @@
 {
 	public enum TVTProgrammeType
 	{
-        Movie,
-        Series,
+        Undefined = 0,
+        Movie = 1,
+        Series = 2,
         //Episode, //einer Serie
-        Show,
-        Reportage,
-        Commercial,
-        CallIn,
-        Event,
-        Misc
+        Show = 3,
+        Reportage = 4,
+        Commercial = 5,
+        CallIn = 6,
+        Event = 7,
+        Misc = 8
 	}
 }
