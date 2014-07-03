@@ -73,7 +73,7 @@ namespace TVTower.UnitTests
                 TVTCommandsV3.InsertEpisodes(connection, database.GetAllEpisodes());
                 TVTCommandsV3.InsertAdvertisings2(connection, database.GetAllAdvertisings());
                 //TVTCommandsV3.InsertAdvertisings(connection, database.GetAllAdvertisings());
-                TVTCommandsV3.InsertNews(connection, database.GetAllNews());
+                TVTCommandsV3.InsertNews2(connection, database.GetAllNews());
             }
         }
 
@@ -93,14 +93,17 @@ namespace TVTower.UnitTests
             using (var connection = TVTSQLSession.GetSessionNewDB())
             {
                 var programmes = TVTCommandsV3.ReadProgrammes(connection);
-                database.AddProgrammes(programmes);
+                database.AddProgrammes(programmes.Where(x => (int)x.DataStatus >= 8 ));
 
 				var ads = TVTCommandsV3.ReadAdvertisings( connection );
                 database.AddAdvertisings(ads);
 
                 var people = TVTCommandsV3.ReadPeople(connection);
                 database.AddPeople(people);
-                int z = 1;
+
+                var news = TVTCommandsV3.ReadNews(connection);
+                database.AddNews(news);
+
             }
 
             var persister = new XmlPersister();

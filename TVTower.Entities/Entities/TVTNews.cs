@@ -11,8 +11,8 @@ namespace TVTower.Entities
         public string DescriptionDE { get; set; }
         public string DescriptionEN { get; set; }
 
-        public TVTNewsType NewsType;
-        public TVTNewsHandling NewsHandling;
+        public TVTNewsType NewsType { get; set; }
+        public TVTNewsHandling NewsHandling { get; set; }
         public string NewsThreadId { get; set; }
         public TVTNewsGenre Genre { get; set; }
         public TVTNews Predecessor { get; set; }
@@ -20,10 +20,10 @@ namespace TVTower.Entities
         public int Price { get; set; }		//0 - 1000		
         public int Topicality { get; set; } //0 - 100
 
-        public int FixYear;
-        public int AvailableAfterXDays;
-        public int YearRangeFrom;
-        public int YearRangeTo;
+        public int FixYear { get; set; }
+        public int AvailableAfterDays { get; set; }
+        public int YearRangeFrom { get; set; }
+        public int YearRangeTo { get; set; }
         public int MinHoursAfterPredecessor { get; set; }
         public int TimeRangeFrom { get; set; } //-1 oder 0 - 24
         public int TimeRangeTo { get; set; }  //-1 oder 0 - 24
@@ -67,6 +67,13 @@ namespace TVTower.Entities
             if (Predecessor != null && NewsThreadId != Predecessor.NewsThreadId)
             {
                 DataStatus = TVTDataStatus.Incorrect;
+                return DataStatus;
+            }
+
+            if (DataStatus == TVTDataStatus.Complete)
+            {
+                DataStatus = TVTDataStatus.Approved;
+                Approved = true; //TODO
                 return DataStatus;
             }
 

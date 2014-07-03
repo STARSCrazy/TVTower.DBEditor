@@ -269,7 +269,7 @@ namespace TVTower.Converter
                 news.Genre = (TVTNewsGenre)newsSrc.genre;
 
                 news.FixYear = -1;
-                news.AvailableAfterXDays = -1;
+                news.AvailableAfterDays = -1;
                 news.YearRangeFrom = -1;
                 news.YearRangeTo = -1;
                 news.MinHoursAfterPredecessor = -1;

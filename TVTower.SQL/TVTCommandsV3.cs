@@ -22,23 +22,31 @@ namespace TVTower.SQL
                 return null;
         }
 
-        public static void AddEntityBaseSQLDefinition<T>(SQLDefinition<T> definition)
-            where T : ITVTNames
+
+
+        public static void AddNamesBasicSQLDefinition<T>(SQLDefinition<T> definition)
+            where T : ITVTNamesBasic
         {
             definition.Add(x => x.Id);
             definition.Add(x => x.TitleDE);
             definition.Add(x => x.TitleEN);
-            definition.Add(x => x.FakeTitleDE);
-            definition.Add(x => x.FakeTitleEN);
             definition.Add(x => x.DescriptionDE);
             definition.Add(x => x.DescriptionEN);
+        }
+
+        public static void AddNamesSQLDefinition<T>(SQLDefinition<T> definition)
+            where T : ITVTNames
+        {
+            AddNamesBasicSQLDefinition(definition);
+            definition.Add(x => x.FakeTitleDE);
+            definition.Add(x => x.FakeTitleEN);
         }
 
         public static SQLDefinition<TVTProgramme> GetProgrammeSQLDefinition()
         {
             var definition = new SQLDefinition<TVTProgramme>();
 
-            AddEntityBaseSQLDefinition(definition);
+            AddNamesSQLDefinition(definition);
 
             definition.Add(x => x.FakeDescriptionDE);
             definition.Add(x => x.FakeDescriptionEN);
@@ -85,7 +93,7 @@ namespace TVTower.SQL
         {
             var definition = new SQLDefinition<TVTAdvertising>();
 
-            AddEntityBaseSQLDefinition(definition);
+            AddNamesSQLDefinition(definition);
 
             definition.Add(x => x.FakeDescriptionDE);
             definition.Add(x => x.FakeDescriptionEN);
@@ -166,6 +174,46 @@ namespace TVTower.SQL
             return definition;
         }
 
+        public static SQLDefinition<TVTNews> GetNewsSQLDefinition()
+        {
+            var definition = new SQLDefinition<TVTNews>();
+
+            AddNamesBasicSQLDefinition(definition);
+
+            definition.Add(x => x.NewsType);
+            definition.Add(x => x.NewsHandling);
+            definition.Add(x => x.NewsThreadId);
+            definition.Add(x => x.Genre);
+            definition.Add(x => x.Predecessor);
+
+            definition.Add(x => x.Price);
+            definition.Add(x => x.Topicality);
+
+            definition.Add(x => x.FixYear);
+            definition.Add(x => x.AvailableAfterDays);
+            definition.Add(x => x.YearRangeFrom);
+            definition.Add(x => x.YearRangeTo);
+            definition.Add(x => x.MinHoursAfterPredecessor);
+            definition.Add(x => x.TimeRangeFrom);
+            definition.Add(x => x.TimeRangeTo);
+
+            definition.Add(x => x.Resource1Type);
+            definition.Add(x => x.Resource2Type);
+            definition.Add(x => x.Resource3Type);
+            definition.Add(x => x.Resource4Type);
+
+            definition.Add(x => x.Effect);
+            definition.Add(x => x.EffectParameters);
+
+            definition.Add(x => x.ProPressureGroups);
+            definition.Add(x => x.ContraPressureGroups);
+
+            //Zusatzinfos
+            AdditionalFields2(definition);
+
+            return definition;
+        }
+
         private static List<T> ReadGeneric<T>(MySqlConnection connection, string commandText, SQLDefinition<T> definition)
         {
             var result = new List<T>();
@@ -212,6 +260,12 @@ namespace TVTower.SQL
         {
             return ReadGeneric<TVTPerson>(connection, "SELECT * FROM tvt_people", GetPersonSQLDefinition());
         }
+
+        public static List<TVTNews> ReadNews(MySqlConnection connection)
+        {
+            return ReadGeneric<TVTNews>(connection, "SELECT * FROM tvt_news", GetNewsSQLDefinition());
+        }
+        
 
         private static void AdditionalFields2<T>(SQLDefinition<T> definition)
             where T : TVTEntity
@@ -559,6 +613,26 @@ namespace TVTower.SQL
             }
         }
 
+        public static void InsertNews2(MySqlConnection connection, IEnumerable<TVTNews> news)
+        {
+            var definition = GetNewsSQLDefinition();
+
+            var sqlCommandText = "INSERT INTO tvt_news (" + definition.GetFieldNames(',') + ") VALUES (" + definition.GetFieldNames(',', "?") + ")";
+
+            foreach (var aNews in news)
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = sqlCommandText;
+                var enumerator = definition.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    var field = enumerator.Current;
+                    command.Parameters.AddWithValue("?" + field.FieldName, field.GetValue(aNews));
+                }
+                command.ExecuteNonQuery();
+            }
+        }
+
         public static void InsertNews(MySqlConnection connection, IEnumerable<TVTNews> newsEnum)
         {
             foreach (var news in newsEnum)
@@ -581,7 +655,7 @@ namespace TVTower.SQL
                 content.Add("topicality", news.Topicality);
 
                 content.Add("fix_year", news.FixYear);
-                content.Add("available_after_days", news.AvailableAfterXDays);
+                content.Add("available_after_days", news.AvailableAfterDays);
                 content.Add("year_range_from", news.YearRangeFrom);
                 content.Add("year_range_to", news.YearRangeTo);
                 content.Add("hours_after_predecessor", news.MinHoursAfterPredecessor);

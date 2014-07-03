@@ -88,6 +88,18 @@ namespace TVTower.Converter
                 else
                     return null;
             }
+            else if (type == typeof(TVTNews))
+            {
+                if (value != null)
+                {
+                    var result = (TVTEntity)Activator.CreateInstance(type);
+                    result.OnlyReference = true;
+                    result.Id = Guid.Parse(value.ToString());
+                    return result;
+                }
+                else
+                    return null;
+            }
             else
             {
                 throw new NotSupportedException();

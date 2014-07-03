@@ -96,6 +96,19 @@ namespace TVTower.Xml
                 }
             }
 
+            if (((int)dbVersion) >= 3)
+            {
+                var allnews = doc.CreateElement("allnews");
+                //allpeople.AddElement( "version", CURRENT_VERSION.ToString() );
+                tvgdb.AppendChild(allnews);
+
+                foreach (var news in database.GetAllNews())
+                {
+                    if (news.Approved)
+                        SetNewsDetailNode(doc, allnews, news, dbVersion, dataStructure);
+                }
+            }
+
             var exportOptions = doc.CreateElement("exportOptions");
             exportOptions.AddAttribute("onlyFakes", (dataStructure == DataStructure.FakeData).ToString().ToLower());
             exportOptions.AddAttribute("onlyCustom", "false");
@@ -169,6 +182,66 @@ namespace TVTower.Xml
             return adNode;
         }
 
+        public XmlNode SetNewsDetailNode(XmlDocument doc, XmlElement element, TVTNews news, DatabaseVersion dbVersion, DataStructure dataStructure)
+        {
+            XmlNode adNode = null;
+
+            adNode = doc.CreateElement("news");
+            {
+                adNode.AddAttribute("id", news.Id.ToString());
+                adNode.AddAttribute("thread_id", news.NewsThreadId);
+                adNode.AddAttribute("predecessor_id", news.Predecessor != null ? news.Predecessor.Id.ToString() : null);
+            }
+            element.AppendChild(adNode);
+
+            adNode.AddElement("title_de", news.TitleDE);
+            adNode.AddElement("title_en", news.TitleEN);
+            adNode.AddElement("description_de", news.DescriptionDE);
+            adNode.AddElement("description_en", news.DescriptionEN);
+                        
+            {
+                XmlNode dataNode = doc.CreateElement("data");
+                
+                dataNode.AddAttribute("genre", news.Genre.ToString());
+                dataNode.AddAttribute("price", news.Price.ToString());
+                dataNode.AddAttribute("topicality", news.Topicality.ToString());
+
+                adNode.AppendChild(dataNode);
+            }
+
+            {
+                XmlNode dataHandling = doc.CreateElement("handling");
+                
+                dataHandling.AddAttribute("type", ((int)news.NewsType).ToString());
+                dataHandling.AddAttribute("handling", ((int)news.NewsHandling).ToString());
+
+                dataHandling.AddAttribute("effect", ((int)news.Effect).ToString());
+                dataHandling.AddAttribute("effect_params", news.EffectParameters.ToContentString(' '));
+
+                dataHandling.AddAttribute("Resource_type_1", news.Resource1Type != null ? news.Resource1Type.ToString() : null);
+                dataHandling.AddAttribute("Resource_type_2", news.Resource2Type != null ? news.Resource2Type.ToString() : null);
+                dataHandling.AddAttribute("Resource_type_3", news.Resource3Type != null ? news.Resource3Type.ToString() : null);
+                dataHandling.AddAttribute("Resource_type_4", news.Resource4Type != null ? news.Resource4Type.ToString() : null);
+
+                adNode.AppendChild(dataHandling);
+            }
+
+            {
+                XmlNode dataCond = doc.CreateElement("conditions");
+
+                dataCond.AddAttribute("fix_year", news.FixYear.ToString());
+                dataCond.AddAttribute("available_after_days", news.AvailableAfterDays.ToString());
+                dataCond.AddAttribute("year_range_from", news.YearRangeFrom.ToString());
+                dataCond.AddAttribute("year_range_to", news.YearRangeTo.ToString());
+                dataCond.AddAttribute("min_hours_after_predecessor", news.MinHoursAfterPredecessor.ToString());
+                dataCond.AddAttribute("time_range_from", news.TimeRangeFrom.ToString());
+                dataCond.AddAttribute("time_range_to", news.TimeRangeTo.ToString());
+
+                adNode.AppendChild(dataCond);
+            }
+
+            return adNode;
+        }
 
 
         public XmlNode SetInsignificantPersonDetailNode(XmlDocument doc, XmlElement element, TVTPerson person, DatabaseVersion dbVersion, DataStructure dataStructure)
@@ -276,22 +349,22 @@ namespace TVTower.Xml
             switch (dataStructure)
             {
                 case DataStructure.FakeData:
-                    if (!string.IsNullOrEmpty(programme.FakeDescriptionDE))
+                    if (!string.IsNullOrEmpty(programme.FakeTitleDE))
                         movieNode.AddElement("title_de", programme.FakeTitleDE);
-                    else
-                        movieNode.AddElement("title_de", programme.TitleDE);
+                    //else
+                    //    movieNode.AddElement("title_de", programme.TitleDE);
 
-                    if (!string.IsNullOrEmpty(programme.FakeDescriptionDE))
+                    if (!string.IsNullOrEmpty(programme.FakeTitleEN))
                         movieNode.AddElement("title_en", programme.FakeTitleEN);
-                    else
-                        movieNode.AddElement("title_en", programme.TitleEN);
+                    //else
+                    //    movieNode.AddElement("title_en", programme.TitleEN);
 
                     if (!string.IsNullOrEmpty(programme.FakeDescriptionDE))
                         movieNode.AddElement("description_de", programme.FakeDescriptionDE);
                     else
                         movieNode.AddElement("description_de", programme.DescriptionDE);
 
-                    if (!string.IsNullOrEmpty(programme.FakeDescriptionDE))
+                    if (!string.IsNullOrEmpty(programme.FakeDescriptionEN))
                         movieNode.AddElement("description_en", programme.FakeDescriptionEN);
                     else
                         movieNode.AddElement("description_en", programme.DescriptionEN);
