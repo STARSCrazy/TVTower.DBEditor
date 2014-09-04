@@ -43,13 +43,26 @@ namespace TVTower.Xml
             version.AddAttribute("exportDate", DateTime.Now.ToString());
             tvgdb.AppendChild(version);
 
-            var allmovies = doc.CreateElement("allmovies");
-            //allmovies.AddElement( "version", CURRENT_VERSION.ToString() );
-            tvgdb.AppendChild(allmovies);
-
-            foreach (var movie in database.GetAllMovies())
             {
-                SetProgrammeDetailNode(doc, allmovies, movie, dbVersion, dataStructure);
+                var allmovies = doc.CreateElement("allmovies");
+                //allmovies.AddElement( "version", CURRENT_VERSION.ToString() );
+                tvgdb.AppendChild(allmovies);
+
+                foreach (var movie in database.GetAllMovies())
+                {
+                    SetProgrammeDetailNode(doc, allmovies, movie, dbVersion, dataStructure);
+                }
+            }
+
+            {
+                var allepisodes = doc.CreateElement("allepisodes");
+                //allmovies.AddElement( "version", CURRENT_VERSION.ToString() );
+                tvgdb.AppendChild(allepisodes);
+
+                foreach (var episode in database.GetAllEpisodes())
+                {
+                    SetEpisodeDetailNode(doc, allepisodes, episode, dbVersion, dataStructure);
+                }
             }
 
             if (((int)dbVersion) >= 3)
@@ -351,13 +364,13 @@ namespace TVTower.Xml
                 case DataStructure.FakeData:
                     if (!string.IsNullOrEmpty(programme.FakeTitleDE))
                         movieNode.AddElement("title_de", programme.FakeTitleDE);
-                    //else
-                    //    movieNode.AddElement("title_de", programme.TitleDE);
+                    else
+                        movieNode.AddElement("title_de", "NEED_FAKE: " + programme.TitleDE);
 
                     if (!string.IsNullOrEmpty(programme.FakeTitleEN))
                         movieNode.AddElement("title_en", programme.FakeTitleEN);
-                    //else
-                    //    movieNode.AddElement("title_en", programme.TitleEN);
+                    else
+                        movieNode.AddElement("title_en", "NEED_FAKE: " + programme.TitleEN);
 
                     if (!string.IsNullOrEmpty(programme.FakeDescriptionDE))
                         movieNode.AddElement("description_de", programme.FakeDescriptionDE);
@@ -404,6 +417,70 @@ namespace TVTower.Xml
                 dataNode.AddAttribute("critics", programme.CriticsRate.ToString());
                 dataNode.AddAttribute("speed", programme.ViewersRate.ToString());
                 dataNode.AddAttribute("outcome", programme.BoxOfficeRate.ToString());
+            }
+
+            movieNode.AppendChild(dataNode);
+
+            return movieNode;
+        }
+
+        public XmlNode SetEpisodeDetailNode(XmlDocument doc, XmlElement element, TVTEpisode episode, DatabaseVersion dbVersion, DataStructure dataStructure)
+        {
+            XmlNode movieNode, dataNode;
+
+            movieNode = doc.CreateElement("episode");
+            {
+                movieNode.AddAttribute("id", episode.Id.ToString());
+
+                if (episode.SeriesMaster != null && episode.SeriesMaster.IsAlive)
+                    movieNode.AddAttribute("series_id", episode.SeriesMaster.TargetGeneric.Id.ToString());
+                else
+                    movieNode.AddAttribute("series_id", "");
+
+                movieNode.AddAttribute("index", episode.EpisodeIndex.ToString());
+            }
+            element.AppendChild(movieNode);
+
+            switch (dataStructure)
+            {
+                case DataStructure.FakeData:
+                    if (!string.IsNullOrEmpty(episode.FakeTitleDE))
+                        movieNode.AddElement("title_de", episode.FakeTitleDE);
+                    else
+                        movieNode.AddElement("title_de", "NEED_FAKE: " + episode.TitleDE);
+
+                    if (!string.IsNullOrEmpty(episode.FakeTitleEN))
+                        movieNode.AddElement("title_en", episode.FakeTitleEN);
+                    else
+                        movieNode.AddElement("title_en", "NEED_FAKE: " + episode.TitleEN);
+
+                    if (!string.IsNullOrEmpty(episode.FakeDescriptionDE))
+                        movieNode.AddElement("description_de", episode.FakeDescriptionDE);
+                    else
+                        movieNode.AddElement("description_de", episode.DescriptionDE);
+
+                    if (!string.IsNullOrEmpty(episode.FakeDescriptionEN))
+                        movieNode.AddElement("description_en", episode.FakeDescriptionEN);
+                    else
+                        movieNode.AddElement("description_en", episode.DescriptionEN);
+                    break;
+                case DataStructure.OriginalData:
+                    movieNode.AddElement("title_de", episode.TitleDE);
+                    movieNode.AddElement("title_en", episode.TitleEN);
+                    movieNode.AddElement("description_de", episode.DescriptionDE);
+                    movieNode.AddElement("description_en", episode.DescriptionEN);
+                    break;
+            }
+
+            //movieNode.AddElement( "version", movie.DataVersion.ToString() );
+
+            dataNode = doc.CreateElement("data");
+            {
+                dataNode.AddAttribute("participants", episode.Participants.ToContentString(' '));
+                dataNode.AddAttribute("director", episode.Director != null ? episode.Director.Id.ToString() : "");
+
+                dataNode.AddAttribute("critics", episode.CriticsRate.ToString());
+                dataNode.AddAttribute("speed", episode.ViewersRate.ToString());
             }
 
             movieNode.AppendChild(dataNode);

@@ -5,7 +5,7 @@ namespace TVTower.Entities
 	{
 		Undefined = 0,
 
-		//Movie-Genre 100+
+		//Movie-Genre 1+
 		Adventure = 1,
 		Action = 2,
 		Animation = 3,

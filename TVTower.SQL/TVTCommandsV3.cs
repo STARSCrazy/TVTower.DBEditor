@@ -89,6 +89,33 @@ namespace TVTower.SQL
             return definition;
         }
 
+        public static SQLDefinition<TVTEpisode> GetEpisodeSQLDefinition()
+        {
+            var definition = new SQLDefinition<TVTEpisode>();
+
+            AddNamesSQLDefinition(definition);
+
+            definition.Add(x => x.FakeDescriptionDE);
+            definition.Add(x => x.FakeDescriptionEN);
+
+            definition.Add(x => x.Director, null, "_id");
+            definition.Add(x => x.Participants, "participant1_id", null, 0);
+            definition.Add(x => x.Participants, "participant2_id", null, 1);
+            definition.Add(x => x.Participants, "participant3_id", null, 2);
+
+            definition.Add(x => x.CriticsRate);
+            definition.Add(x => x.ViewersRate);
+            
+            //definition.Add(x => x.SeriesMaster, "series_id");
+            definition.Add(x => x.SeriesId, "series_id");
+            definition.Add(x => x.EpisodeIndex);
+
+            //Zusatzinfos
+            AdditionalFields2(definition);
+
+            return definition;
+        }
+
         public static SQLDefinition<TVTAdvertising> GetAdvertisingSQLDefinition()
         {
             var definition = new SQLDefinition<TVTAdvertising>();
@@ -249,6 +276,11 @@ namespace TVTower.SQL
         public static List<TVTProgramme> ReadProgrammes(MySqlConnection connection)
         {
             return ReadGeneric<TVTProgramme>(connection, "SELECT * FROM tvt_programmes", GetProgrammeSQLDefinition());
+        }
+
+        public static List<TVTEpisode> ReadEpisodes(MySqlConnection connection)
+        {
+            return ReadGeneric<TVTEpisode>(connection, "SELECT * FROM tvt_episodes", GetEpisodeSQLDefinition());
         }
 
         public static List<TVTAdvertising> ReadAdvertisings(MySqlConnection connection)

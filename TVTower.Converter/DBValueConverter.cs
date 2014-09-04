@@ -20,6 +20,15 @@ namespace TVTower.Converter
             if (nullableType != null) // It's nullable
                 type = nullableType;
 
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CodeKnight.Core.WeakReference<>))
+            {
+                var refType = type.GetGenericArguments()[0];
+                var weakRefValue = ConvertDBValueToType(refType, value);
+
+                var constructor = type.GetConstructor(new Type[] { refType });
+                return constructor.Invoke(new object[] {weakRefValue });
+            }
+
             if (type == typeof(string))
             {
                 if (value == null)
@@ -53,7 +62,11 @@ namespace TVTower.Converter
             }
             else if (type == typeof(Guid))
             {
-                return Guid.Parse(value.ToString());
+                Guid guid;
+                if (Guid.TryParse(value.ToString(), out guid))
+                    return guid;
+                else
+                    return Guid.Empty;
             }
             else if (type.IsEnum)
             {
@@ -72,6 +85,25 @@ namespace TVTower.Converter
                         list.Add(convertedType);
                     }
                     return list;
+                }
+                else
+                    return null;
+            }
+            else if (type == typeof(TVTProgramme))
+            {
+                if (value != null)
+                {
+                    var result = (TVTEntity)Activator.CreateInstance(type);
+                    result.OnlyReference = true;
+                    
+                    Guid guid;
+                    if (Guid.TryParse(value.ToString(), out guid))
+                    {
+                        result.Id = guid;
+                        return result;
+                    }
+                    else
+                        return null;
                 }
                 else
                     return null;

@@ -27,6 +27,7 @@ namespace TVTower.Entities
         public int ViewersRate { get; set; }
 
         public WeakReference<TVTProgramme> SeriesMaster { get; set; }
+        public Guid SeriesId { get; set; } //Redundanz
         public int? EpisodeIndex { get; set; }
 
         public override TVTDataStatus RefreshStatus()

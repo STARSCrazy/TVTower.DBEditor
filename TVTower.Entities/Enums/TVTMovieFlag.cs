@@ -32,6 +32,6 @@ namespace TVTower.Entities
 		FSK18,			//Kleiner Bonus für Jugendliche, Arbeitnehmer, Arbeitslose, (Männer). Kleiner Malus für Kinder, Hausfrauen, Rentner, (Frauen).
 		Paid,			//Call-In-Shows
 
-		Series			//Ist ne Serie!
+		//Series			//Ist ne Serie!
 	}
 }

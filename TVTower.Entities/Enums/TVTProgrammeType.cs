@@ -5,7 +5,6 @@
         Undefined = 0,
         Movie = 1,
         Series = 2,
-        //Episode, //einer Serie
         Show = 3,
         Reportage = 4,
         Commercial = 5,
