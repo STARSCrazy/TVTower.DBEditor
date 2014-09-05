@@ -3,9 +3,8 @@ namespace TVTower.Entities
 {
 	public enum TVTDataType
 	{
-        Undefined = 0,
-		MadTV = 1,
-        TVTower = 2,
-        Custom = 3
+		Undefined = 0,
+		Real = 1,
+		Fictitious = 2
 	}
 }

@@ -4,7 +4,7 @@ namespace TVTower.Entities
 	public enum TVTDataContent
 	{
         Undefined,
-		Fake,
+		Fictitious,
 		FakeWithRefId,
 		Original,
 		OriginalWithRefId,
