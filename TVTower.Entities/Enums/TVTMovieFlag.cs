@@ -36,10 +36,14 @@ namespace TVTower.Entities
 	}
 }
 
-//[b]Live[/b] = Großer Quotenbonus, feste Sendezeit.
-//[b]Animation[/b] = Bonus bei Kindern und Jugendlichen. Malus bei Rentnern und Managern.
-//[b]Kultur[/b] = Bonus bei Managern. Malus bei allen anderen Gruppen vor allem Kindern und Jugendlichen. Gefällt Betty.
-//[b]Kult-Film[/b] = Verringert die Nachteile des Filmalters. Weniger Abnutzung. Höhere Serientreue bei Serien.
-//[b]Trash[/b] = Bonus im Morgen-, Mittag- und Nachtprogramm. Malus bei Managern. Ablehnung bei Betty. Senkt Image im Abendprogramm.
-//[b]B-Movie[/b] = Sehr geringerer Preis. Malus bei allen anderen Zielgruppen (außer Jugendlichen). Bonus im Nachtprogramm. Senkt Image im Abendprogramm.
-//[b]FSK18[/b] = Nur zwischen 23 und 6 Uhr erlaubt. Kleiner Bonus für Arbeitnehmer und Arbeitslose. Großer Malus für Kinder. Kleiner Malus Hausfrauen und Rentner.
+//Live = Großer Quotenbonus, feste Sendezeit.
+//Animation = Bonus bei Kindern und Jugendlichen. Malus bei Rentnern und Managern.
+//Kultur = Bonus bei Managern. Malus bei allen anderen Gruppen vor allem Kindern und Jugendlichen. Gefällt Betty.
+//Kult-Film = Verringert die Nachteile des Filmalters. Weniger Abnutzung. Höhere Serientreue bei Serien.
+//Trash = etwas geringerer Preis, Bonus im Morgen-, Mittag- und Nachtprogramm. Malus bei Managern. Ablehnung bei Betty. Senkt Image im Abendprogramm.
+//B-Movie = Sehr geringerer Preis. Malus bei allen anderen Zielgruppen (außer Jugendlichen). Bonus im Nachtprogramm. Senkt Image im Abendprogramm.
+//FSK18 = Nur zwischen 23 und 6 Uhr erlaubt. Kleiner Bonus für Arbeitnehmer und Arbeitslose. Großer Malus für Kinder. Kleiner Malus Hausfrauen und Rentner.
+//Call-In = Show hat ein Gewinnspiel
+//Füllprogramm = Winziger Preis, keine Abnutzung, geringe Quote (im Nachtprogramm)   ist typisches Dauerschleifenprogramm in der Nacht: Chatrooms, Kaminfeuer, Landschaften, Zugfahrten, SMS-Spiele
+
+//Mit Wiederholungen, Trash, B-Movies, Füllprogramm und FSK18-Filmen kann man somit das Nachtprogramm gestalten.
