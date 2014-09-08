@@ -7,6 +7,7 @@ namespace TVTower.Converter
 	public class NameFaker
 	{
 		private List<Syllable> Syllables;
+        private List<Fix> Fixes;
 
 		public void InitializeData()
 		{
@@ -25,7 +26,10 @@ namespace TVTower.Converter
 			Syllables.Add( new Syllable( "nann", "man", 2 ) );
 			Syllables.Add( new Syllable( "nan", "nann", 2 ) );
 
+            Syllables.Add(new Syllable("hoff", "off"));
 
+            
+            Syllables.Add( new Syllable( "chr", "gr" ) );
 			Syllables.Add( new Syllable( "ste", "shti" ) );
 			Syllables.Add( new Syllable( "ven", "phen" ) );
 			Syllables.Add( new Syllable( "iel", "yl" ) );
@@ -70,8 +74,7 @@ namespace TVTower.Converter
 			Syllables.Add( new Syllable( "ter", "der" ) );
 			Syllables.Add( new Syllable( "ner", "nr" ) );
 			Syllables.Add( new Syllable( "ald", "alt" ) );
-			Syllables.Add( new Syllable( "rei", "ray" ) );
-			Syllables.Add( new Syllable( "hoff", "off" ) );
+			Syllables.Add( new Syllable( "rei", "ray" ) );			
 			Syllables.Add( new Syllable( "greg", "kreg" ) );
 			Syllables.Add( new Syllable( "bon", "pon" ) );
 			Syllables.Add( new Syllable( "bom", "pom" ) );
@@ -112,7 +115,7 @@ namespace TVTower.Converter
             Syllables.Add( new Syllable( "ton", "turn" ) );
             Syllables.Add( new Syllable( "ers", "ehs" ) );
             Syllables.Add( new Syllable( "ter", "tjier" ) );
-            Syllables.Add( new Syllable( "der", "ter" ) );
+            Syllables.Add( new Syllable( "der", "ter", 4 ) );
             Syllables.Add( new Syllable( "har", "er" ) );
             Syllables.Add( new Syllable( "ger", "kehr" ) );
             Syllables.Add( new Syllable( "ner", "mehr" ) );
@@ -152,7 +155,7 @@ namespace TVTower.Converter
 
 			Syllables.Add( new Syllable( "ne", "ner", 3, 3 ) );
 
-			Syllables.Add( new Syllable( "ma", "ga", 4 ) );            
+			Syllables.Add( new Syllable( "ma", "na", 5 ) );            
 			//Syllables.Add( new Syllable( "ne", "neh", 4 ) );
 			//
 
@@ -164,10 +167,30 @@ namespace TVTower.Converter
 			//Syllables.Add( new Syllable( "n", "m", 5 ) );
 			//Syllables.Add( new Syllable( "q", "k", 5 ) );
 			//Syllables.Add( new Syllable( "w", "v", 5 ) );
+
+
+            Fixes = new List<Fix>();
+            Fixes.Add(new Prefix("Don"));
+            Fixes.Add(new Prefix("Mac"));
+            Fixes.Add(new Prefix("O'"));
+            Fixes.Add(new Prefix("Nic"));
+            Fixes.Add(new Prefix("Il-"));
+            Fixes.Add(new Prefix("von "));
+            Fixes.Add(new Prefix("van "));
+            Fixes.Add(new Prefix("be "));
+
+            Fixes = new List<Fix>();
+            Fixes.Add(new Suffix("son"));
+            Fixes.Add(new Suffix("san"));
+            Fixes.Add(new Suffix("rol"));
+            Fixes.Add(new Suffix("er"));
+            Fixes.Add(new Suffix("bald"));
 		}
 
 		public string Fake( string name )
 		{
+            var start = name;
+
 			if ( ReplaceIntern( ref name, 1, true ) > 0 )
 				return name;
 
@@ -184,8 +207,15 @@ namespace TVTower.Converter
             if (changed3 < 3)
                 changed4 = changed3 + ReplaceIntern(ref name, 4, false);
 
-            if (changed4 < 3)
-				ReplaceIntern( ref name, 5, false );
+            if (changed4 < 2)
+                ReplaceIntern(ref name, 5, false);
+
+            if (start == name)
+            {
+                var random = new Random();
+                var fix = Fixes[random.Next(0, Fixes.Count -1)];
+                return fix.AddTo(name);
+            }
 
 			return name;
 		}
@@ -258,4 +288,44 @@ namespace TVTower.Converter
 			Value.Add( value );
 		}
 	}
+
+    public class Fix
+    {
+        public string Value;
+
+        public Fix(string value)
+        {
+            this.Value = value;
+        }
+
+        public virtual string AddTo(string addTo)
+        {
+            return addTo;
+        }
+    }
+
+    public class Prefix : Fix
+    {
+        public Prefix(string value) : base(value)
+        {
+        }
+
+        public override string AddTo(string addTo)
+        {
+            return Value + addTo;
+        }
+    }
+
+    public class Suffix : Fix
+    {
+        public Suffix(string value)
+            : base(value)
+        {
+        }
+
+        public override string AddTo(string addTo)
+        {
+            return addTo + Value;
+        }
+    }
 }
