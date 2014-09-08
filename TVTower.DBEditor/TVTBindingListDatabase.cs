@@ -8,27 +8,27 @@ namespace TVTower.DBEditor
 	public class TVTBindingListDatabase : ITVTDatabase
 	{
 		public SortedBindingList<TVTProgramme> ProgrammeData { get; set; }
-        public SortedBindingList<TVTEpisode> EpisodeData { get; set; }        
+		public SortedBindingList<TVTEpisode> EpisodeData { get; set; }
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
-        public SortedBindingList<TVTAdvertising> AdvertisingData { get; set; }
-        public SortedBindingList<TVTNews> NewsData { get; set; }        
+		public SortedBindingList<TVTAdvertising> AdvertisingData { get; set; }
+		public SortedBindingList<TVTNews> NewsData { get; set; }
 
 		public void Initialize()
 		{
 			if ( ProgrammeData == null )
 				ProgrammeData = new SortedBindingList<TVTProgramme>();
 
-            if (EpisodeData == null)
-                EpisodeData = new SortedBindingList<TVTEpisode>();
+			if ( EpisodeData == null )
+				EpisodeData = new SortedBindingList<TVTEpisode>();
 
-            if (PersonData == null)
-                PersonData = new SortedBindingList<TVTPerson>();
+			if ( PersonData == null )
+				PersonData = new SortedBindingList<TVTPerson>();
 
-            if (AdvertisingData == null)
-                AdvertisingData = new SortedBindingList<TVTAdvertising>();
+			if ( AdvertisingData == null )
+				AdvertisingData = new SortedBindingList<TVTAdvertising>();
 
-            if (NewsData == null)
-                NewsData = new SortedBindingList<TVTNews>();                 
+			if ( NewsData == null )
+				NewsData = new SortedBindingList<TVTNews>();
 		}
 
 		public void SetMovieBindingList( SortedBindingList<TVTProgramme> movieData )
@@ -54,16 +54,16 @@ namespace TVTower.DBEditor
 				AddProgramme( programme );
 		}
 
-        public void AddEpisode(TVTEpisode episode)
-        {
-            EpisodeData.Add(episode);
-        }
+		public void AddEpisode( TVTEpisode episode )
+		{
+			EpisodeData.Add( episode );
+		}
 
-        public void AddEpisodes(IEnumerable<TVTEpisode> episodes)
-        {
-            foreach (var episode in episodes)
-                AddEpisode(episode);
-        }
+		public void AddEpisodes( IEnumerable<TVTEpisode> episodes )
+		{
+			foreach ( var episode in episodes )
+				AddEpisode( episode );
+		}
 
 		public void AddPerson( TVTPerson person )
 		{
@@ -76,29 +76,29 @@ namespace TVTower.DBEditor
 				AddPerson( person );
 		}
 
-        public void AddAdvertising(TVTAdvertising advertising)
-        {
-            AdvertisingData.Add(advertising);
-        }
+		public void AddAdvertising( TVTAdvertising advertising )
+		{
+			AdvertisingData.Add( advertising );
+		}
 
-        public void AddAdvertisings(IEnumerable<TVTAdvertising> advertisings)
-        {
-            foreach (var person in advertisings)
-                AddAdvertising(person);
-        }
+		public void AddAdvertisings( IEnumerable<TVTAdvertising> advertisings )
+		{
+			foreach ( var person in advertisings )
+				AddAdvertising( person );
+		}
 
-        public void AddNews(TVTNews news)
-        {
-            NewsData.Add(news);
-        }
+		public void AddNews( TVTNews news )
+		{
+			NewsData.Add( news );
+		}
 
-        public void AddNews(IEnumerable<TVTNews> news)
-        {
-            foreach (var currNews in news)
-                AddNews(currNews);
-        }
+		public void AddNews( IEnumerable<TVTNews> news )
+		{
+			foreach ( var currNews in news )
+				AddNews( currNews );
+		}
 
-		public IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false )
+		public IEnumerable<TVTProgramme> GetAllProgrammes( bool withSeries = false )
 		{
 			var result = new List<TVTProgramme>();
 			if ( withSeries )
@@ -111,16 +111,16 @@ namespace TVTower.DBEditor
 		public IEnumerable<TVTProgramme> GetAllSeries()
 		{
 			var result = new List<TVTProgramme>();
-            result.AddRange(ProgrammeData.Where(x => x.ProgrammeType == TVTProgrammeType.Series));
+			result.AddRange( ProgrammeData.Where( x => x.ProgrammeType == TVTProgrammeType.Series ) );
 			return result;
 		}
 
-        public IEnumerable<TVTEpisode> GetAllEpisodes()
-        {
-            var result = new List<TVTEpisode>();
-            result.AddRange(EpisodeData);
-            return result;
-        }        
+		public IEnumerable<TVTEpisode> GetAllEpisodes()
+		{
+			var result = new List<TVTEpisode>();
+			result.AddRange( EpisodeData );
+			return result;
+		}
 
 		public IEnumerable<TVTPerson> GetAllPeople()
 		{
@@ -129,19 +129,19 @@ namespace TVTower.DBEditor
 			return result;
 		}
 
-        public IEnumerable<TVTAdvertising> GetAllAdvertisings()
-        {
-            var result = new List<TVTAdvertising>();
-            result.AddRange(AdvertisingData);
-            return result;
-        }
+		public IEnumerable<TVTAdvertising> GetAllAdvertisings()
+		{
+			var result = new List<TVTAdvertising>();
+			result.AddRange( AdvertisingData );
+			return result;
+		}
 
-        public IEnumerable<TVTNews> GetAllNews()
-        {
-            var result = new List<TVTNews>();
-            result.AddRange(NewsData);
-            return result;
-        }
+		public IEnumerable<TVTNews> GetAllNews()
+		{
+			var result = new List<TVTNews>();
+			result.AddRange( NewsData );
+			return result;
+		}
 
 		public TVTPerson GetPersonById( Guid id )
 		{
@@ -164,88 +164,122 @@ namespace TVTower.DBEditor
 
 		public TVTPerson GetPersonByName( string name )
 		{
-            var result = PersonData.FirstOrDefault(x => x.FullName != null ? x.FullName.Trim() == name.Trim() : false);
-            if (result != null)
-                return result;
-            else
-                return PersonData.FirstOrDefault(x => x.FakeFullName != null ? x.FakeFullName.Trim() == name.Trim() : false);
+			var result = PersonData.FirstOrDefault( x => x.FullName != null ? x.FullName.Trim() == name.Trim() : false );
+			if ( result != null )
+				return result;
+			else
+				return PersonData.FirstOrDefault( x => x.FakeFullName != null ? x.FakeFullName.Trim() == name.Trim() : false );
 		}
 
-        public void RefreshPersonProgrammeCount()
-        {
-            foreach (var person in this.PersonData)
-            {
-                person.ProgrammeCount = 0;
-            }
+		public IEnumerable<TVTEpisode> GetEpisodesOfSeries( Guid seriesId )
+		{
+			return EpisodeData.Where( x => x.SeriesId == seriesId );
+		}
 
-            foreach(var movie in this.ProgrammeData)
-            {
-                foreach(var person in movie.Participants)
-                {
-                    var currPerson = GetPersonById(person.Id);
-                    currPerson.ProgrammeCount++;                    
-                }
+		public void RefreshPersonProgrammeCount()
+		{
+			foreach ( var person in this.PersonData )
+			{
+				person.ProgrammeCount = 0;
+			}
 
-                if (movie.Director != null)
-                {
-                    var currPerson = GetPersonById(movie.Director.Id);
-                    currPerson.ProgrammeCount++;
-                }
-            }
+			foreach ( var movie in this.ProgrammeData )
+			{
+				foreach ( var person in movie.Participants )
+				{
+					var currPerson = GetPersonById( person.Id );
+					currPerson.ProgrammeCount++;
+				}
 
-            foreach (var episode in this.EpisodeData)
-            {
-                foreach (var person in episode.Participants)
-                {
-                    var currPerson = GetPersonById(person.Id);
-                    currPerson.ProgrammeCount++;
-                }
+				if ( movie.Director != null )
+				{
+					var currPerson = GetPersonById( movie.Director.Id );
+					currPerson.ProgrammeCount++;
+				}
+			}
 
-                if (episode.Director != null)
-                {
-                    var currPerson = GetPersonById(episode.Director.Id);
-                    currPerson.ProgrammeCount++;
-                }
-            }
+			foreach ( var episode in this.EpisodeData )
+			{
+				foreach ( var person in episode.Participants )
+				{
+					var currPerson = GetPersonById( person.Id );
+					currPerson.ProgrammeCount++;
+				}
 
-            foreach (var person in PersonData)
-            {
-                if (person.ProgrammeCount >= 8)
-                    person.Prominence = 1;
-                else if (person.ProgrammeCount >= 4)
-                    person.Prominence = 2;
-                else
-                    person.Prominence = 3;
-            }
-        }
+				if ( episode.Director != null )
+				{
+					var currPerson = GetPersonById( episode.Director.Id );
+					currPerson.ProgrammeCount++;
+				}
+			}
 
-        public void RefreshStatus()
-        {
-            foreach (var person in this.PersonData)
-            {
-                person.RefreshStatus();
-            }
+			foreach ( var person in PersonData )
+			{
+				if ( person.ProgrammeCount >= 8 )
+					person.Prominence = 1;
+				else if ( person.ProgrammeCount >= 4 )
+					person.Prominence = 2;
+				else
+					person.Prominence = 3;
+			}
+		}
 
-            foreach (var movie in this.ProgrammeData)
-            {
-                movie.RefreshStatus();
-            }
+		public void RefreshReferences()
+		{
+			foreach ( var person in this.PersonData )
+			{
+				person.RefreshReferences( this );
+			}
 
-            foreach (var episode in this.EpisodeData)
-            {
-                episode.RefreshStatus();
-            }
+			//Episode muss vor Programmes kommen
+			foreach ( var episode in this.EpisodeData )
+			{
+				episode.RefreshReferences( this );
+			}
 
-            foreach (var advertising in this.AdvertisingData)
-            {
-                advertising.RefreshStatus();
-            }
+			foreach ( var programme in this.ProgrammeData )
+			{
+				programme.RefreshReferences( this );
+			}
 
-            foreach (var news in this.NewsData)
-            {
-                news.RefreshStatus();
-            }  
-        }
+			foreach ( var advertising in this.AdvertisingData )
+			{
+				advertising.RefreshReferences( this );
+			}
+
+			foreach ( var news in this.NewsData )
+			{
+				news.RefreshReferences( this );
+			}
+		}
+
+		public void RefreshStatus()
+		{
+			foreach ( var person in this.PersonData )
+			{
+				person.RefreshStatus();
+			}
+
+			foreach ( var programme in this.ProgrammeData )
+			{
+				programme.RefreshStatus();
+			}
+
+			foreach ( var episode in this.EpisodeData )
+			{
+				episode.RefreshStatus();
+			}
+
+			foreach ( var advertising in this.AdvertisingData )
+			{
+				advertising.RefreshStatus();
+			}
+
+			foreach ( var news in this.NewsData )
+			{
+				news.RefreshStatus();
+			}
+		}
 
 		#endregion
 	}

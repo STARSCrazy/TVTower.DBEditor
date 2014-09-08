@@ -10,7 +10,7 @@ namespace TVTower.Converter
 		public static void RefreshMovieDescriptions( ITVTDatabase database )
 		{
 			var programme = new List<ITVTProgrammeCore>();
-			programme.AddRange( database.GetAllMovies( true ) );
+			programme.AddRange( database.GetAllProgrammes( true ) );
 			programme.AddRange( database.GetAllEpisodes() );
 
 			foreach ( var person in database.GetAllPeople() )
@@ -127,15 +127,15 @@ namespace TVTower.Converter
 			ConvertCommonMinimal( common, names, database );
 			if ( flipFake )
 			{
-				names.FakeTitleDE = common.title;
-				names.FakeTitleEN = common.titleEnglish;
-				names.TitleDE = common.titleFake;
-				names.TitleEN = common.titleEnglishFake;
+				names.FakeTitleDE = common.title != null ? common.title.Trim() : null;
+				names.FakeTitleEN = common.titleEnglish != null ? common.titleEnglish.Trim() : null;
+				names.TitleDE = common.titleFake != null ? common.titleFake.Trim() : null;
+				names.TitleEN = common.titleEnglishFake != null ? common.titleEnglishFake.Trim() : null;
 			}
 			else
 			{
-				names.FakeTitleDE = common.titleFake;
-				names.FakeTitleEN = common.titleEnglishFake;
+				names.FakeTitleDE = common.titleFake != null ? common.titleFake.Trim() : null;
+				names.FakeTitleEN = common.titleEnglishFake != null ? common.titleEnglishFake.Trim() : null;
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace TVTower.Converter
 			}
 
 			//Nachträglich die Parents auf IsSeries setzen
-			var allMovies = database.GetAllMovies();
+			var allMovies = database.GetAllProgrammes();
 			foreach ( var current in database.GetAllEpisodes() )
 			{
 				var series = allMovies.FirstOrDefault( x => x.AltId.CompareTo( current.Tag ) == 0 );

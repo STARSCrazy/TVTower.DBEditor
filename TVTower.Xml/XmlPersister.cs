@@ -43,26 +43,26 @@ namespace TVTower.Xml
 			tvgdb.AppendChild( version );
 
 			{
-				var allmovies = doc.CreateElement( "allmovies" );
+				var allmovies = doc.CreateElement( "allprogrammes" );
 				//allmovies.AddElement( "version", CURRENT_VERSION.ToString() );
 				tvgdb.AppendChild( allmovies );
 
-				foreach ( var movie in database.GetAllMovies() )
+				foreach ( var movie in database.GetAllProgrammes( true ) )
 				{
 					SetProgrammeDetailNode( doc, allmovies, movie, dbVersion, dataStructure );
 				}
 			}
 
-			{
-				var allepisodes = doc.CreateElement( "allepisodes" );
-				//allmovies.AddElement( "version", CURRENT_VERSION.ToString() );
-				tvgdb.AppendChild( allepisodes );
+			//{
+			//    var allepisodes = doc.CreateElement( "allepisodes" );
+			//    //allmovies.AddElement( "version", CURRENT_VERSION.ToString() );
+			//    tvgdb.AppendChild( allepisodes );
 
-				foreach ( var episode in database.GetAllEpisodes() )
-				{
-					SetEpisodeDetailNode( doc, allepisodes, episode, dbVersion, dataStructure );
-				}
-			}
+			//    foreach ( var episode in database.GetAllEpisodes() )
+			//    {
+			//        SetEpisodeDetailNode( doc, allepisodes, episode, dbVersion, dataStructure );
+			//    }
+			//}
 
 			if ( ((int)dbVersion) >= 3 )
 			{
@@ -262,6 +262,9 @@ namespace TVTower.Xml
 			{
 				personNode.AddAttribute( "id", person.Id.ToString() );
 
+				if ( person.DataType == TVTDataType.Fictitious )
+					dataStructure = DataStructure.OriginalData;
+
 				switch ( dataStructure )
 				{
 					case DataStructure.FakeData:
@@ -270,10 +273,12 @@ namespace TVTower.Xml
 						else
 							personNode.AddAttribute( "first_name", person.FirstName );
 						personNode.AddAttribute( "last_name", person.FakeLastName );
+						personNode.AddAttribute( "nick_name", person.FakeNickName );
 						break;
 					case DataStructure.OriginalData:
 						personNode.AddAttribute( "first_name", person.FirstName );
 						personNode.AddAttribute( "last_name", person.LastName );
+						personNode.AddAttribute( "nick_name", person.NickName );
 						break;
 				}
 			}
@@ -292,6 +297,9 @@ namespace TVTower.Xml
 			}
 			element.AppendChild( personNode );
 
+			if ( person.DataType == TVTDataType.Fictitious )
+				dataStructure = DataStructure.OriginalData;
+
 			switch ( dataStructure )
 			{
 				case DataStructure.FakeData:
@@ -305,9 +313,16 @@ namespace TVTower.Xml
 					else
 						personNode.AddElement( "last_name", person.FakeLastName );
 					break;
+
+					if ( person.DataType != TVTDataType.Fictitious )
+						personNode.AddElement( "nick_name", person.NickName );
+					else
+						personNode.AddElement( "nick_name", person.FakeNickName );
+					break;
 				case DataStructure.OriginalData:
 					personNode.AddElement( "first_name", person.FirstName );
 					personNode.AddElement( "last_name", person.LastName );
+					personNode.AddElement( "nick_name", person.NickName );
 					break;
 			}
 
@@ -349,10 +364,10 @@ namespace TVTower.Xml
 		{
 			XmlNode movieNode, dataNode;
 
-			if ( programme.ProgrammeType == TVTProgrammeType.Series )
-				throw new NotImplementedException();
+			//if ( programme.ProgrammeType == TVTProgrammeType.Series )
+			//    throw new NotImplementedException();
 
-			movieNode = doc.CreateElement( "movie" );
+			movieNode = doc.CreateElement( "programme" );
 			{
 				movieNode.AddAttribute( "id", programme.Id.ToString() );
 				//movieNode.AddAttribute("status", programme.DataStatus.ToString());
@@ -369,23 +384,7 @@ namespace TVTower.Xml
 
 			movieNode.AddElement( "image_url", programme.ImageUrl );
 
-
-			var participantsNode = doc.CreateElement( "stuff" );
-			{
-				if ( programme.Director != null )
-				{
-					participantsNode.AddElement( "director", programme.Director.ToString() );
-				}
-
-				if ( programme.Participants != null )
-				{
-					foreach ( var par in programme.Participants )
-					{
-						participantsNode.AddElement( "participant", par.Id.ToString() );
-					}
-				}
-			}
-			movieNode.AppendChild( participantsNode );
+			SetStuffNode( doc, movieNode, programme );
 
 			var flagsNode = doc.CreateElement( "flags" );
 			{
@@ -431,6 +430,7 @@ namespace TVTower.Xml
 			{
 				dataNode.AddAttribute( "country", programme.Country );
 				dataNode.AddAttribute( "year", programme.Year.ToString() );
+				dataNode.AddAttribute( "distribution", ((int)programme.DistributionChannel).ToString() );
 
 				dataNode.AddAttribute( "maingenre", ((int)programme.MainGenre).ToString() );
 				dataNode.AddAttribute( "subgenre", ((int)programme.SubGenre).ToString() );
@@ -449,7 +449,40 @@ namespace TVTower.Xml
 			}
 			movieNode.AppendChild( ratingsNode );
 
+			var episodesNode = doc.CreateElement( "episodes" );
+			{
+				if ( programme.Episodes != null )
+				{
+					foreach ( var episode in programme.Episodes )
+					{
+						SetEpisodeDetailNode( doc, episodesNode, (TVTEpisode)episode, dbVersion, dataStructure );
+					}
+				}
+			}
+			movieNode.AppendChild( episodesNode );
+
 			return movieNode;
+		}
+
+		private void SetStuffNode( XmlDocument doc, XmlNode parentNode, ITVTProgrammeCore programmeCore )
+		{
+			var stuffNode = doc.CreateElement( "stuff" );
+			{
+				if ( programmeCore.Director != null )
+				{
+					stuffNode.AddElement( "director", programmeCore.Director.ToString() );
+				}
+
+				if ( programmeCore.Participants != null )
+				{
+					foreach ( var par in programmeCore.Participants )
+					{
+						stuffNode.AddElement( "participant", par.Id.ToString() );
+					}
+				}
+			}
+
+			parentNode.AppendChild( stuffNode );
 		}
 
 		private void SetTitleAndDescription( XmlDocument doc, XmlNode node, DataStructure dataStructure, ITVTNames nameObject )
@@ -458,10 +491,12 @@ namespace TVTower.Xml
 			var titleNode = doc.CreateElement( "title" );
 			var descriptionNode = doc.CreateElement( "description" );
 			{
+				if ( nameObject.DataType == TVTDataType.Fictitious )
+					dataStructure = DataStructure.OriginalData;
+
 				switch ( dataStructure )
 				{
 					case DataStructure.FakeData:
-
 						if ( !string.IsNullOrEmpty( nameObject.FakeTitleDE ) )
 							titleNode.AddElement( "de", nameObject.FakeTitleDE );
 						else
@@ -501,66 +536,27 @@ namespace TVTower.Xml
 
 		public XmlNode SetEpisodeDetailNode( XmlDocument doc, XmlElement element, TVTEpisode episode, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
-			XmlNode movieNode, dataNode;
+			XmlNode episodeNode;
 
-			movieNode = doc.CreateElement( "episode" );
+			episodeNode = doc.CreateElement( "episode" );
 			{
-				movieNode.AddAttribute( "id", episode.Id.ToString() );
-
-				if ( episode.SeriesMaster != null && episode.SeriesMaster.IsAlive )
-					movieNode.AddAttribute( "series_id", episode.SeriesMaster.TargetGeneric.Id.ToString() );
-				else
-					movieNode.AddAttribute( "series_id", "" );
-
-				movieNode.AddAttribute( "index", episode.EpisodeIndex.ToString() );
+				episodeNode.AddAttribute( "id", episode.Id.ToString() );
+				episodeNode.AddAttribute( "index", episode.EpisodeIndex.ToString() );
 			}
-			element.AppendChild( movieNode );
+			element.AppendChild( episodeNode );
 
-			switch ( dataStructure )
+			SetTitleAndDescription( doc, episodeNode, dataStructure, episode );
+
+			SetStuffNode( doc, episodeNode, episode );
+
+			var ratingsNode = doc.CreateElement( "ratings" );
 			{
-				case DataStructure.FakeData:
-					if ( !string.IsNullOrEmpty( episode.FakeTitleDE ) )
-						movieNode.AddElement( "title_de", episode.FakeTitleDE );
-					else
-						movieNode.AddElement( "title_de", "NEED_FAKE: " + episode.TitleDE );
-
-					if ( !string.IsNullOrEmpty( episode.FakeTitleEN ) )
-						movieNode.AddElement( "title_en", episode.FakeTitleEN );
-					else
-						movieNode.AddElement( "title_en", "NEED_FAKE: " + episode.TitleEN );
-
-					if ( !string.IsNullOrEmpty( episode.FakeDescriptionDE ) )
-						movieNode.AddElement( "description_de", episode.FakeDescriptionDE );
-					else
-						movieNode.AddElement( "description_de", episode.DescriptionDE );
-
-					if ( !string.IsNullOrEmpty( episode.FakeDescriptionEN ) )
-						movieNode.AddElement( "description_en", episode.FakeDescriptionEN );
-					else
-						movieNode.AddElement( "description_en", episode.DescriptionEN );
-					break;
-				case DataStructure.OriginalData:
-					movieNode.AddElement( "title_de", episode.TitleDE );
-					movieNode.AddElement( "title_en", episode.TitleEN );
-					movieNode.AddElement( "description_de", episode.DescriptionDE );
-					movieNode.AddElement( "description_en", episode.DescriptionEN );
-					break;
+				ratingsNode.AddAttribute( "critics", episode.CriticsRate.ToString() );
+				ratingsNode.AddAttribute( "speed", episode.ViewersRate.ToString() );
 			}
+			episodeNode.AppendChild( ratingsNode );
 
-			//movieNode.AddElement( "version", movie.DataVersion.ToString() );
-
-			dataNode = doc.CreateElement( "data" );
-			{
-				dataNode.AddAttribute( "participants", episode.Participants.ToContentString( ' ' ) );
-				dataNode.AddAttribute( "director", episode.Director != null ? episode.Director.Id.ToString() : "" );
-
-				dataNode.AddAttribute( "critics", episode.CriticsRate.ToString() );
-				dataNode.AddAttribute( "speed", episode.ViewersRate.ToString() );
-			}
-
-			movieNode.AppendChild( dataNode );
-
-			return movieNode;
+			return episodeNode;
 		}
 
 		public ITVTDatabase LoadXML( string filename, ITVTDatabase database )

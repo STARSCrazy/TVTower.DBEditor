@@ -8,30 +8,32 @@ namespace TVTower.Entities
 		void AddProgramme( TVTProgramme movie );
 		void AddProgrammes( IEnumerable<TVTProgramme> movies );
 
-        void AddEpisode(TVTEpisode episode);
-        void AddEpisodes(IEnumerable<TVTEpisode> episodes);
+		void AddEpisode( TVTEpisode episode );
+		void AddEpisodes( IEnumerable<TVTEpisode> episodes );
 
 		void AddPerson( TVTPerson person );
 		void AddPeople( IEnumerable<TVTPerson> people );
 
-        void AddAdvertising(TVTAdvertising advertising);
-        void AddAdvertisings(IEnumerable<TVTAdvertising> advertisings);
+		void AddAdvertising( TVTAdvertising advertising );
+		void AddAdvertisings( IEnumerable<TVTAdvertising> advertisings );
 
-        void AddNews(TVTNews news);
-        void AddNews(IEnumerable<TVTNews> news);
+		void AddNews( TVTNews news );
+		void AddNews( IEnumerable<TVTNews> news );
 
-		IEnumerable<TVTProgramme> GetAllMovies( bool withSeries = false );
+		IEnumerable<TVTProgramme> GetAllProgrammes( bool withSeries = false );
 		IEnumerable<TVTProgramme> GetAllSeries();
-        IEnumerable<TVTEpisode> GetAllEpisodes();
+		IEnumerable<TVTEpisode> GetAllEpisodes();
 		IEnumerable<TVTPerson> GetAllPeople();
-        IEnumerable<TVTAdvertising> GetAllAdvertisings();
-        IEnumerable<TVTNews> GetAllNews();
+		IEnumerable<TVTAdvertising> GetAllAdvertisings();
+		IEnumerable<TVTNews> GetAllNews();
+
+		IEnumerable<TVTEpisode> GetEpisodesOfSeries( Guid seriesId );
 
 		TVTPerson GetPersonById( Guid id );
 		TVTPerson GetPersonByStringId( string id );
 		TVTPerson GetPersonByTmdbId( int tmdbId );
 		TVTPerson GetPersonByName( string name );
 
-        void RefreshPersonProgrammeCount();
+		void RefreshPersonProgrammeCount();
 	}
 }

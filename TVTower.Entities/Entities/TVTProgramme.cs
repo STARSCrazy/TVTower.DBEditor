@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using CodeKnight.Core;
+using System.Linq;
 
 namespace TVTower.Entities
 {
 	public class TVTProgramme : TVTEntity, ITVTProgrammeCore
 	{
 		public TVTProgrammeType ProgrammeType { get; set; }
-				
+
 		public string TitleDE { get; set; }
 		public string TitleEN { get; set; }
 		public string DescriptionDE { get; set; }
@@ -51,7 +51,7 @@ namespace TVTower.Entities
 		public string ImageUrl { get; set; }			//Von hier kann die Bildquelle geladen werden
 
 		//Für Serien
-		public List<ITVTEpisode> Episodes { get; set; }
+		public List<TVTEpisode> Episodes { get; set; }
 		public TVTMovieAdditional MovieAdditional { get; set; }
 
 
@@ -64,53 +64,92 @@ namespace TVTower.Entities
 		public override TVTDataStatus RefreshStatus()
 		{
 			var baseStatus = base.RefreshStatus();
-			if (baseStatus == TVTDataStatus.Incorrect)
+			if ( baseStatus == TVTDataStatus.Incorrect )
 				return baseStatus;
 
-			if (string.IsNullOrEmpty(Country) ||
+			if ( ProgrammeType == TVTProgrammeType.Series )
+			{
+				var EpisodesIndexes = new List<int>();
+
+				if ( Episodes.Count == 0 )
+					return TVTDataStatus.Incomplete;
+
+				foreach ( var episode in Episodes )
+				{
+					var episodeStatus = episode.RefreshStatus();
+					if ( episodeStatus == TVTDataStatus.Incorrect || episodeStatus == TVTDataStatus.Incomplete )
+					{
+						DataStatus = episodeStatus;
+						return DataStatus;
+					}
+
+					if ( !episode.EpisodeIndex.HasValue || EpisodesIndexes.Contains( episode.EpisodeIndex.Value ) )
+					{
+						DataStatus = TVTDataStatus.Incorrect;
+						return DataStatus;
+					}
+					else
+						EpisodesIndexes.Add( episode.EpisodeIndex.Value );
+				}
+			}
+
+			if ( string.IsNullOrEmpty( Country ) ||
 				MainGenre == TVTProgrammeGenre.Undefined ||
 				MainGenre == TVTProgrammeGenre.Undefined_Show ||
 				MainGenre == TVTProgrammeGenre.Undefined_Reportage ||
 				Blocks == 0 ||
-				Year == 0)
+				Year == 0 )
 			{
 				DataStatus = TVTDataStatus.Incomplete;
 				return DataStatus;
 			}
 			else
 			{
-				if (!string.IsNullOrEmpty(TitleDE) &&
-					!string.IsNullOrEmpty(DescriptionDE) &&
-					!string.IsNullOrEmpty(FakeTitleDE))
+				if ( !string.IsNullOrEmpty( TitleDE ) &&
+					!string.IsNullOrEmpty( DescriptionDE ) &&
+					!string.IsNullOrEmpty( FakeTitleDE ) )
 				{
 					DataStatus = TVTDataStatus.OnlyDE;
 					return DataStatus;
 				}
 
-				if (!string.IsNullOrEmpty(TitleEN) &&
-					!string.IsNullOrEmpty(DescriptionEN) &&
-					!string.IsNullOrEmpty(FakeTitleEN))
+				if ( !string.IsNullOrEmpty( TitleEN ) &&
+					!string.IsNullOrEmpty( DescriptionEN ) &&
+					!string.IsNullOrEmpty( FakeTitleEN ) )
 				{
 					DataStatus = TVTDataStatus.OnlyEN;
 					return DataStatus;
 				}
 
-				if (string.IsNullOrEmpty(TitleDE) ||
-					string.IsNullOrEmpty(DescriptionDE) ||
-					string.IsNullOrEmpty(TitleEN) ||
-					string.IsNullOrEmpty(DescriptionEN))
+				if ( string.IsNullOrEmpty( TitleDE ) ||
+					string.IsNullOrEmpty( DescriptionDE ) ||
+					string.IsNullOrEmpty( TitleEN ) ||
+					string.IsNullOrEmpty( DescriptionEN ) )
 				{
 					DataStatus = TVTDataStatus.Incomplete;
 
-					if (string.IsNullOrEmpty(FakeTitleDE) ||
-						string.IsNullOrEmpty(FakeTitleEN))
+					if ( DataType != TVTDataType.Fictitious )
 					{
-						DataStatus = TVTDataStatus.NoFakes;
+						if ( string.IsNullOrEmpty( FakeTitleDE ) ||
+							string.IsNullOrEmpty( FakeTitleEN ) )
+						{
+							DataStatus = TVTDataStatus.NoFakes;
+						}
 					}
 				}
 			}
 
+
+
 			return DataStatus;
+		}
+
+		public override void RefreshReferences( ITVTDatabase database )
+		{
+			if ( this.ProgrammeType == TVTProgrammeType.Series )
+			{
+				Episodes = database.GetEpisodesOfSeries( this.Id ).OrderBy( x => x.EpisodeIndex ).ToList<TVTEpisode>();
+			}
 		}
 	}
 }

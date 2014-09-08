@@ -26,9 +26,9 @@ namespace TVTower.Entities
 		//public string PlaceOfBirth { get; set; }
 		public string Country { get; set; }
 
-        public int Prominence { get; set; } // 1 = Top-Promi, 2 = Promi, 3 = Unbekannte Person
+		public int Prominence { get; set; } // 1 = Top-Promi, 2 = Promi, 3 = Unbekannte Person
 
-        public int Skill { get; set; }		//0 - 100	Für Regisseur, Musiker und Intellektueller: Wie gut kann er sein Handwerk. Für Schauspieler: Kinokasse +		Kritik +	Tempo +
+		public int Skill { get; set; }		//0 - 100	Für Regisseur, Musiker und Intellektueller: Wie gut kann er sein Handwerk. Für Schauspieler: Kinokasse +		Kritik +	Tempo +
 		public int Fame { get; set; }					//0 - 100	Kinokasse ++							Wie berühmt ist die Person?
 		public int Scandalizing { get; set; }			//0 - 100	Besonders Interessant für Shows und Sonderevents
 		public int PriceFactor { get; set; }
@@ -40,35 +40,38 @@ namespace TVTower.Entities
 		//public int CharacterSkill { get; set; }			//0 - 100	Kinokasse +		Kritik +++		Bonus bei manchen Genre (wie Drama)
 
 		public TVTProgrammeGenre TopGenre1 { get; set; }
-        public TVTProgrammeGenre TopGenre2 { get; set; }
+		public TVTProgrammeGenre TopGenre2 { get; set; }
 
-        public int ProgrammeCount { get; set; }
+		public int ProgrammeCount { get; set; }
 
 		public TVTPerson()
 		{
 			Functions = new List<TVTPersonFunction>();
 		}
 
-        public override TVTDataStatus RefreshStatus()
-        {
-            var baseStatus = base.RefreshStatus();
-            if (baseStatus == TVTDataStatus.Incorrect)
-                return baseStatus;
+		public override TVTDataStatus RefreshStatus()
+		{
+			var baseStatus = base.RefreshStatus();
+			if ( baseStatus == TVTDataStatus.Incorrect )
+				return baseStatus;
 
-            if (string.IsNullOrEmpty(FakeLastName) || LastName == FakeLastName)
-            {
-                DataStatus = TVTDataStatus.NoFakes;
-                return DataStatus;
-            }
+			if ( DataType != TVTDataType.Fictitious )
+			{
+				if ( string.IsNullOrEmpty( FakeLastName ) || LastName == FakeLastName )
+				{
+					DataStatus = TVTDataStatus.NoFakes;
+					return DataStatus;
+				}
+			}
 
-            if (DataStatus == TVTDataStatus.Complete)
-            {
-                DataStatus = TVTDataStatus.Approved;
-                Approved = true; //TODO
-                return DataStatus;
-            }
+			if ( DataStatus == TVTDataStatus.Complete )
+			{
+				DataStatus = TVTDataStatus.Approved;
+				Approved = true; //TODO
+				return DataStatus;
+			}
 
-            return DataStatus;
-        }
+			return DataStatus;
+		}
 	}
 }

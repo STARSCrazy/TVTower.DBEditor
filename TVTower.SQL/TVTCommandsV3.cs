@@ -418,8 +418,10 @@ namespace TVTower.SQL
 				content.Add( "fake_title_de", episode.FakeTitleDE );
 				content.Add( "fake_title_en", episode.FakeTitleEN );
 
-				content.Add( "fake_description_de", episode.DescriptionDE );
-				content.Add( "fake_description_en", episode.DescriptionEN );
+				content.Add( "description_de", episode.DescriptionDE );
+				content.Add( "description_en", episode.DescriptionEN );
+				content.Add( "fake_description_de", episode.FakeDescriptionDE );
+				content.Add( "fake_description_en", episode.FakeDescriptionEN );
 
 				if ( episode.SeriesMaster != null && episode.SeriesMaster.IsAlive )
 					content.Add( "series_id", episode.SeriesMaster.TargetGeneric.Id );
