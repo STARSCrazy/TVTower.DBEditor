@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 using CodeKnight.Core;
 using MySql.Data.MySqlClient;
 using TVTower.Entities;
@@ -40,6 +42,7 @@ namespace TVTower.SQL
 		public static SQLDefinition<TVTProgramme> GetProgrammeSQLDefinition()
 		{
 			var definition = new SQLDefinition<TVTProgramme>();
+			definition.Table = "tvt_programmes";
 
 			AddNamesSQLDefinition( definition );
 
@@ -79,7 +82,7 @@ namespace TVTower.SQL
 			definition.Add( x => x.BoxOfficeRate );
 
 			//Zusatzinfos
-			AdditionalFields2( definition );
+			AdditionalFields( definition );
 
 			return definition;
 		}
@@ -87,6 +90,7 @@ namespace TVTower.SQL
 		public static SQLDefinition<TVTEpisode> GetEpisodeSQLDefinition()
 		{
 			var definition = new SQLDefinition<TVTEpisode>();
+			definition.Table = "tvt_episodes";
 
 			AddNamesSQLDefinition( definition );
 
@@ -106,7 +110,7 @@ namespace TVTower.SQL
 			definition.Add( x => x.EpisodeIndex );
 
 			//Zusatzinfos
-			AdditionalFields2( definition );
+			AdditionalFields( definition );
 
 			return definition;
 		}
@@ -114,6 +118,7 @@ namespace TVTower.SQL
 		public static SQLDefinition<TVTAdvertising> GetAdvertisingSQLDefinition()
 		{
 			var definition = new SQLDefinition<TVTAdvertising>();
+			definition.Table = "tvt_advertisings";
 
 			AddNamesSQLDefinition( definition );
 
@@ -141,7 +146,7 @@ namespace TVTower.SQL
 			definition.Add( x => x.ContraPressureGroups );
 
 			//Zusatzinfos
-			AdditionalFields2( definition );
+			AdditionalFields( definition );
 
 			return definition;
 		}
@@ -149,6 +154,7 @@ namespace TVTower.SQL
 		public static SQLDefinition<TVTPerson> GetPersonSQLDefinition()
 		{
 			var definition = new SQLDefinition<TVTPerson>();
+			definition.Table = "tvt_people";
 
 			//AddEntityBaseSQLDefinition(definition);
 
@@ -191,7 +197,22 @@ namespace TVTower.SQL
 			definition.Add( x => x.ProgrammeCount );
 
 			//Zusatzinfos
-			AdditionalFields2( definition );
+			AdditionalFields( definition );
+
+			return definition;
+		}
+
+		public static SQLDefinition<TVTNewsEffect> GetNewsEffectSQLDefinition()
+		{
+			var definition = new SQLDefinition<TVTNewsEffect>();
+			definition.Table = "tvt_news_effects";
+			definition.OwnerIdField = "news_id";
+
+			definition.Add( x => x.Id );
+			definition.Add( x => x.Type );
+			definition.Add( x => x.EffectParameters, "value1", null, 0 );
+			definition.Add( x => x.EffectParameters, "value2", null, 1 );
+			definition.Add( x => x.EffectParameters, "value3", null, 2 );
 
 			return definition;
 		}
@@ -199,14 +220,13 @@ namespace TVTower.SQL
 		public static SQLDefinition<TVTNews> GetNewsSQLDefinition()
 		{
 			var definition = new SQLDefinition<TVTNews>();
+			definition.Table = "tvt_news";
 
 			AddNamesBasicSQLDefinition( definition );
 
 			definition.Add( x => x.NewsType );
-			definition.Add( x => x.NewsHandling );
 			definition.Add( x => x.NewsThreadId );
 			definition.Add( x => x.Genre );
-			definition.Add( x => x.Predecessor );
 
 			definition.Add( x => x.Price );
 			definition.Add( x => x.Topicality );
@@ -224,24 +244,89 @@ namespace TVTower.SQL
 			definition.Add( x => x.Resource3Type );
 			definition.Add( x => x.Resource4Type );
 
-			definition.Add( x => x.Effect );
-			definition.Add( x => x.EffectParameters );
+			//definition.Add( x => x.Effects );
 
 			definition.Add( x => x.ProPressureGroups );
 			definition.Add( x => x.ContraPressureGroups );
 
 			//Zusatzinfos
-			AdditionalFields2( definition );
+			AdditionalFields( definition );
+
+			definition.AddSubDefinition( x => x.Effects, GetNewsEffectSQLDefinition() );
+
+
+			//definition.AfterInsert = new Action<MySqlConnection, TVTNews>( ( x, y ) =>
+			//{
+
+			//});
+
+
+
+
+
+			//var definition = GetNewsSQLDefinition();
+
+			//var sqlCommandText = "INSERT INTO tvt_news (" + definition.GetFieldNames( ',' ) + ") VALUES (" + definition.GetFieldNames( ',', "?" ) + ")";
+
+			//foreach ( var aNews in news )
+			//{
+			//    var command = connection.CreateCommand();
+			//    command.CommandText = sqlCommandText;
+			//    var enumerator = definition.GetEnumerator();
+			//    while ( enumerator.MoveNext() )
+			//    {
+			//        var field = enumerator.Current;
+			//        command.Parameters.AddWithValue( "?" + field.FieldName, field.GetValue( aNews ) );
+			//    }
+			//    command.ExecuteNonQuery();
+
+			//    if ( definition.AfterInsert != null )
+			//        definition.AfterInsert( connection, aNews );
+			//}
+
+
 
 			return definition;
 		}
 
-		private static List<T> ReadGeneric<T>( MySqlConnection connection, string commandText, SQLDefinition<T> definition )
+		//private static List<T> ReadGeneric<T>( MySqlConnection connection, string commandText, SQLDefinition<T> definition )
+		//{
+		//    var result = new List<T>();
+
+		//    var command = connection.CreateCommand();
+		//    command.CommandText = commandText;
+		//    var Reader = command.ExecuteReader();
+		//    try
+		//    {
+		//        while ( Reader.Read() )
+		//        {
+		//            var entity = Activator.CreateInstance<T>();
+
+		//            var enumerator = definition.GetEnumerator();
+		//            while ( enumerator.MoveNext() )
+		//            {
+		//                var field = enumerator.Current;
+		//                field.Read( Reader, entity );
+		//            }
+
+		//            result.Add( entity );
+		//        }
+		//    }
+		//    finally
+		//    {
+		//        if ( Reader != null && !Reader.IsClosed )
+		//            Reader.Close();
+		//    }
+
+		//    return result;
+		//}
+
+		public static List<T> Read<T>( MySqlConnection connection, SQLDefinition<T> definition ) where T : IIdEntity
 		{
 			var result = new List<T>();
 
 			var command = connection.CreateCommand();
-			command.CommandText = commandText;
+			command.CommandText = "SELECT * FROM " + definition.Table;
 			var Reader = command.ExecuteReader();
 			try
 			{
@@ -265,36 +350,86 @@ namespace TVTower.SQL
 					Reader.Close();
 			}
 
+
+			if ( definition.SubDefinitions.Count > 0 )
+			{
+				foreach ( var subDef in definition.SubDefinitions )
+				{
+					var readSubMethod = typeof( TVTCommandsV3 ).GetMethod( "ReadSubDefinition" );
+					var readMethodGeneric = readSubMethod.MakeGenericMethod( subDef.Key.PropertyType.GetGenericArguments()[0], typeof(T) );
+					readMethodGeneric.Invoke( null, new object[] { connection, subDef.Value, subDef.Key, result } );
+				}
+			}
+
 			return result;
 		}
 
-		public static List<TVTProgramme> ReadProgrammes( MySqlConnection connection )
+		public static void ReadSubDefinition<T, TOwner>( MySqlConnection connection, SQLDefinition<T> subDefinition, PropertyInfo ownerPropInfo, List<TOwner> possibleOwner )
+			where T : IIdEntity
+			where TOwner : IIdEntity
 		{
-			return ReadGeneric<TVTProgramme>( connection, "SELECT * FROM tvt_programmes", GetProgrammeSQLDefinition() );
+			Action<MySqlDataReader, object> ownerReadAction = ( r, x ) =>
+			{
+				var ownerIdTemp = r[subDefinition.OwnerIdField];
+				var ownerId = Guid.Parse( ownerIdTemp.ToString() );
+
+				var owner = possibleOwner.FirstOrDefault( z => z.Id == ownerId );
+
+				var list = (List<T>)ownerPropInfo.GetValue( owner, null );
+				list.Add( (T)x );
+			};
+
+			var fieldDef = subDefinition.GetFieldDefinition( subDefinition.OwnerIdField );
+			if ( fieldDef == null )
+				subDefinition.Add( new SQLDefinitionFieldFunc( subDefinition.OwnerIdField, null, ownerReadAction ) );
+			else
+				(fieldDef as SQLDefinitionFieldFunc).ReadAction = ownerReadAction;
+
+			Read<T>( connection, subDefinition );
+
+			//var readMethod = typeof( TVTCommandsV3 ).GetMethod( "Read" );
+			//var readMethodGeneric = readMethod.MakeGenericMethod( subDef.Key.PropertyType.GetGenericArguments()[0] );
+			//readMethodGeneric.Invoke( null, new object[] { connection, subDefinition } );
 		}
 
-		public static List<TVTEpisode> ReadEpisodes( MySqlConnection connection )
+		public static void Insert<T>( MySqlConnection connection, SQLDefinition<T> definition, IEnumerable<T> elements ) where T : IIdEntity
 		{
-			return ReadGeneric<TVTEpisode>( connection, "SELECT * FROM tvt_episodes", GetEpisodeSQLDefinition() );
+			var sqlCommandText = "INSERT INTO " + definition.Table + " (" + definition.GetFieldNames( ',' ) + ") VALUES (" + definition.GetFieldNames( ',', "?" ) + ")";
+
+			foreach ( var element in elements )
+			{
+				var command = connection.CreateCommand();
+				command.CommandText = sqlCommandText;
+				var enumerator = definition.GetEnumerator();
+				while ( enumerator.MoveNext() )
+				{
+					var field = enumerator.Current;
+					command.Parameters.AddWithValue( "?" + field.FieldName, field.GetValue( element ) );
+				}
+				command.ExecuteNonQuery();
+
+				if ( definition.SubDefinitions.Count > 0 )
+				{
+					foreach ( var subDef in definition.SubDefinitions )
+					{
+						var subDefinition = subDef.Value;
+
+						var fieldDef = subDefinition.GetFieldDefinition( subDefinition.OwnerIdField );
+						if ( fieldDef == null )
+							subDefinition.Add( new SQLDefinitionFieldFunc( subDefinition.OwnerIdField, x => { return element.Id.ToString(); } ) );
+						else
+							(fieldDef as SQLDefinitionFieldFunc).GetValueFunc = x => { return element.Id.ToString(); };
+
+						var propertyValue = subDef.Key.GetValue( element, null );
+						var insertMethod = typeof( TVTCommandsV3 ).GetMethod( "Insert" );
+						var insertMethodGeneric = insertMethod.MakeGenericMethod( subDef.Key.PropertyType.GetGenericArguments()[0] );
+						insertMethodGeneric.Invoke( null, new object[] { connection, subDefinition, propertyValue } );
+					}
+				}
+			}
 		}
 
-		public static List<TVTAdvertising> ReadAdvertisings( MySqlConnection connection )
-		{
-			return ReadGeneric<TVTAdvertising>( connection, "SELECT * FROM tvt_advertisings ORDER BY title_de, fake_title_de", GetAdvertisingSQLDefinition() );
-		}
-
-		public static List<TVTPerson> ReadPeople( MySqlConnection connection )
-		{
-			return ReadGeneric<TVTPerson>( connection, "SELECT * FROM tvt_people", GetPersonSQLDefinition() );
-		}
-
-		public static List<TVTNews> ReadNews( MySqlConnection connection )
-		{
-			return ReadGeneric<TVTNews>( connection, "SELECT * FROM tvt_news", GetNewsSQLDefinition() );
-		}
-
-
-		private static void AdditionalFields2<T>( SQLDefinition<T> definition )
+		private static void AdditionalFields<T>( SQLDefinition<T> definition )
 			where T : TVTEntity
 		{
 			definition.Add( x => x.DataType );
@@ -304,437 +439,6 @@ namespace TVTower.SQL
 
 			definition.Add( x => x.CreatorId );
 			definition.Add( x => x.EditorId );
-		}
-
-		public static void InsertProgrammes2( MySqlConnection connection, IEnumerable<TVTProgramme> programmes )
-		{
-			var definition = GetProgrammeSQLDefinition();
-
-			var sqlCommandText = "INSERT INTO tvt_programmes (" + definition.GetFieldNames( ',' ) + ") VALUES (" + definition.GetFieldNames( ',', "?" ) + ")";
-
-			foreach ( var programme in programmes )
-			{
-				var command = connection.CreateCommand();
-				command.CommandText = sqlCommandText;
-				var enumerator = definition.GetEnumerator();
-				while ( enumerator.MoveNext() )
-				{
-					var field = enumerator.Current;
-					command.Parameters.AddWithValue( "?" + field.FieldName, field.GetValue( programme ) );
-				}
-				command.ExecuteNonQuery();
-			}
-		}
-
-		//public static void InsertProgrammes(MySqlConnection connection, IEnumerable<TVTProgramme> programmes)
-		//{
-		//    foreach (var programme in programmes)
-		//    {
-		//        var content = new Dictionary<string, object>();
-		//        content.Add("id", programme.Id);
-
-		//        content.Add("programme_type", programme.ProgrammeType);
-		//        content.Add("country", programme.Country);
-		//        content.Add("year", programme.Year);
-
-		//        content.Add("main_genre", programme.MainGenre);
-		//        content.Add("sub_genre", programme.SubGenre);
-
-		//        content.Add("blocks", programme.Blocks);
-		//        content.Add("live_hour", programme.LiveHour);
-		//        content.Add("distribution_channel", programme.DistributionChannel);                
-
-		//        content.Add("flags", programme.Flags.ToContentString()); //TODO
-		//        content.Add("target_groups", programme.TargetGroups.ToContentString());
-		//        content.Add("pro_pressure_groups", GetListToSeperatedString(programme.ProPressureGroups));
-		//        content.Add("contra_pressure_groups", GetListToSeperatedString(programme.ContraPressureGroups));
-
-		//        content.Add("imdb_id", programme.ImdbId);
-		//        content.Add("tmdb_id", programme.TmdbId);
-		//        content.Add("rotten_tomatoes_id", programme.RottenTomatoesId);
-
-		//        content.Add("image_url", programme.ImageUrl);
-
-
-		//        //Episode                
-		//        content.Add("title_de", programme.TitleDE);
-		//        content.Add("title_en", programme.TitleEN);
-		//        content.Add("fake_de", programme.FakeTitleDE);
-		//        content.Add("fake_en", programme.FakeTitleEN);
-
-		//        content.Add("description_de", programme.DescriptionDE);
-		//        content.Add("description_en", programme.DescriptionEN);
-		//        content.Add("fake_description_de", programme.FakeDescriptionDE);
-		//        content.Add("fake_description_en", programme.FakeDescriptionEN);
-
-		//        content.Add("director_id", programme.Director != null ? programme.Director.Id.ToString() : null);
-
-		//        if (programme.Participants != null && programme.Participants.Count > 0)
-		//        {
-		//            for (var i = 0; i < programme.Participants.Count; i++)
-		//            {
-		//                if (i >= 3)
-		//                    break;
-
-		//                var participant = programme.Participants[i];
-		//                if (participant != null)
-		//                    content.Add("participant" + (i + 1) + "_id", participant.Id);
-		//            }
-		//        }
-
-		//        content.Add("betty", programme.BettyBonus);
-		//        content.Add("price", programme.PriceMod);
-		//        content.Add("critics", programme.CriticsRate);
-		//        content.Add("viewers", programme.ViewersRate);
-		//        content.Add("boxoffice", programme.BoxOfficeRate);
-
-
-		//        //Zusatzinfos
-		//        AdditionalFields(content, programme);
-
-
-		//        var command = connection.CreateCommand();
-
-		//        command.CommandText = "INSERT INTO tvt_movies (" + content.Keys.ToContentString(',') + ") VALUES (" + content.ForEach(x => "?" + x, null).Keys.ToContentString(',') + ")";
-		//        foreach (var kvp in content)
-		//        {
-		//            command.Parameters.AddWithValue("?" + kvp.Key, kvp.Value);
-		//        }
-
-		//        command.ExecuteNonQuery();
-		//    }
-		//}
-
-		public static void InsertEpisodes( MySqlConnection connection, IEnumerable<TVTEpisode> episodes )
-		{
-			foreach ( var episode in episodes )
-			{
-				var content = new Dictionary<string, object>();
-				content.Add( "id", episode.Id );
-
-				//Episode                
-				content.Add( "title_de", episode.TitleDE );
-				content.Add( "title_en", episode.TitleEN );
-				content.Add( "fake_title_de", episode.FakeTitleDE );
-				content.Add( "fake_title_en", episode.FakeTitleEN );
-
-				content.Add( "description_de", episode.DescriptionDE );
-				content.Add( "description_en", episode.DescriptionEN );
-				content.Add( "fake_description_de", episode.FakeDescriptionDE );
-				content.Add( "fake_description_en", episode.FakeDescriptionEN );
-
-				if ( episode.SeriesMaster != null && episode.SeriesMaster.IsAlive )
-					content.Add( "series_id", episode.SeriesMaster.TargetGeneric.Id );
-				else
-					content.Add( "series_id", -1 );
-				content.Add( "episode_index", episode.EpisodeIndex );
-
-				content.Add( "director_id", episode.Director != null ? episode.Director.Id.ToString() : null );
-
-				if ( episode.Participants != null && episode.Participants.Count > 0 )
-				{
-					for ( var i = 0; i < episode.Participants.Count; i++ )
-					{
-						if ( i >= 3 )
-							break;
-
-						var participant = episode.Participants[i];
-						if ( participant != null )
-							content.Add( "participant_" + (i + 1) + "_id", participant.Id );
-					}
-				}
-
-				content.Add( "critics_rate", episode.CriticsRate );
-				content.Add( "viewers_rate", episode.ViewersRate );
-
-				//Zusatzinfos
-				AdditionalFields( content, episode );
-
-
-				var command = connection.CreateCommand();
-
-				command.CommandText = "INSERT INTO tvt_episodes (" + content.Keys.ToContentString( ',' ) + ") VALUES (" + content.ForEach( x => "?" + x, null ).Keys.ToContentString( ',' ) + ")";
-				foreach ( var kvp in content )
-				{
-					command.Parameters.AddWithValue( "?" + kvp.Key, kvp.Value );
-				}
-
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public static void InsertPeople2( MySqlConnection connection, IEnumerable<TVTPerson> people )
-		{
-			var definition = GetPersonSQLDefinition();
-
-			var sqlCommandText = "INSERT INTO tvt_people (" + definition.GetFieldNames( ',' ) + ") VALUES (" + definition.GetFieldNames( ',', "?" ) + ")";
-
-			foreach ( var person in people )
-			{
-				var command = connection.CreateCommand();
-				command.CommandText = sqlCommandText;
-				var enumerator = definition.GetEnumerator();
-				while ( enumerator.MoveNext() )
-				{
-					var field = enumerator.Current;
-					command.Parameters.AddWithValue( "?" + field.FieldName, field.GetValue( person ) );
-				}
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public static void InsertPeople( MySqlConnection connection, IEnumerable<TVTPerson> people )
-		{
-			foreach ( var person in people )
-			{
-				var content = new Dictionary<string, object>();
-				content.Add( "id", person.Id );
-
-				//Episode                
-				content.Add( "first_name", person.FirstName );
-				content.Add( "last_name", person.LastName );
-				content.Add( "nick_name", person.NickName );
-
-				content.Add( "fake_first_name", person.FakeFirstName );
-				content.Add( "fake_last_name", person.FakeLastName );
-				content.Add( "fake_nick_name", person.FakeNickName );
-
-				content.Add( "imdb_id", person.ImdbId );
-				content.Add( "tmdb_id", person.TmdbId );
-				content.Add( "image_url", person.ImageUrl );
-
-				if ( person.Functions != null )
-					content.Add( "functions", person.Functions.ToContentString() );
-				else
-					content.Add( "functions", null );
-
-				content.Add( "birthday", person.Birthday );
-				content.Add( "deathday", person.Deathday );
-				content.Add( "country", person.Country );
-
-				content.Add( "fame", person.Fame );
-				content.Add( "price_factor", person.PriceFactor );
-
-				content.Add( "skill", person.Skill );
-				content.Add( "power", person.Power );
-				content.Add( "humor", person.Humor );
-				content.Add( "charisma", person.Charisma );
-				content.Add( "appearance", person.Appearance );
-
-				content.Add( "top_genre_1", person.TopGenre1 );
-				content.Add( "top_genre_2", person.TopGenre2 );
-
-				content.Add( "programme_count", person.ProgrammeCount );
-
-
-				//Zusatzinfos
-				AdditionalFields( content, person );
-
-
-				var command = connection.CreateCommand();
-
-				command.CommandText = "INSERT INTO tvt_people (" + content.Keys.ToContentString( ',' ) + ") VALUES (" + content.ForEach( x => "?" + x, null ).Keys.ToContentString( ',' ) + ")";
-				foreach ( var kvp in content )
-				{
-					command.Parameters.AddWithValue( "?" + kvp.Key, kvp.Value );
-				}
-
-				command.ExecuteNonQuery();
-			}
-		}
-
-
-
-		public static void InsertAdvertisings2( MySqlConnection connection, IEnumerable<TVTAdvertising> advertisings )
-		{
-			var definition = GetAdvertisingSQLDefinition();
-
-			var sqlCommandText = "INSERT INTO tvt_advertisings (" + definition.GetFieldNames( ',' ) + ") VALUES (" + definition.GetFieldNames( ',', "?" ) + ")";
-
-			foreach ( var advertising in advertisings )
-			{
-				var command = connection.CreateCommand();
-				command.CommandText = sqlCommandText;
-				var enumerator = definition.GetEnumerator();
-				while ( enumerator.MoveNext() )
-				{
-					var field = enumerator.Current;
-					command.Parameters.AddWithValue( "?" + field.FieldName, field.GetValue( advertising ) );
-				}
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public static void InsertAdvertisings( MySqlConnection connection, IEnumerable<TVTAdvertising> advertisings )
-		{
-			foreach ( var ad in advertisings )
-			{
-				var content = new Dictionary<string, object>();
-				content.Add( "id", ad.Id );
-				//Episode                
-				content.Add( "title_de", ad.TitleDE );
-				content.Add( "title_en", ad.TitleEN );
-				content.Add( "fake_de", ad.FakeTitleDE );
-				content.Add( "fake_en", ad.FakeTitleEN );
-
-				content.Add( "description_de", ad.DescriptionDE );
-				content.Add( "description_en", ad.DescriptionEN );
-
-				content.Add( "infomercial", ad.Infomercial );
-				content.Add( "quality", ad.Quality );
-
-				content.Add( "flexible_profit", ad.FlexibleProfit );
-				content.Add( "min_audience", ad.MinAudience );
-				content.Add( "min_image", ad.MinImage );
-				content.Add( "repetitions", ad.Repetitions );
-				content.Add( "duration", ad.Duration );
-				content.Add( "profit", ad.Profit );
-				content.Add( "penalty", ad.Penalty );
-				content.Add( "target_group", ad.TargetGroup );
-
-
-				if ( ad.AllowedGenres != null )
-					content.Add( "allowed_genres", ad.AllowedGenres.ToContentString() );
-				else
-					content.Add( "allowed_genres", null );
-
-				if ( ad.ProhibitedGenres != null )
-					content.Add( "prohibited_genres", ad.ProhibitedGenres.ToContentString() );
-				else
-					content.Add( "prohibited_genres", null );
-
-
-				if ( ad.AllowedProgrammeTypes != null )
-					content.Add( "allowed_programme_types", ad.AllowedProgrammeTypes.ToContentString() );
-				else
-					content.Add( "allowed_programme_types", null );
-
-				if ( ad.ProhibitedProgrammeTypes != null )
-					content.Add( "prohibited_programme_types", ad.ProhibitedProgrammeTypes.ToContentString() );
-				else
-					content.Add( "prohibited_programme_types", null );
-
-
-				if ( ad.ProPressureGroups != null )
-					content.Add( "pro_pressure_groups", ad.ProPressureGroups.ToContentString() );
-				else
-					content.Add( "pro_pressure_groups", null );
-
-				if ( ad.ContraPressureGroups != null )
-					content.Add( "contra_pressure_groups", ad.ContraPressureGroups.ToContentString() );
-				else
-					content.Add( "contra_pressure_groups", null );
-
-
-				//Zusatzinfos
-				AdditionalFields( content, ad );
-
-
-				var command = connection.CreateCommand();
-
-				command.CommandText = "INSERT INTO tvt_advertisings (" + content.Keys.ToContentString( ',' ) + ") VALUES (" + content.ForEach( x => "?" + x, null ).Keys.ToContentString( ',' ) + ")";
-				foreach ( var kvp in content )
-				{
-					command.Parameters.AddWithValue( "?" + kvp.Key, kvp.Value );
-				}
-
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public static void InsertNews2( MySqlConnection connection, IEnumerable<TVTNews> news )
-		{
-			var definition = GetNewsSQLDefinition();
-
-			var sqlCommandText = "INSERT INTO tvt_news (" + definition.GetFieldNames( ',' ) + ") VALUES (" + definition.GetFieldNames( ',', "?" ) + ")";
-
-			foreach ( var aNews in news )
-			{
-				var command = connection.CreateCommand();
-				command.CommandText = sqlCommandText;
-				var enumerator = definition.GetEnumerator();
-				while ( enumerator.MoveNext() )
-				{
-					var field = enumerator.Current;
-					command.Parameters.AddWithValue( "?" + field.FieldName, field.GetValue( aNews ) );
-				}
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public static void InsertNews( MySqlConnection connection, IEnumerable<TVTNews> newsEnum )
-		{
-			foreach ( var news in newsEnum )
-			{
-				var content = new Dictionary<string, object>();
-				content.Add( "id", news.Id );
-				//Episode                
-				content.Add( "title_de", news.TitleDE );
-				content.Add( "title_en", news.TitleEN );
-				content.Add( "description_de", news.DescriptionDE );
-				content.Add( "description_en", news.DescriptionEN );
-
-				content.Add( "type", news.NewsType );
-				content.Add( "handling", news.NewsHandling );
-				content.Add( "thread_id", news.NewsThreadId );
-				content.Add( "genre", news.Genre );
-				content.Add( "predecessor", news.Predecessor != null ? news.Predecessor.Id.ToString() : null );
-
-				content.Add( "price", news.Price );
-				content.Add( "topicality", news.Topicality );
-
-				content.Add( "fix_year", news.FixYear );
-				content.Add( "available_after_days", news.AvailableAfterDays );
-				content.Add( "year_range_from", news.YearRangeFrom );
-				content.Add( "year_range_to", news.YearRangeTo );
-				content.Add( "hours_after_predecessor", news.MinHoursAfterPredecessor );
-				content.Add( "time_range_from", news.TimeRangeFrom );
-				content.Add( "time_range_to", news.TimeRangeTo );
-
-				content.Add( "resource_1_type", news.Resource1Type );
-				content.Add( "resource_2_type", news.Resource2Type );
-				content.Add( "resource_3_type", news.Resource3Type );
-				content.Add( "resource_4_type", news.Resource4Type );
-
-				content.Add( "effect", news.Effect );
-				content.Add( "effect_parameters", news.EffectParameters.ToContentString() );
-
-				if ( news.ProPressureGroups != null )
-					content.Add( "pro_pressure_groups", news.ProPressureGroups.ToContentString() );
-				else
-					content.Add( "pro_pressure_groups", null );
-
-				if ( news.ContraPressureGroups != null )
-					content.Add( "contra_pressure_groups", news.ContraPressureGroups.ToContentString() );
-				else
-					content.Add( "contra_pressure_groups", null );
-
-
-				//Zusatzinfos
-				AdditionalFields( content, news );
-
-
-				var command = connection.CreateCommand();
-
-				command.CommandText = "INSERT INTO tvt_news (" + content.Keys.ToContentString( ',' ) + ") VALUES (" + content.ForEach( x => "?" + x, null ).Keys.ToContentString( ',' ) + ")";
-				foreach ( var kvp in content )
-				{
-					command.Parameters.AddWithValue( "?" + kvp.Key, kvp.Value );
-				}
-
-				command.ExecuteNonQuery();
-			}
-		}
-
-		private static void AdditionalFields( Dictionary<string, object> content, TVTEntity entity )
-		{
-			content.Add( "data_type", entity.DataType );
-			content.Add( "data_status", entity.DataStatus );
-			content.Add( "approved", entity.Approved );
-			content.Add( "additional_info", entity.AdditionalInfo );
-
-			content.Add( "creator_id", entity.CreatorId );
-			content.Add( "editor_id", entity.EditorId );
 		}
 	}
 }

@@ -257,7 +257,7 @@ namespace TVTower.Converter
 
 				if ( newsSrc.parentID == 0 )
 				{
-					news.NewsType = TVTNewsType.SingleNews;
+					news.NewsType = TVTNewsType.InitialNews;
 					news.NewsThreadId = newsSrc.id.ToString();
 					news.Tag = 0;
 				}
@@ -267,8 +267,6 @@ namespace TVTower.Converter
 					news.NewsThreadId = newsSrc.parentID.ToString();
 					news.Tag = newsSrc.episode;
 				}
-
-				news.NewsHandling = TVTNewsHandling.FixMessage;
 
 				//PossibleFollower - erst später ermitteln;
 				news.Genre = (TVTNewsGenre)newsSrc.genre;
@@ -289,8 +287,6 @@ namespace TVTower.Converter
 				news.Resource3Type = null;
 				news.Resource4Type = null;
 
-				news.Effect = TVTNewsEffect.None;
-
 				database.AddNews( news );
 			}
 
@@ -304,13 +300,12 @@ namespace TVTower.Converter
 				if ( follower != null )
 				{
 					follower.NewsType = TVTNewsType.FollowingNews;
-					news.NewsType = TVTNewsType.InitialNewsAutomatic;
-					follower.Predecessor = news;
+					news.Effects.Add( new TVTNewsEffect( TVTNewsEffectType.Follower, follower.Id.ToString()) );
 				}
 				else
 				{
 					if ( news.NewsThreadId == news.AltId )
-						news.NewsType = TVTNewsType.InitialNewsAutomatic;
+						news.NewsType = TVTNewsType.InitialNews;
 					else
 						news.NewsType = TVTNewsType.FollowingNews;
 				}
@@ -318,13 +313,13 @@ namespace TVTower.Converter
 
 			foreach ( var news in allNews )
 			{
-				if ( news.NewsType == TVTNewsType.SingleNews )
-					news.NewsThreadId = null;
-				else
-				{
+				//if ( news.NewsType == TVTNewsType.SingleNews )
+				//    news.NewsThreadId = null;
+				//else
+				//{
 					TVTNews thread_owner = allNews.FirstOrDefault( x => x.AltId == news.NewsThreadId );
 					news.NewsThreadId = thread_owner.Id.ToString();
-				}
+				//}
 			}
 		}
 

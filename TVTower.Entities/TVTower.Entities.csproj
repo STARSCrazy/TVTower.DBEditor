@@ -47,8 +47,8 @@
     <Compile Include="Entities\TVTAdvertising.cs" />
     <Compile Include="Entities\TVTEntity.cs" />
     <Compile Include="Entities\TVTResource.cs" />
-    <Compile Include="Enums\TVTNewsHandling.cs" />
     <Compile Include="Enums\TVTDistributionChannel.cs" />
+    <Compile Include="Enums\TVTNewsEffectType.cs" />
     <Compile Include="Interfaces\ITVTNamesBasic.cs" />
     <Compile Include="Interfaces\ITVTNames.cs" />
     <Compile Include="Interfaces\ITVTNewsResource.cs" />
@@ -58,7 +58,7 @@
     <Compile Include="Entities\TVTProgramme.cs" />
     <Compile Include="Entities\TVTPerson.cs" />
     <Compile Include="Enums\TVTNewsType.cs" />
-    <Compile Include="Enums\TVTNewsEffect.cs" />
+    <Compile Include="Entities\TVTNewsEffect.cs" />
     <Compile Include="Enums\TVTNewsGenre.cs" />
     <Compile Include="Enums\TVTProgrammeType.cs" />
     <Compile Include="Enums\TVTDataType.cs" />

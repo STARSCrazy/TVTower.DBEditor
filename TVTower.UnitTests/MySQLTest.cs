@@ -67,12 +67,11 @@ namespace TVTower.UnitTests
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )
 			{
-				TVTCommandsV3.InsertPeople2( connection, database.GetAllPeople() );
-				TVTCommandsV3.InsertProgrammes2( connection, database.GetAllProgrammes( true ) );
-				TVTCommandsV3.InsertEpisodes( connection, database.GetAllEpisodes() );
-				TVTCommandsV3.InsertAdvertisings2( connection, database.GetAllAdvertisings() );
-				//TVTCommandsV3.InsertAdvertisings(connection, database.GetAllAdvertisings());
-				TVTCommandsV3.InsertNews2( connection, database.GetAllNews() );
+				TVTCommandsV3.Insert<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), database.GetAllPeople() );
+				TVTCommandsV3.Insert<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), database.GetAllProgrammes( true ) );
+				TVTCommandsV3.Insert<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), database.GetAllEpisodes() );
+				TVTCommandsV3.Insert<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), database.GetAllAdvertisings() );
+				TVTCommandsV3.Insert<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), database.GetAllNews() );
 			}
 		}
 
@@ -91,19 +90,19 @@ namespace TVTower.UnitTests
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )
 			{
-				var programmes = TVTCommandsV3.ReadProgrammes( connection );
+				var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition() );
 				database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
 
-				var episodes = TVTCommandsV3.ReadEpisodes( connection );
+				var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition() );
 				database.AddEpisodes( episodes );
 
-				var ads = TVTCommandsV3.ReadAdvertisings( connection );
+				var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition() );
 				database.AddAdvertisings( ads );
 
-				var people = TVTCommandsV3.ReadPeople( connection );
+				var people = TVTCommandsV3.Read<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition() );
 				database.AddPeople( people );
 
-				var news = TVTCommandsV3.ReadNews( connection );
+				var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition() );
 				database.AddNews( news );
 
 				database.RefreshReferences();

@@ -3,9 +3,8 @@ namespace TVTower.Entities
 {
 	public enum TVTNewsType
 	{
-		SingleNews = 0,
-		InitialNewsAutomatic = 1,
-		InitialNewsInGameEvent = 2,
-		FollowingNews = 3
+		InitialNews = 0,
+		InitialNewsByInGameEvent = 1,
+		FollowingNews = 2
 	}
 }
