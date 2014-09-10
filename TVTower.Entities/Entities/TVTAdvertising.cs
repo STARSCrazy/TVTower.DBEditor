@@ -18,7 +18,7 @@ namespace TVTower.Entities
         public int Quality { get; set; }        //Wenn als Infomercial gesendet!
 
         public bool FlexibleProfit { get; set; }
-		public int MinAudience { get; set; }	//0 - 100
+        public float MinAudience { get; set; }	//0 - 100
 		public int MinImage { get; set; }		//0 - 100
 		public int Repetitions { get; set; }	//0 - 10
         public int Duration { get; set; }		//0 - 10

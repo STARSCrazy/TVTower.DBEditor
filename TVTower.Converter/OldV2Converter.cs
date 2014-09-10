@@ -241,9 +241,9 @@ namespace TVTower.Converter
 				ad.EditorId = adSrc.editorID;
 				ad.LastModified = new DateTime( 2004, 1, 1 );
 
-				ad.FlexibleProfit = (adSrc.fixedProfit > 0);
-				ad.MinAudience = ConvertOldToNewValue( adSrc.minAudience );
-				ad.MinImage = ConvertOldToNewValue( adSrc.minImage );
+				ad.FlexibleProfit = ( adSrc.fixedProfit > 0 );
+				ad.MinAudience = ConvertOldToNewValue( adSrc.minAudience ) / 10;
+				ad.MinImage = ConvertOldToNewValue( adSrc.minImage ) / 10;
 				ad.Repetitions = adSrc.repetitions;
 				ad.Duration = adSrc.duration;
 				ad.Profit = ConvertProfitPenalty( adSrc.profit, adSrc.fixedProfit > 0, adSrc.fixedProfit );
