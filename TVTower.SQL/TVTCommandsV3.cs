@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CodeKnight.Core;
 using MySql.Data.MySqlClient;
@@ -70,10 +70,10 @@ namespace TVTower.SQL
 			definition.Add( x => x.RottenTomatoesId );
 			definition.Add( x => x.ImageUrl );
 
-			definition.Add( x => x.Director, null, "_id" );
-			definition.Add( x => x.Participants, "participant1_id", null, 0 );
-			definition.Add( x => x.Participants, "participant2_id", null, 1 );
-			definition.Add( x => x.Participants, "participant3_id", null, 2 );
+			//definition.Add( x => x.Director, null, "_id" );
+			//definition.Add( x => x.Participants, "participant1_id", null, 0 );
+			//definition.Add( x => x.Participants, "participant2_id", null, 1 );
+			//definition.Add( x => x.Participants, "participant3_id", null, 2 );
 
 			definition.Add( x => x.BettyBonus );
 			definition.Add( x => x.PriceMod );
@@ -83,6 +83,8 @@ namespace TVTower.SQL
 
 			//Zusatzinfos
 			AdditionalFields( definition );
+
+			definition.AddSubDefinition( x => x.Staff, GetStaffSQLDefinition() );
 
 			return definition;
 		}
@@ -97,10 +99,10 @@ namespace TVTower.SQL
 			definition.Add( x => x.FakeDescriptionDE );
 			definition.Add( x => x.FakeDescriptionEN );
 
-			definition.Add( x => x.Director, null, "_id" );
-			definition.Add( x => x.Participants, "participant1_id", null, 0 );
-			definition.Add( x => x.Participants, "participant2_id", null, 1 );
-			definition.Add( x => x.Participants, "participant3_id", null, 2 );
+			//definition.Add( x => x.Director, null, "_id" );
+			//definition.Add( x => x.Participants, "participant1_id", null, 0 );
+			//definition.Add( x => x.Participants, "participant2_id", null, 1 );
+			//definition.Add( x => x.Participants, "participant3_id", null, 2 );
 
 			definition.Add( x => x.CriticsRate );
 			definition.Add( x => x.ViewersRate );
@@ -111,6 +113,8 @@ namespace TVTower.SQL
 
 			//Zusatzinfos
 			AdditionalFields( definition );
+
+			definition.AddSubDefinition( x => x.Staff, GetStaffSQLDefinition() );
 
 			return definition;
 		}
@@ -213,6 +217,20 @@ namespace TVTower.SQL
 			definition.Add( x => x.EffectParameters, "value1", null, 0 );
 			definition.Add( x => x.EffectParameters, "value2", null, 1 );
 			definition.Add( x => x.EffectParameters, "value3", null, 2 );
+
+			return definition;
+		}
+
+		public static SQLDefinition<TVTStaff> GetStaffSQLDefinition()
+		{
+			var definition = new SQLDefinition<TVTStaff>();
+			definition.Table = "tvt_staff";
+			definition.OwnerIdField = "owner_id";
+
+			definition.Add( x => x.Id );
+			definition.Add( x => x.Function );
+			definition.Add( x => x.Person, "person_id" );
+			definition.Add( x => x.Index, "sortindex" );
 
 			return definition;
 		}
@@ -356,7 +374,7 @@ namespace TVTower.SQL
 				foreach ( var subDef in definition.SubDefinitions )
 				{
 					var readSubMethod = typeof( TVTCommandsV3 ).GetMethod( "ReadSubDefinition" );
-					var readMethodGeneric = readSubMethod.MakeGenericMethod( subDef.Key.PropertyType.GetGenericArguments()[0], typeof(T) );
+					var readMethodGeneric = readSubMethod.MakeGenericMethod( subDef.Key.PropertyType.GetGenericArguments()[0], typeof( T ) );
 					readMethodGeneric.Invoke( null, new object[] { connection, subDef.Value, subDef.Key, result } );
 				}
 			}
@@ -374,9 +392,11 @@ namespace TVTower.SQL
 				var ownerId = Guid.Parse( ownerIdTemp.ToString() );
 
 				var owner = possibleOwner.FirstOrDefault( z => z.Id == ownerId );
-
-				var list = (List<T>)ownerPropInfo.GetValue( owner, null );
-				list.Add( (T)x );
+				if ( owner != null )
+				{
+					var list = (List<T>)ownerPropInfo.GetValue( owner, null );
+					list.Add( (T)x );
+				}
 			};
 
 			var fieldDef = subDefinition.GetFieldDefinition( subDefinition.OwnerIdField );
@@ -439,6 +459,7 @@ namespace TVTower.SQL
 
 			definition.Add( x => x.CreatorId );
 			definition.Add( x => x.EditorId );
+			definition.Add( x => x.LastModified );
 		}
 	}
 }

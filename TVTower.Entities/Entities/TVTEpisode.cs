@@ -18,8 +18,9 @@ namespace TVTower.Entities
 		public string FakeDescriptionDE { get; set; } //Optional
 		public string FakeDescriptionEN { get; set; } //Optional
 
-		public TVTPerson Director { get; set; }
-		public List<TVTPerson> Participants { get; set; }
+		//public TVTPerson Director { get; set; }
+		//public List<TVTPerson> Participants { get; set; }
+		public IndexingList<TVTStaff> Staff { get; set; }
 
 		public int CriticsRate { get; set; }
 		public int ViewersRate { get; set; }
@@ -27,6 +28,11 @@ namespace TVTower.Entities
 		public WeakReference<TVTProgramme> SeriesMaster { get; set; }
 		public Guid SeriesId { get; set; } //Redundanz
 		public int? EpisodeIndex { get; set; }
+
+		public TVTEpisode()
+		{
+			Staff = new IndexingList<TVTStaff>();
+		}
 
 		public override TVTDataStatus RefreshStatus()
 		{
@@ -61,22 +67,31 @@ namespace TVTower.Entities
 					return DataStatus;
 				}
 
-				if ( string.IsNullOrEmpty( TitleDE ) ||
-					string.IsNullOrEmpty( DescriptionDE ) ||
-					string.IsNullOrEmpty( TitleEN ) ||
-					string.IsNullOrEmpty( DescriptionEN ) )
+				if ( DataType != TVTDataType.Fictitious )
 				{
-					DataStatus = TVTDataStatus.Incomplete;
-
-					if ( DataType != TVTDataType.Fictitious )
+					if ( string.IsNullOrEmpty( FakeTitleDE ) ||
+						string.IsNullOrEmpty( FakeTitleEN ) )
 					{
-						if ( string.IsNullOrEmpty( FakeTitleDE ) ||
-							string.IsNullOrEmpty( FakeTitleEN ) )
-						{
-							DataStatus = TVTDataStatus.NoFakes;
-						}
+						DataStatus = TVTDataStatus.NoFakes;
 					}
 				}
+
+				//if ( string.IsNullOrEmpty( TitleDE ) ||
+				//    string.IsNullOrEmpty( DescriptionDE ) ||
+				//    string.IsNullOrEmpty( TitleEN ) ||
+				//    string.IsNullOrEmpty( DescriptionEN ) )
+				//{
+				//    DataStatus = TVTDataStatus.Incomplete;
+
+				//    if ( DataType != TVTDataType.Fictitious )
+				//    {
+				//        if ( string.IsNullOrEmpty( FakeTitleDE ) ||
+				//            string.IsNullOrEmpty( FakeTitleEN ) )
+				//        {
+				//            DataStatus = TVTDataStatus.NoFakes;
+				//        }
+				//    }
+				//}
 			}
 
 			return DataStatus;

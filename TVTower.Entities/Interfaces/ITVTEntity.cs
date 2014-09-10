@@ -1,19 +1,22 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 
 namespace TVTower.Entities
 {
-    public interface ITVTEntity
-    {
-        Guid Id { get; set; }
-        string AltId { get; set; }
+	public interface ITVTEntity
+	{
+		Guid Id { get; set; }
+		string AltId { get; set; }
 
-        TVTDataType DataType { get; set; }
-        TVTDataStatus DataStatus { get; set; }
+		TVTDataType DataType { get; set; }
+		TVTDataStatus DataStatus { get; set; }
 
-        object Tag { get; set; }
-        string AdditionalInfo { get; set; }
+		object Tag { get; set; }
+		string AdditionalInfo { get; set; }
 
-        void GenerateGuid();
-    }
+		string CreatorId { get; set; }
+		string EditorId { get; set; }
+		DateTime LastModified { get; set; }
+
+		void GenerateGuid();
+	}
 }

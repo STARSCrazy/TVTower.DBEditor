@@ -134,8 +134,8 @@ namespace TVTower.SQL
 					ad.targetgroup = reader.GetInt( "targetgroup" );
 					ad.duration = reader.GetInt( "duration" );
 					ad.approved = reader.GetBool( "approved" );
-					ad.creatorID = reader.GetInt( "creatorID" );
-					ad.editorID = reader.GetInt( "editorID" );
+					ad.creatorID = reader.GetString( "creatorID" );
+					ad.editorID = reader.GetString( "editorID" );
 					ad.custom = reader.GetBool( "custom" );
 					ad.deleted = reader.GetBool( "deleted" );
 

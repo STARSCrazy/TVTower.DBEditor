@@ -1,8 +1,9 @@
 ﻿using System;
+using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
-	public abstract class TVTEntity : ITVTEntity
+	public abstract class TVTEntity : ITVTEntity, IIdEntity
 	{
 		public Guid Id { get; set; }
 		public string AltId { get; set; }
@@ -18,6 +19,12 @@ namespace TVTower.Entities
 
 		public string CreatorId { get; set; }
 		public string EditorId { get; set; }
+		public DateTime LastModified { get; set; }
+
+		public TVTEntity MySelf
+		{
+			get { return this; }
+		}
 
 		public void GenerateGuid()
 		{

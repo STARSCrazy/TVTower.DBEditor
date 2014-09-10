@@ -3,8 +3,8 @@ namespace TVTower.Entities
 {
 	public enum TVTPersonFunction
 	{
-		Unknown,
-		Actor,
-		Director
+		Unknown = 0,
+		Director = 1,
+		Actor = 2
 	}
 }

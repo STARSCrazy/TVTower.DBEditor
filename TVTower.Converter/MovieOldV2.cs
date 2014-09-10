@@ -22,8 +22,6 @@ namespace TVTower.Converter
         public int episode;
         public bool approved;
         public int time;
-        public string creatorID;
-        public string editorID;
         public bool deleted;
         public bool custom;
     }

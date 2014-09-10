@@ -170,8 +170,10 @@ namespace TVTower.SQL
 						return null;
 				}
 			}
+			else if ( value is IIdEntity )
+				return (value as IIdEntity).Id;
 			else
-				return PropertyInfo.GetValue( model, null );
+				return value;
 		}
 
 		public virtual void Read( MySqlDataReader reader, object model )

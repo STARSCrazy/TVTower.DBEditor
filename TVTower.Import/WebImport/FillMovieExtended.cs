@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TVTower.Entities;
 using WatTmdb.V3;
-using TVTower.Import;
 
 namespace TVTower.Import
 {
@@ -43,7 +42,7 @@ namespace TVTower.Import
 
 			var castCounter = 1;
 
-			movie.Participants = new List<TVTPerson>();
+			movie.Staff = new IndexingList<TVTStaff>();
 			foreach ( var cast in tmdbMovieCast.cast )
 			{
 				if ( castCounter > 3 )
@@ -51,7 +50,7 @@ namespace TVTower.Import
 
 				var person = importer.RegisterActor( cast );
 				if ( person != null )
-					movie.Participants.Add( person );
+					movie.Staff.Add( new TVTStaff( person, TVTPersonFunction.Actor ) );
 
 				castCounter++;
 			}
@@ -62,7 +61,7 @@ namespace TVTower.Import
 					break;
 
 				var person = importer.RegisterDirector( crew );
-				movie.Director = person;
+				movie.Staff.Add( new TVTStaff( person, TVTPersonFunction.Director ) );
 
 				break;
 			}

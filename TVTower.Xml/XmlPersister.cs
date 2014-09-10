@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Xml;
 using TVTower.Converter;
 using TVTower.Entities;
@@ -150,6 +151,7 @@ namespace TVTower.Xml
 			adNode = doc.CreateElement( "ad" );
 			{
 				adNode.AddAttribute( "id", ad.Id.ToString() );
+				adNode.AddAttribute( "creator", ad.CreatorId );
 			}
 			element.AppendChild( adNode );
 
@@ -193,18 +195,19 @@ namespace TVTower.Xml
 
 		public XmlNode SetNewsDetailNode( XmlDocument doc, XmlElement element, TVTNews news, DatabaseVersion dbVersion, DataStructure dataStructure )
 		{
-			XmlNode adNode = null;
+			XmlNode newsNode = null;
 
-			adNode = doc.CreateElement( "news" );
+			newsNode = doc.CreateElement( "news" );
 			{
-				adNode.AddAttribute( "id", news.Id.ToString() );
-				adNode.AddAttribute( "thread_id", news.NewsThreadId );
-				adNode.AddAttribute( "type", ((int)news.NewsType).ToString() );
+				newsNode.AddAttribute( "id", news.Id.ToString() );
+				newsNode.AddAttribute( "thread_id", news.NewsThreadId );
+				newsNode.AddAttribute( "type", ((int)news.NewsType).ToString() );
+				newsNode.AddAttribute( "creator", news.CreatorId );
 				//adNode.AddAttribute("predecessor_id", news.Predecessor != null ? news.Predecessor.Id.ToString() : null);
 			}
-			element.AppendChild( adNode );
+			element.AppendChild( newsNode );
 
-			SetTitleAndDescriptionBasic( doc, adNode, news );
+			SetTitleAndDescriptionBasic( doc, newsNode, news );
 
 			var effectsNode = doc.CreateElement( "effects" );
 			{
@@ -212,7 +215,8 @@ namespace TVTower.Xml
 				{
 					foreach ( var effect in news.Effects )
 					{
-						var effectNode = doc.CreateElement( effect.Type.ToString().ToLower() );
+						var effectNode = doc.CreateElement( "effect" );
+						effectNode.AddAttribute( "type", effect.Type.ToString().ToLower() );
 						if ( effect.EffectParameters.Count == 1 )
 							effectNode.AddAttribute( "parameter1", effect.EffectParameters[0] );
 						if ( effect.EffectParameters.Count == 2 )
@@ -225,7 +229,7 @@ namespace TVTower.Xml
 					}
 				}
 			}
-			adNode.AppendChild( effectsNode );
+			newsNode.AppendChild( effectsNode );
 
 			{
 				XmlNode dataNode = doc.CreateElement( "data" );
@@ -234,7 +238,7 @@ namespace TVTower.Xml
 				dataNode.AddAttribute( "price", news.Price.ToString() );
 				dataNode.AddAttribute( "topicality", news.Topicality.ToString() );
 
-				adNode.AppendChild( dataNode );
+				newsNode.AppendChild( dataNode );
 			}
 
 			//{
@@ -263,10 +267,10 @@ namespace TVTower.Xml
 				//dataCond.AddAttribute("time_range_from", news.TimeRangeFrom.ToString());
 				//dataCond.AddAttribute("time_range_to", news.TimeRangeTo.ToString());
 
-				adNode.AppendChild( dataCond );
+				newsNode.AppendChild( dataCond );
 			}
 
-			return adNode;
+			return newsNode;
 		}
 
 
@@ -308,6 +312,7 @@ namespace TVTower.Xml
 				personNode.AddAttribute( "prominence", person.Prominence.ToString() );
 				personNode.AddAttribute( "tmdb_id", person.TmdbId.ToString() );
 				personNode.AddAttribute( "imdb_id", person.ImdbId != null ? person.ImdbId.ToString() : null );
+				personNode.AddAttribute( "creator", person.CreatorId );
 			}
 			element.AppendChild( personNode );
 
@@ -406,6 +411,7 @@ namespace TVTower.Xml
 				movieNode.AddAttribute( "tmdb_id", programme.TmdbId.ToString() );
 				movieNode.AddAttribute( "imdb_id", programme.ImdbId );
 				movieNode.AddAttribute( "rt_id", programme.RottenTomatoesId.HasValue ? programme.RottenTomatoesId.Value.ToString() : "" );
+				movieNode.AddAttribute( "creator", programme.CreatorId );
 			}
 			element.AppendChild( movieNode );
 
@@ -506,17 +512,13 @@ namespace TVTower.Xml
 		{
 			var staffNode = doc.CreateElement( "staff" );
 			{
-				if ( programmeCore.Director != null )
+				foreach ( var staffMember in programmeCore.Staff.OrderBy( x => x.SortIndex() ) )
 				{
-					staffNode.AddElement( "director", programmeCore.Director.ToString() );
-				}
-
-				if ( programmeCore.Participants != null )
-				{
-					foreach ( var par in programmeCore.Participants )
-					{
-						staffNode.AddElement( "participant", par.Id.ToString() );
-					}
+					var memberNode = doc.CreateElement( "member" );
+					memberNode.AddAttribute( "index", staffMember.Index.ToString() );
+					memberNode.AddAttribute( "function", staffMember.Function.ToString() );
+					memberNode.InnerText = staffMember.Person.Id.ToString();
+					staffNode.AppendChild( memberNode );
 				}
 			}
 

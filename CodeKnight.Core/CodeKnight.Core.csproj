@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IIdEntity.cs" />
+    <Compile Include="IIndexEntity.cs" />
     <Compile Include="ListExtensions.cs" />
     <Compile Include="PInfo.cs" />
     <Compile Include="WeakReference.cs" />

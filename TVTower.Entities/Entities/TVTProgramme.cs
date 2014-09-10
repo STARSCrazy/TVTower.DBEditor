@@ -20,8 +20,7 @@ namespace TVTower.Entities
 
 		public string DescriptionMovieDB { get; set; }
 
-		public TVTPerson Director { get; set; }
-		public List<TVTPerson> Participants { get; set; } //Kann sich in den Episoden unterscheiden
+		public IndexingList<TVTStaff> Staff { get; set; }
 
 		public int BettyBonus { get; set; }		//0 - 10
 		public int PriceMod { get; set; }		//0 - 255
@@ -57,6 +56,7 @@ namespace TVTower.Entities
 
 		public TVTProgramme()
 		{
+			Staff = new IndexingList<TVTStaff>();
 			Flags = new List<TVTMovieFlag>();
 			TargetGroups = new List<TVTTargetGroup>();
 		}
@@ -121,22 +121,22 @@ namespace TVTower.Entities
 					return DataStatus;
 				}
 
-				if ( string.IsNullOrEmpty( TitleDE ) ||
-					string.IsNullOrEmpty( DescriptionDE ) ||
-					string.IsNullOrEmpty( TitleEN ) ||
-					string.IsNullOrEmpty( DescriptionEN ) )
-				{
-					DataStatus = TVTDataStatus.Incomplete;
+				//if ( string.IsNullOrEmpty( TitleDE ) ||
+				//    string.IsNullOrEmpty( DescriptionDE ) ||
+				//    string.IsNullOrEmpty( TitleEN ) ||
+				//    string.IsNullOrEmpty( DescriptionEN ) )
+				//{
+				//    DataStatus = TVTDataStatus.Incomplete;
 
-					if ( DataType != TVTDataType.Fictitious )
+				if ( DataType != TVTDataType.Fictitious )
+				{
+					if ( string.IsNullOrEmpty( FakeTitleDE ) ||
+						string.IsNullOrEmpty( FakeTitleEN ) )
 					{
-						if ( string.IsNullOrEmpty( FakeTitleDE ) ||
-							string.IsNullOrEmpty( FakeTitleEN ) )
-						{
-							DataStatus = TVTDataStatus.NoFakes;
-						}
+						DataStatus = TVTDataStatus.NoFakes;
 					}
 				}
+				//}
 			}
 
 

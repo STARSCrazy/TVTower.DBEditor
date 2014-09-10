@@ -15,10 +15,10 @@ namespace TVTower.Converter
 
 			foreach ( var person in database.GetAllPeople() )
 			{
-				var foundProgrammes = programme.Where( x => x.Participants.Contains( person ) );
+				var foundProgrammes = programme.Where( x => x.Staff.FirstOrDefault( y => y.Person == person ) != null );
 				foreach ( var foundProgramme in foundProgrammes )
 				{
-					var index = foundProgramme.Participants.IndexOf( person );
+					var index = foundProgramme.Staff.FirstOrDefault( y => y.Person == person ).Index;
 
 					if ( person.FullName != " " && foundProgramme.DescriptionDE.Contains( person.FullName ) )
 						foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FullName, string.Format( "[{0}|Full]", index ) );
@@ -151,9 +151,16 @@ namespace TVTower.Converter
 			}
 
 			ConvertCommon( movieOldV2, episode, database );
-			episode.Participants = GetPersonsByNameOrCreate( database, movieOldV2.actors, episode.DataType, TVTPersonFunction.Actor );
-			episode.Director = GetPersonByNameOrCreate( database, movieOldV2.director, episode.DataType, TVTPersonFunction.Director );
+			episode.CreatorId = movieOldV2.creatorID;
+			episode.EditorId = movieOldV2.editorID;
+			episode.LastModified = new DateTime( 2004, 1, 1 );
 
+			var director = GetPersonByNameOrCreate( database, movieOldV2.director, episode.DataType, TVTPersonFunction.Director );
+			if ( director != null )
+				episode.Staff.Add( new TVTStaff( director, TVTPersonFunction.Director ) );
+
+			var actors = GetPersonsByNameOrCreate( database, movieOldV2.actors, episode.DataType, TVTPersonFunction.Actor );
+			actors.ForEach( x => episode.Staff.Add( new TVTStaff( x, TVTPersonFunction.Actor ) ) );
 		}
 
 		public static void Convert( List<MovieOldV2> moviesOldV2, ITVTDatabase database )
@@ -230,6 +237,9 @@ namespace TVTower.Converter
 				ad.DescriptionDE = null;
 				ad.DescriptionEN = null;
 
+				ad.CreatorId = adSrc.creatorID;
+				ad.EditorId = adSrc.editorID;
+				ad.LastModified = new DateTime( 2004, 1, 1 );
 
 				ad.FlexibleProfit = (adSrc.fixedProfit > 0);
 				ad.MinAudience = ConvertOldToNewValue( adSrc.minAudience );
@@ -300,7 +310,7 @@ namespace TVTower.Converter
 				if ( follower != null )
 				{
 					follower.NewsType = TVTNewsType.FollowingNews;
-					news.Effects.Add( new TVTNewsEffect( TVTNewsEffectType.Follower, follower.Id.ToString()) );
+					news.Effects.Add( new TVTNewsEffect( TVTNewsEffectType.TriggerNews, follower.Id.ToString() ) );
 				}
 				else
 				{
@@ -317,8 +327,8 @@ namespace TVTower.Converter
 				//    news.NewsThreadId = null;
 				//else
 				//{
-					TVTNews thread_owner = allNews.FirstOrDefault( x => x.AltId == news.NewsThreadId );
-					news.NewsThreadId = thread_owner.Id.ToString();
+				TVTNews thread_owner = allNews.FirstOrDefault( x => x.AltId == news.NewsThreadId );
+				news.NewsThreadId = thread_owner.Id.ToString();
 				//}
 			}
 		}

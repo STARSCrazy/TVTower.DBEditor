@@ -132,10 +132,18 @@ namespace TVTower.Converter
                 else
                     return null;
             }
-            else
-            {
-                throw new NotSupportedException();
-            }
+			else if ( type == typeof( DateTime ) )
+			{
+				DateTime retValue;
+				if ( DateTime.TryParse( value.ToString(), out retValue ) )
+					return retValue;
+				else
+					return null;
+			}
+			else
+			{
+				throw new NotSupportedException();
+			}
 
             return null;
         }

@@ -185,30 +185,18 @@ namespace TVTower.DBEditor
 
 			foreach ( var movie in this.ProgrammeData )
 			{
-				foreach ( var person in movie.Participants )
+				foreach ( var staff in movie.Staff )
 				{
-					var currPerson = GetPersonById( person.Id );
-					currPerson.ProgrammeCount++;
-				}
-
-				if ( movie.Director != null )
-				{
-					var currPerson = GetPersonById( movie.Director.Id );
+					var currPerson = GetPersonById( staff.Person.Id );
 					currPerson.ProgrammeCount++;
 				}
 			}
 
 			foreach ( var episode in this.EpisodeData )
 			{
-				foreach ( var person in episode.Participants )
+				foreach ( var staff in episode.Staff )
 				{
-					var currPerson = GetPersonById( person.Id );
-					currPerson.ProgrammeCount++;
-				}
-
-				if ( episode.Director != null )
-				{
-					var currPerson = GetPersonById( episode.Director.Id );
+					var currPerson = GetPersonById( staff.Person.Id );
 					currPerson.ProgrammeCount++;
 				}
 			}

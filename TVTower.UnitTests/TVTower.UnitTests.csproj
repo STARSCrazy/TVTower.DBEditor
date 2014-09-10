@@ -52,6 +52,10 @@
     <Compile Include="MySQLTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">
+      <Project>{A12F5069-3DCE-406A-A9AB-42184F211121}</Project>
+      <Name>CodeKnight.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TVTower.Converter\TVTower.Converter.csproj">
       <Project>{AFD86351-F554-4DBA-9505-76D6E4008279}</Project>
       <Name>TVTower.Converter</Name>
