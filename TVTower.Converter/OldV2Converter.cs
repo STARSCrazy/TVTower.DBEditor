@@ -247,8 +247,8 @@ namespace TVTower.Converter
 				ad.LastModified = new DateTime( 2004, 1, 1 );
 
 				ad.FixPrice = (adSrc.fixedProfit > 0);
-				ad.MinAudience = ConvertOldToNewValue( adSrc.minAudience ) / 10;
-				ad.MinImage = ConvertOldToNewValue( adSrc.minImage ) / 10;
+				ad.MinAudience = ConvertOldToNewValueFloat( adSrc.minAudience );
+				ad.MinImage = ConvertOldToNewValue( adSrc.minImage );
 				ad.Repetitions = adSrc.repetitions;
 				ad.Duration = adSrc.duration;
 				ad.Profit = ConvertProfitPenalty( adSrc.profit, adSrc.fixedProfit > 0, adSrc.fixedProfit );
@@ -343,12 +343,18 @@ namespace TVTower.Converter
 			return oldValue * 100 / 255;
 		}
 
+		public static float ConvertOldToNewValueFloat( int oldValue )
+		{
+			float value = ((float)oldValue) * 100 / 255;
+			return (float)Math.Round( (Decimal)value, 1, MidpointRounding.AwayFromZero );
+		}
+
 		public static int ConvertProfitPenalty( int value, bool isFixValue, int fixValue )
 		{
 			if ( isFixValue )
 				return fixValue;// / 1000;
 			else
-				return value * 1000;
+				return value * 30;
 		}
 
 		public static TVTTargetGroup ConvertTargetGroup( int oldTargetGroup )
