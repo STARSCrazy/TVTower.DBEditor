@@ -346,9 +346,9 @@ namespace TVTower.Converter
 		public static int ConvertProfitPenalty( int value, bool isFixValue, int fixValue )
 		{
 			if ( isFixValue )
-				return fixValue / 1000;
+				return fixValue;// / 1000;
 			else
-				return value;
+				return value * 1000;
 		}
 
 		public static TVTTargetGroup ConvertTargetGroup( int oldTargetGroup )
