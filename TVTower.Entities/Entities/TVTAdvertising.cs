@@ -17,7 +17,7 @@ namespace TVTower.Entities
 		public bool Infomercial { get; set; }
 		public int Quality { get; set; }        //Wenn als Infomercial gesendet!
 
-		public bool FixProfit { get; set; }
+		public bool FixPrice { get; set; }
 		public float MinAudience { get; set; }	//0 - 100
 		public int MinImage { get; set; }		//0 - 100
 		public int Repetitions { get; set; }	//0 - 10
@@ -25,7 +25,7 @@ namespace TVTower.Entities
 		public int Profit { get; set; }			//0 - 1000
 		public int Penalty { get; set; }		//0 - 1000		
 
-		public List<TVTTargetGroup> TargetGroups { get; set; }
+		public TVTTargetGroup TargetGroup { get; set; }
 
 		public List<TVTProgrammeGenre> AllowedGenres { get; set; }
 		public List<TVTProgrammeGenre> ProhibitedGenres { get; set; }
@@ -35,9 +35,5 @@ namespace TVTower.Entities
 		public List<TVTPressureGroup> ProPressureGroups { get; set; }
 		public List<TVTPressureGroup> ContraPressureGroups { get; set; }
 
-		public TVTAdvertising()
-		{
-			TargetGroups = new List<TVTTargetGroup>();
-		}
 	}
 }

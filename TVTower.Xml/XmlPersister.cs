@@ -158,56 +158,17 @@ namespace TVTower.Xml
 
 			SetTitleAndDescription( doc, adNode, dataStructure, ad );
 
-			var groupNode = doc.CreateElement( "groups" );
+			var conditionsNode = doc.CreateElement( "conditions" );
 			{
-				if ( ad.TargetGroups != null )
-				{
-					foreach ( var gorup in ad.TargetGroups )
-					{
-						groupNode.AddElement( "target_group", gorup.ToString() );
-					}
-				}
+				conditionsNode.AddAttribute( "min_audience", ad.MinAudience.ToString( CultureInfo.InvariantCulture ) );
+				conditionsNode.AddAttribute( "min_image", ad.MinImage.ToString() );
+				conditionsNode.AddAttribute( "target_group", ((int)ad.TargetGroup).ToString() );
 
-				if ( ad.ProPressureGroups != null )
-				{
-					foreach ( var group in ad.ProPressureGroups )
-					{
-						groupNode.AddElement( "pro_pressure_group", group.ToString() );
-					}
-				}
-
-				if ( ad.ContraPressureGroups != null )
-				{
-					foreach ( var gorup in ad.ContraPressureGroups )
-					{
-						groupNode.AddElement( "contra_pressure_group", gorup.ToString() );
-					}
-				}
-			}
-			adNode.AppendChild( groupNode );
-
-			{
-				XmlNode dataNode = doc.CreateElement( "data" );
-				dataNode.AddAttribute( "infomercial", ad.Infomercial ? "1" : "0" );
-				dataNode.AddAttribute( "quality", ad.Quality.ToString() );
-				dataNode.AddAttribute( "fix_profit", ad.FixProfit ? "1" : "0" );
-				dataNode.AddAttribute( "min_audience", ad.MinAudience.ToString( CultureInfo.InvariantCulture ) );
-				dataNode.AddAttribute( "min_image", ad.MinImage.ToString() );
-				dataNode.AddAttribute( "repetitions", ad.Repetitions.ToString() );
-				dataNode.AddAttribute( "duration", ad.Duration.ToString() );
-				dataNode.AddAttribute( "profit", ad.Profit.ToString() );
-				dataNode.AddAttribute( "penalty", ad.Penalty.ToString() );
-
-				adNode.AppendChild( dataNode );
-			}
-
-			var conditionsNode = doc.CreateElement( "constraints" );
-			{
 				if ( ad.AllowedGenres != null )
 				{
 					foreach ( var genre in ad.AllowedGenres )
 					{
-						groupNode.AddElement( "allowed_genre", genre.ToString() );
+						conditionsNode.AddElement( "allowed_genre", genre.ToString() );
 					}
 				}
 
@@ -215,7 +176,7 @@ namespace TVTower.Xml
 				{
 					foreach ( var genre in ad.ProhibitedGenres )
 					{
-						groupNode.AddElement( "prohibited_genre", genre.ToString() );
+						conditionsNode.AddElement( "prohibited_genre", genre.ToString() );
 					}
 				}
 
@@ -223,7 +184,7 @@ namespace TVTower.Xml
 				{
 					foreach ( var type in ad.AllowedProgrammeTypes )
 					{
-						groupNode.AddElement( "allowed_programme_type", type.ToString() );
+						conditionsNode.AddElement( "allowed_programme_type", type.ToString() );
 					}
 				}
 
@@ -231,12 +192,41 @@ namespace TVTower.Xml
 				{
 					foreach ( var type in ad.ProhibitedProgrammeTypes )
 					{
-						groupNode.AddElement( "prohibited_programme_type", type.ToString() );
+						conditionsNode.AddElement( "prohibited_programme_type", type.ToString() );
 					}
 				}
 			}
 			adNode.AppendChild( conditionsNode );
 
+
+			{
+				XmlNode dataNode = doc.CreateElement( "data" );
+				dataNode.AddAttribute( "infomercial", ad.Infomercial ? "1" : "0" );
+				dataNode.AddAttribute( "quality", ad.Quality.ToString() );
+				dataNode.AddAttribute( "repetitions", ad.Repetitions.ToString() );
+				dataNode.AddAttribute( "duration", ad.Duration.ToString() );
+				dataNode.AddAttribute( "fix_price", ad.FixPrice ? "1" : "0" );
+				dataNode.AddAttribute( "profit", ad.Profit.ToString() );
+				dataNode.AddAttribute( "penalty", ad.Penalty.ToString() );
+
+				if ( ad.ProPressureGroups != null )
+				{
+					foreach ( var group in ad.ProPressureGroups )
+					{
+						dataNode.AddElement( "pro_pressure_group", ((int)group).ToString() );
+					}
+				}
+
+				if ( ad.ContraPressureGroups != null )
+				{
+					foreach ( var group in ad.ContraPressureGroups )
+					{
+						dataNode.AddElement( "contra_pressure_group", ((int)group).ToString() );
+					}
+				}
+
+				adNode.AppendChild( dataNode );
+			}
 
 			return adNode;
 		}
@@ -407,7 +397,7 @@ namespace TVTower.Xml
 				{
 					foreach ( var func in person.Functions )
 					{
-						functionsNode.AddElement( "functions", func.ToString() );
+						functionsNode.AddElement( "function", ((int)func).ToString() );
 					}
 				}
 			}
@@ -494,9 +484,9 @@ namespace TVTower.Xml
 			{
 				if ( programme.TargetGroups != null )
 				{
-					foreach ( var gorup in programme.TargetGroups )
+					foreach ( var group in programme.TargetGroups )
 					{
-						groupNode.AddElement( "target_group", gorup.ToString() );
+						groupNode.AddElement( "target_group", ((int)group).ToString() );
 					}
 				}
 
@@ -504,15 +494,15 @@ namespace TVTower.Xml
 				{
 					foreach ( var group in programme.ProPressureGroups )
 					{
-						groupNode.AddElement( "pro_pressure_group", group.ToString() );
+						groupNode.AddElement( "pro_pressure_group", ((int)group).ToString() );
 					}
 				}
 
 				if ( programme.ContraPressureGroups != null )
 				{
-					foreach ( var gorup in programme.ContraPressureGroups )
+					foreach ( var group in programme.ContraPressureGroups )
 					{
-						groupNode.AddElement( "contra_pressure_group", gorup.ToString() );
+						groupNode.AddElement( "contra_pressure_group", ((int)group).ToString() );
 					}
 				}
 			}
@@ -564,7 +554,7 @@ namespace TVTower.Xml
 				{
 					var memberNode = doc.CreateElement( "member" );
 					memberNode.AddAttribute( "index", staffMember.Index.ToString() );
-					memberNode.AddAttribute( "function", staffMember.Function.ToString() );
+					memberNode.AddAttribute( "function", ((int)staffMember.Function).ToString() );
 					memberNode.InnerText = staffMember.Person.Id.ToString();
 					staffNode.AppendChild( memberNode );
 				}

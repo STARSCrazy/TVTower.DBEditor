@@ -246,7 +246,7 @@ namespace TVTower.Converter
 				ad.EditorId = adSrc.editorID;
 				ad.LastModified = new DateTime( 2004, 1, 1 );
 
-				ad.FixProfit = (adSrc.fixedProfit > 0);
+				ad.FixPrice = (adSrc.fixedProfit > 0);
 				ad.MinAudience = ConvertOldToNewValue( adSrc.minAudience ) / 10;
 				ad.MinImage = ConvertOldToNewValue( adSrc.minImage ) / 10;
 				ad.Repetitions = adSrc.repetitions;
@@ -254,9 +254,7 @@ namespace TVTower.Converter
 				ad.Profit = ConvertProfitPenalty( adSrc.profit, adSrc.fixedProfit > 0, adSrc.fixedProfit );
 				ad.Penalty = ConvertProfitPenalty( adSrc.penalty, adSrc.fixedPenalty > 0, adSrc.fixedPenalty );
 
-				var tgroup = ConvertTargetGroup( adSrc.targetgroup );
-				if ( tgroup != null && tgroup != TVTTargetGroup.All )
-					ad.TargetGroups.Add( tgroup );
+				ad.TargetGroup = ConvertTargetGroup( adSrc.targetgroup );
 
 				ad.Approved = adSrc.approved;
 
