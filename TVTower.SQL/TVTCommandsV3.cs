@@ -132,14 +132,14 @@ namespace TVTower.SQL
 			definition.Add( x => x.Infomercial );
 			definition.Add( x => x.Quality );
 
-			definition.Add( x => x.FlexibleProfit );
+			definition.Add( x => x.FixProfit );
 			definition.Add( x => x.MinAudience );
 			definition.Add( x => x.MinImage );
 			definition.Add( x => x.Repetitions );
 			definition.Add( x => x.Duration );
 			definition.Add( x => x.Profit );
 			definition.Add( x => x.Penalty );
-			definition.Add( x => x.TargetGroup );
+			definition.Add( x => x.TargetGroups );
 
 			definition.Add( x => x.AllowedGenres );
 			definition.Add( x => x.ProhibitedGenres );
@@ -188,7 +188,7 @@ namespace TVTower.SQL
 			definition.Add( x => x.Skill );
 			definition.Add( x => x.Fame );
 			definition.Add( x => x.Scandalizing );
-			definition.Add( x => x.PriceFactor );
+			definition.Add( x => x.PriceMod );
 
 			definition.Add( x => x.Power );
 			definition.Add( x => x.Humor );

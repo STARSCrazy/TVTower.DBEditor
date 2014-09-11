@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Xml;
 using TVTower.Converter;
@@ -157,38 +158,85 @@ namespace TVTower.Xml
 
 			SetTitleAndDescription( doc, adNode, dataStructure, ad );
 
+			var groupNode = doc.CreateElement( "groups" );
+			{
+				if ( ad.TargetGroups != null )
+				{
+					foreach ( var gorup in ad.TargetGroups )
+					{
+						groupNode.AddElement( "target_group", gorup.ToString() );
+					}
+				}
+
+				if ( ad.ProPressureGroups != null )
+				{
+					foreach ( var group in ad.ProPressureGroups )
+					{
+						groupNode.AddElement( "pro_pressure_group", group.ToString() );
+					}
+				}
+
+				if ( ad.ContraPressureGroups != null )
+				{
+					foreach ( var gorup in ad.ContraPressureGroups )
+					{
+						groupNode.AddElement( "contra_pressure_group", gorup.ToString() );
+					}
+				}
+			}
+			adNode.AppendChild( groupNode );
+
 			{
 				XmlNode dataNode = doc.CreateElement( "data" );
 				dataNode.AddAttribute( "infomercial", ad.Infomercial ? "1" : "0" );
 				dataNode.AddAttribute( "quality", ad.Quality.ToString() );
-				dataNode.AddAttribute( "flexible_profit", ad.FlexibleProfit ? "1" : "0" );
-				dataNode.AddAttribute( "min_audience", ad.MinAudience.ToString() );
+				dataNode.AddAttribute( "fix_profit", ad.FixProfit ? "1" : "0" );
+				dataNode.AddAttribute( "min_audience", ad.MinAudience.ToString( CultureInfo.InvariantCulture ) );
 				dataNode.AddAttribute( "min_image", ad.MinImage.ToString() );
 				dataNode.AddAttribute( "repetitions", ad.Repetitions.ToString() );
 				dataNode.AddAttribute( "duration", ad.Duration.ToString() );
 				dataNode.AddAttribute( "profit", ad.Profit.ToString() );
 				dataNode.AddAttribute( "penalty", ad.Penalty.ToString() );
-				dataNode.AddAttribute( "target_group", ((int)ad.TargetGroup).ToString() );
-
-				dataNode.AddAttribute( "pro_pressure_groups", ad.ProPressureGroups.ToContentString( ',' ) );
-				dataNode.AddAttribute( "contra_pressure_groups", ad.ContraPressureGroups.ToContentString( ',' ) );
 
 				adNode.AppendChild( dataNode );
 			}
 
-			if ( ad.AllowedGenres != null && ad.AllowedGenres.Count > 0 ||
-				ad.ProhibitedGenres != null && ad.ProhibitedGenres.Count > 0 ||
-				ad.AllowedProgrammeTypes != null && ad.AllowedProgrammeTypes.Count > 0 ||
-				ad.ProhibitedProgrammeTypes != null && ad.ProhibitedProgrammeTypes.Count > 0 )
+			var conditionsNode = doc.CreateElement( "constraints" );
 			{
-				XmlNode conditionsNode = doc.CreateElement( "conditions" );
-				conditionsNode.AddAttribute( "allowed_genres", ad.AllowedGenres != null ? ad.AllowedGenres.ToContentString( ',' ) : null );
-				conditionsNode.AddAttribute( "prohibited_genres", ad.ProhibitedGenres != null ? ad.ProhibitedGenres.ToContentString( ',' ) : null );
-				conditionsNode.AddAttribute( "allowed_programme_types", ad.AllowedProgrammeTypes != null ? ad.AllowedProgrammeTypes.ToContentString( ',' ) : null );
-				conditionsNode.AddAttribute( "prohibited_programme_types", ad.ProhibitedProgrammeTypes != null ? ad.ProhibitedProgrammeTypes.ToContentString( ',' ) : null );
+				if ( ad.AllowedGenres != null )
+				{
+					foreach ( var genre in ad.AllowedGenres )
+					{
+						groupNode.AddElement( "allowed_genre", genre.ToString() );
+					}
+				}
 
-				adNode.AppendChild( conditionsNode );
+				if ( ad.ProhibitedGenres != null )
+				{
+					foreach ( var genre in ad.ProhibitedGenres )
+					{
+						groupNode.AddElement( "prohibited_genre", genre.ToString() );
+					}
+				}
+
+				if ( ad.AllowedProgrammeTypes != null )
+				{
+					foreach ( var type in ad.AllowedProgrammeTypes )
+					{
+						groupNode.AddElement( "allowed_programme_type", type.ToString() );
+					}
+				}
+
+				if ( ad.ProhibitedProgrammeTypes != null )
+				{
+					foreach ( var type in ad.ProhibitedProgrammeTypes )
+					{
+						groupNode.AddElement( "prohibited_programme_type", type.ToString() );
+					}
+				}
 			}
+			adNode.AppendChild( conditionsNode );
+
 
 			return adNode;
 		}
@@ -381,7 +429,7 @@ namespace TVTower.Xml
 				dataNode.AddAttribute( "skill", person.Skill.ToString() );
 				dataNode.AddAttribute( "fame", person.Fame.ToString() );
 				dataNode.AddAttribute( "scandalizing", person.Scandalizing.ToString() );
-				dataNode.AddAttribute( "pricefactor", person.PriceFactor.ToString() );
+				dataNode.AddAttribute( "price_mod", person.PriceMod.ToString() );
 
 				dataNode.AddAttribute( "power", person.Power.ToString() );
 				dataNode.AddAttribute( "humor", person.Humor.ToString() );
@@ -454,9 +502,9 @@ namespace TVTower.Xml
 
 				if ( programme.ProPressureGroups != null )
 				{
-					foreach ( var gorup in programme.ProPressureGroups )
+					foreach ( var group in programme.ProPressureGroups )
 					{
-						groupNode.AddElement( "pro_pressure_group", gorup.ToString() );
+						groupNode.AddElement( "pro_pressure_group", group.ToString() );
 					}
 				}
 
@@ -481,7 +529,7 @@ namespace TVTower.Xml
 
 				dataNode.AddAttribute( "blocks", programme.Blocks.ToString() );
 				dataNode.AddAttribute( "time", programme.LiveHour.ToString() );
-				dataNode.AddAttribute( "price", programme.PriceMod.ToString() );
+				dataNode.AddAttribute( "price_mod", programme.PriceMod.ToString( CultureInfo.InvariantCulture ) );
 			}
 			movieNode.AppendChild( dataNode );
 

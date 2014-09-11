@@ -31,7 +31,7 @@ namespace TVTower.Entities
 		public int Skill { get; set; }		//0 - 100	Für Regisseur, Musiker und Intellektueller: Wie gut kann er sein Handwerk. Für Schauspieler: Kinokasse +		Kritik +	Tempo +
 		public int Fame { get; set; }					//0 - 100	Kinokasse ++							Wie berühmt ist die Person?
 		public int Scandalizing { get; set; }			//0 - 100	Besonders Interessant für Shows und Sonderevents
-		public int PriceFactor { get; set; }
+		public float PriceMod { get; set; }
 
 		public int Power { get; set; }					//0 - 100	Kinokasse +		Tempo +++		Bonus bei manchen Genre (wie Action)
 		public int Humor { get; set; }					//0 - 100	Kinokasse +		Tempo ++		Bonus bei manchen Genre (wie Komödie)

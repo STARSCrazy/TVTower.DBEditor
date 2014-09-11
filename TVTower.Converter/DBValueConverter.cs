@@ -140,6 +140,14 @@ namespace TVTower.Converter
 				else
 					return null;
 			}
+			else if ( type == typeof( Single ) )
+			{
+				Single singleValue;
+				if ( Single.TryParse( value.ToString(), out singleValue ) )
+					return singleValue;
+				else
+					return null;
+			}
 			else
 			{
 				throw new NotSupportedException();

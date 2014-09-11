@@ -177,7 +177,12 @@ namespace TVTower.Converter
 
 					programme.CriticsRate = ConvertOldToNewValue( movSrc.critics );
 					programme.ViewersRate = ConvertOldToNewValue( movSrc.speed );
-					programme.PriceMod = ConvertOldToNewValue( movSrc.price );
+					programme.PriceMod = ((float)movSrc.price) / 150;
+					if ( programme.PriceMod == 0.0 )
+						programme.PriceMod = 1;
+					else if ( programme.PriceMod > 10 )
+						programme.PriceMod = 10;
+
 					programme.BoxOfficeRate = ConvertOldToNewValue( movSrc.outcome );
 
 					programme.Year = movSrc.year;
@@ -241,7 +246,7 @@ namespace TVTower.Converter
 				ad.EditorId = adSrc.editorID;
 				ad.LastModified = new DateTime( 2004, 1, 1 );
 
-				ad.FlexibleProfit = ( adSrc.fixedProfit > 0 );
+				ad.FixProfit = (adSrc.fixedProfit > 0);
 				ad.MinAudience = ConvertOldToNewValue( adSrc.minAudience ) / 10;
 				ad.MinImage = ConvertOldToNewValue( adSrc.minImage ) / 10;
 				ad.Repetitions = adSrc.repetitions;
@@ -249,7 +254,9 @@ namespace TVTower.Converter
 				ad.Profit = ConvertProfitPenalty( adSrc.profit, adSrc.fixedProfit > 0, adSrc.fixedProfit );
 				ad.Penalty = ConvertProfitPenalty( adSrc.penalty, adSrc.fixedPenalty > 0, adSrc.fixedPenalty );
 
-				ad.TargetGroup = ConvertTargetGroup( adSrc.targetgroup );
+				var tgroup = ConvertTargetGroup( adSrc.targetgroup );
+				if ( tgroup != null && tgroup != TVTTargetGroup.All )
+					ad.TargetGroups.Add( tgroup );
 
 				ad.Approved = adSrc.approved;
 

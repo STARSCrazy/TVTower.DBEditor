@@ -10,7 +10,7 @@ namespace TVTower.Entities
 		public int GenreOldVersion { get; set; }
 
 
-		public int PriceRateOld { get; set; }
+		public float PriceRateOld { get; set; }
 
 		public int CriticRateOld { get; set; }
 

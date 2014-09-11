@@ -23,7 +23,7 @@ namespace TVTower.Entities
 		public IndexingList<TVTStaff> Staff { get; set; }
 
 		public int BettyBonus { get; set; }		//0 - 10
-		public int PriceMod { get; set; }		//0 - 255
+		public float PriceMod { get; set; }		//0 - 10 (Kommas)
 		public int CriticsRate { get; set; }	//0 - 255
 		public int ViewersRate { get; set; }	//0 - 255	-	auch als Speed bekannt.
 		public int BoxOfficeRate { get; set; }	//0 - 255	-	auch als Outcome bekannt.     
