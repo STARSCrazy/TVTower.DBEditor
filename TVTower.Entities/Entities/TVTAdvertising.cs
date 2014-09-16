@@ -35,5 +35,10 @@ namespace TVTower.Entities
 		public List<TVTPressureGroup> ProPressureGroups { get; set; }
 		public List<TVTPressureGroup> ContraPressureGroups { get; set; }
 
+		public TVTAdvertising()
+		{
+			ProPressureGroups = new List<TVTPressureGroup>();
+			ContraPressureGroups = new List<TVTPressureGroup>();
+		}
 	}
 }

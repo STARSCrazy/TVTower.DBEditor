@@ -209,21 +209,8 @@ namespace TVTower.Xml
 				dataNode.AddAttribute( "profit", ad.Profit.ToString() );
 				dataNode.AddAttribute( "penalty", ad.Penalty.ToString() );
 
-				if ( ad.ProPressureGroups != null )
-				{
-					foreach ( var group in ad.ProPressureGroups )
-					{
-						dataNode.AddElement( "pro_pressure_group", ((int)group).ToString() );
-					}
-				}
-
-				if ( ad.ContraPressureGroups != null )
-				{
-					foreach ( var group in ad.ContraPressureGroups )
-					{
-						dataNode.AddElement( "contra_pressure_group", ((int)group).ToString() );
-					}
-				}
+				dataNode.AddAttribute( "pro_pressure_groups", ad.ProPressureGroups.Sum( x => (int)x ).ToString() );
+				dataNode.AddAttribute( "contra_pressure_groups", ad.ContraPressureGroups.Sum( x => (int)x ).ToString() );
 
 				adNode.AppendChild( dataNode );
 			}
@@ -468,45 +455,21 @@ namespace TVTower.Xml
 
 			SetStaffNode( doc, movieNode, programme );
 
-			var flagsNode = doc.CreateElement( "flags" );
-			{
-				if ( programme.Flags != null )
-				{
-					foreach ( var flag in programme.Flags )
-					{
-						flagsNode.AddElement( "flag", ((int)flag).ToString() );
-					}
-				}
-			}
-			movieNode.AppendChild( flagsNode );
-
 			var groupNode = doc.CreateElement( "groups" );
 			{
-				if ( programme.TargetGroups != null )
-				{
-					foreach ( var group in programme.TargetGroups )
-					{
-						groupNode.AddElement( "target_group", ((int)group).ToString() );
-					}
-				}
+				groupNode.AddAttribute( "target_groups", programme.TargetGroups.Sum( x => (int)x ).ToString() );
 
-				if ( programme.ProPressureGroups != null )
-				{
-					foreach ( var group in programme.ProPressureGroups )
-					{
-						groupNode.AddElement( "pro_pressure_group", ((int)group).ToString() );
-					}
-				}
-
-				if ( programme.ContraPressureGroups != null )
-				{
-					foreach ( var group in programme.ContraPressureGroups )
-					{
-						groupNode.AddElement( "contra_pressure_group", ((int)group).ToString() );
-					}
-				}
+					groupNode.AddAttribute( "pro_pressure_groups", programme.ProPressureGroups.Sum( x => (int)x ).ToString() );
+					groupNode.AddAttribute( "contra_pressure_groups", programme.ContraPressureGroups.Sum( x => (int)x ).ToString() );
 			}
 			movieNode.AppendChild( groupNode );
+
+			int flagSum = 0;
+
+			if ( programme.Flags != null )
+			{
+				flagSum = programme.Flags.Sum( x => (int)x );
+			}
 
 			dataNode = doc.CreateElement( "data" );
 			{
@@ -517,6 +480,7 @@ namespace TVTower.Xml
 				dataNode.AddAttribute( "maingenre", ((int)programme.MainGenre).ToString() );
 				dataNode.AddAttribute( "subgenre", ((int)programme.SubGenre).ToString() );
 
+				dataNode.AddAttribute( "flags", flagSum.ToString() );
 				dataNode.AddAttribute( "blocks", programme.Blocks.ToString() );
 				dataNode.AddAttribute( "time", programme.LiveHour.ToString() );
 				dataNode.AddAttribute( "price_mod", programme.PriceMod.ToString( CultureInfo.InvariantCulture ) );

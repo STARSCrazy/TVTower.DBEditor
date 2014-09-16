@@ -339,12 +339,15 @@ namespace TVTower.SQL
 		//    return result;
 		//}
 
-		public static List<T> Read<T>( MySqlConnection connection, SQLDefinition<T> definition ) where T : IIdEntity
+		public static List<T> Read<T>( MySqlConnection connection, SQLDefinition<T> definition, string orderBy = null ) where T : IIdEntity
 		{
 			var result = new List<T>();
 
 			var command = connection.CreateCommand();
 			command.CommandText = "SELECT * FROM " + definition.Table;
+			if ( !string.IsNullOrEmpty( orderBy ) )
+				command.CommandText = command.CommandText + " ORDER BY " + orderBy;
+
 			var Reader = command.ExecuteReader();
 			try
 			{

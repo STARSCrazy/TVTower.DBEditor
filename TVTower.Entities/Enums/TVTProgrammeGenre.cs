@@ -23,8 +23,7 @@ namespace TVTower.Entities
 		Romance = 15,
 		SciFi = 16,
 		Thriller = 17,
-		War = 18,
-		Western = 19,
+		Western = 18,
 
 		//Show-Genre 100+
 		Undefined_Show = 100,

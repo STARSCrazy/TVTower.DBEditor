@@ -59,6 +59,8 @@ namespace TVTower.Entities
 			Staff = new IndexingList<TVTStaff>();
 			Flags = new List<TVTMovieFlag>();
 			TargetGroups = new List<TVTTargetGroup>();
+			ProPressureGroups = new List<TVTPressureGroup>();
+			ContraPressureGroups = new List<TVTPressureGroup>();
 		}
 
 		public override TVTDataStatus RefreshStatus()

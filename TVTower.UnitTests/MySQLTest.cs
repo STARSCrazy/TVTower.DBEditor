@@ -90,19 +90,19 @@ namespace TVTower.UnitTests
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )
 			{
-				var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition() );
+				var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), "fake_title_de, title_de" );
 				database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
 
-				var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition() );
+				var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), "fake_title_de, title_de" );
 				database.AddEpisodes( episodes );
 
-				var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition() );
+				var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), "fake_title_de, title_de" );
 				database.AddAdvertisings( ads );
 
-				var people = TVTCommandsV3.Read<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition() );
+				var people = TVTCommandsV3.Read<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), "fake_last_name, fake_first_name, last_name" );
 				database.AddPeople( people );
 
-				var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition() );
+				var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), "title_de" );
 				database.AddNews( news );
 
 				database.RefreshReferences();
