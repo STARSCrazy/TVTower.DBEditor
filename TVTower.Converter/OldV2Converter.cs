@@ -195,7 +195,7 @@ namespace TVTower.Converter
 						programme.LiveHour = movSrc.time;
 
 					if ( movSrc.xrated )
-						programme.Flags.Add( TVTMovieFlag.FSK18 );
+						programme.Flags.Add( TVTMovieFlag.XRated );
 
 					database.AddProgramme( programme );
 				}
@@ -208,7 +208,11 @@ namespace TVTower.Converter
 					episode.Tag = movSrc.parentID.ToString();
 
 					episode.CriticsRate = ConvertOldToNewValue( movSrc.critics );
+					if ( episode.CriticsRate == 0 )
+						episode.CriticsRate = -1;
 					episode.ViewersRate = ConvertOldToNewValue( movSrc.speed );
+					if ( episode.ViewersRate == 0 )
+						episode.ViewersRate = -1;
 					episode.EpisodeIndex = movSrc.episode;
 
 					database.AddEpisode( episode );
@@ -496,6 +500,7 @@ namespace TVTower.Converter
 						PersonConverter.ConvertFullname( person, tempName );
 
 					person.Functions.Add( functionForNew );
+					person.PriceMod = 1;
 					database.AddPerson( person );
 				}
 				return person;

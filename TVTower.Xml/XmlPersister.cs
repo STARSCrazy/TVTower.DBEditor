@@ -347,7 +347,6 @@ namespace TVTower.Xml
 			var personNode = doc.CreateElement( "person" );
 			{
 				personNode.AddAttribute( "id", person.Id.ToString() );
-				personNode.AddAttribute( "prominence", person.Prominence.ToString() );
 				personNode.AddAttribute( "tmdb_id", person.TmdbId.ToString() );
 				personNode.AddAttribute( "imdb_id", person.ImdbId != null ? person.ImdbId.ToString() : null );
 				personNode.AddAttribute( "creator", person.CreatorId );
@@ -416,10 +415,11 @@ namespace TVTower.Xml
 
 			{
 				XmlNode dataNode = doc.CreateElement( "data" );
+				dataNode.AddAttribute( "prominence", person.Prominence.ToString() );
 				dataNode.AddAttribute( "skill", person.Skill.ToString() );
 				dataNode.AddAttribute( "fame", person.Fame.ToString() );
 				dataNode.AddAttribute( "scandalizing", person.Scandalizing.ToString() );
-				dataNode.AddAttribute( "price_mod", person.PriceMod.ToString() );
+				dataNode.AddAttribute( "price_mod", person.PriceMod.ToString( CultureInfo.InvariantCulture ) );
 
 				dataNode.AddAttribute( "power", person.Power.ToString() );
 				dataNode.AddAttribute( "humor", person.Humor.ToString() );
@@ -474,7 +474,7 @@ namespace TVTower.Xml
 				{
 					foreach ( var flag in programme.Flags )
 					{
-						flagsNode.AddElement( "flag", flag.ToString() );
+						flagsNode.AddElement( "flag", ((int)flag).ToString() );
 					}
 				}
 			}
