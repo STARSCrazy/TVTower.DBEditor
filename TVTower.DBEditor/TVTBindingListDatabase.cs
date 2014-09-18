@@ -98,12 +98,14 @@ namespace TVTower.DBEditor
 				AddNews( currNews );
 		}
 
-		public IEnumerable<TVTProgramme> GetAllProgrammes( bool withSeries = false )
+        public IEnumerable<TVTProgramme> GetAllProgrammes( bool withSeries = false, bool withEpisodes = false )
 		{
 			var result = new List<TVTProgramme>();
-			if ( withSeries )
+            if ( withSeries && withEpisodes )
 				result.AddRange( ProgrammeData );
-			else
+            else if ( withSeries )
+                result.AddRange( ProgrammeData.Where( x => x.ProductType != TVTProductType.Episode ) );
+            else if ( withEpisodes )
                 result.AddRange( ProgrammeData.Where( x => x.ProductType != TVTProductType.Series ) );
 			return result;
 		}
@@ -174,7 +176,7 @@ namespace TVTower.DBEditor
 		public IEnumerable<TVTProgramme> GetEpisodesOfSeries( Guid seriesId )
 		{
             var seriesIdTemp = seriesId.ToString();
-            return ProgrammeData.Where( x => x.MasterId == seriesIdTemp );
+            return ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode && x.MasterId == seriesIdTemp );
 		}
 
 		public void RefreshPersonProgrammeCount()

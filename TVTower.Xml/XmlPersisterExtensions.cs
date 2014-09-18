@@ -22,6 +22,16 @@ namespace TVTower.Xml
 			node.Attributes.Append( myAttribute );
 		}
 
+        public static void AddAttributeC( this XmlNode node, string name, string innerText )
+        {
+            if ( !string.IsNullOrEmpty( innerText ) && innerText != "-1" )
+            {
+                var myAttribute = node.OwnerDocument.CreateAttribute( name );
+                myAttribute.InnerText = innerText;
+                node.Attributes.Append( myAttribute );
+            }
+        }
+
 		public static string GetAttribute( this XmlNode node, string name )
 		{
 			var attr = node.Attributes[name];

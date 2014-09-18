@@ -20,7 +20,7 @@ namespace TVTower.Entities
 		void AddNews( TVTNews news );
 		void AddNews( IEnumerable<TVTNews> news );
 
-		IEnumerable<TVTProgramme> GetAllProgrammes( bool withSeries = false );
+		IEnumerable<TVTProgramme> GetAllProgrammes( bool withSeries = false, bool withEpisodes = false );
 		IEnumerable<TVTProgramme> GetAllSeries();
         IEnumerable<TVTProgramme> GetAllEpisodes();
 		IEnumerable<TVTPerson> GetAllPeople();

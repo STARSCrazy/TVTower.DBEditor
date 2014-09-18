@@ -49,7 +49,7 @@ namespace TVTower.Xml
                 //allmovies.AddElement( "version", CURRENT_VERSION.ToString() );
                 tvgdb.AppendChild( allmovies );
 
-                foreach ( var movie in database.GetAllProgrammes( true ) )
+                foreach ( var movie in database.GetAllProgrammes( true, false ) )
                 {
                     SetProgrammeDetailNode( doc, allmovies, movie, dbVersion, dataStructure );
                 }
@@ -451,18 +451,20 @@ namespace TVTower.Xml
                 {
                     imagesNode.AddElement( "image", programme.ImageUrl );
                 }
-                movieNode.AppendChild( imagesNode );
+                if ( !NodeIsEmpty( imagesNode ) )
+                    movieNode.AppendChild( imagesNode );
             }
 
             SetStaffNode( doc, movieNode, programme );
 
             var groupNode = doc.CreateElement( "groups" );
             {
-                groupNode.AddAttribute( "target_groups", programme.TargetGroups.Sum( x => (int)x ).ToString() );
-                groupNode.AddAttribute( "pro_pressure_groups", programme.ProPressureGroups.Sum( x => (int)x ).ToString() );
-                groupNode.AddAttribute( "contra_pressure_groups", programme.ContraPressureGroups.Sum( x => (int)x ).ToString() );
+                groupNode.AddAttributeC( "target_groups", programme.TargetGroups.Sum( x => (int)x ).ToString() );
+                groupNode.AddAttributeC( "pro_pressure_groups", programme.ProPressureGroups.Sum( x => (int)x ).ToString() );
+                groupNode.AddAttributeC( "contra_pressure_groups", programme.ContraPressureGroups.Sum( x => (int)x ).ToString() );
             }
-            movieNode.AppendChild( groupNode );
+            if ( !NodeIsEmpty( groupNode ) )
+                movieNode.AppendChild( groupNode );
 
             int flagSum = 0;
 
@@ -473,27 +475,29 @@ namespace TVTower.Xml
 
             dataNode = doc.CreateElement( "data" );
             {
-                dataNode.AddAttribute( "country", programme.Country );
-                dataNode.AddAttribute( "year", programme.Year.ToString() );
-                dataNode.AddAttribute( "distribution", ( (int)programme.DistributionChannel ).ToString() );
+                dataNode.AddAttributeC( "country", programme.Country );
+                dataNode.AddAttributeC( "year", programme.Year.ToString() );
+                dataNode.AddAttributeC( "distribution", ( (int)programme.DistributionChannel ).ToString() );
 
-                dataNode.AddAttribute( "maingenre", ( (int)programme.MainGenre ).ToString() );
-                dataNode.AddAttribute( "subgenre", ( (int)programme.SubGenre ).ToString() );
+                dataNode.AddAttributeC( "maingenre", ( (int)programme.MainGenre ).ToString() );
+                dataNode.AddAttributeC( "subgenre", ( (int)programme.SubGenre ).ToString() );
 
-                dataNode.AddAttribute( "flags", flagSum.ToString() );
-                dataNode.AddAttribute( "blocks", programme.Blocks.ToString() );
-                dataNode.AddAttribute( "time", programme.LiveHour.ToString() );
-                dataNode.AddAttribute( "price_mod", programme.PriceMod.ToString( CultureInfo.InvariantCulture ) );
+                dataNode.AddAttributeC( "flags", flagSum.ToString() );
+                dataNode.AddAttributeC( "blocks", programme.Blocks.ToString() );
+                dataNode.AddAttributeC( "time", programme.LiveHour.ToString() );
+                dataNode.AddAttributeC( "price_mod", programme.PriceMod.ToString( CultureInfo.InvariantCulture ) );
             }
-            movieNode.AppendChild( dataNode );
+            if ( !NodeIsEmpty( dataNode ) )
+                movieNode.AppendChild( dataNode );
 
             var ratingsNode = doc.CreateElement( "ratings" );
             {
-                ratingsNode.AddAttribute( "critics", programme.CriticsRate.ToString() );
-                ratingsNode.AddAttribute( "speed", programme.ViewersRate.ToString() );
-                ratingsNode.AddAttribute( "outcome", programme.BoxOfficeRate.ToString() );
+                ratingsNode.AddAttributeC( "critics", programme.CriticsRate.ToString() );
+                ratingsNode.AddAttributeC( "speed", programme.ViewersRate.ToString() );
+                ratingsNode.AddAttributeC( "outcome", programme.BoxOfficeRate.ToString() );
             }
-            movieNode.AppendChild( ratingsNode );
+            if ( !NodeIsEmpty( ratingsNode ) )
+                movieNode.AppendChild( ratingsNode );
 
             var episodesNode = doc.CreateElement( "episodes" );
             {
@@ -501,11 +505,14 @@ namespace TVTower.Xml
                 {
                     foreach ( var episode in programme.Episodes.OrderBy( x => x.EpisodeIndex ) )
                     {
-                        episodesNode.AddElement( "episode", episode.Id.ToString() );
+                        SetProgrammeDetailNode( doc, episodesNode, episode, dbVersion, dataStructure );
+
+                        //episodesNode.AddElement( "episode", episode.Id.ToString() );
                     }
                 }
             }
-            movieNode.AppendChild( episodesNode );
+            if ( !NodeIsEmpty( episodesNode ) )
+                movieNode.AppendChild( episodesNode );
 
             return movieNode;
         }
@@ -524,7 +531,8 @@ namespace TVTower.Xml
                 }
             }
 
-            parentNode.AppendChild( staffNode );
+            if ( !NodeIsEmpty( staffNode ) )
+                parentNode.AppendChild( staffNode );
         }
 
         private void SetTitleAndDescription( XmlDocument doc, XmlNode node, DataStructure dataStructure, ITVTNames nameObject )
@@ -614,6 +622,11 @@ namespace TVTower.Xml
 
         //    return episodeNode;
         //}
+
+        public bool NodeIsEmpty( XmlNode node )
+        {
+            return ( node.Attributes.Count == 0 && !node.HasChildNodes );
+        }
 
         public ITVTDatabase LoadXML( string filename, ITVTDatabase database )
         {
