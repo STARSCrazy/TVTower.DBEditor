@@ -4,7 +4,7 @@ using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
-	public class TVTEpisode : TVTEntity, ITVTEpisode
+	public class TVTEpisodeOld : TVTEntity, ITVTEpisode
 	{
 		public string TitleDE { get; set; }
 		public string TitleEN { get; set; }
@@ -29,7 +29,7 @@ namespace TVTower.Entities
 		public Guid SeriesId { get; set; } //Redundanz
 		public int? EpisodeIndex { get; set; }
 
-		public TVTEpisode()
+		public TVTEpisodeOld()
 		{
 			Staff = new IndexingList<TVTStaff>();
 		}

@@ -49,6 +49,7 @@ namespace TVTower.SQL
 			definition.Add( x => x.FakeDescriptionDE );
 			definition.Add( x => x.FakeDescriptionEN );
 
+            definition.Add( x => x.ProductType );
 			definition.Add( x => x.ProgrammeType );
 			definition.Add( x => x.Country );
 			definition.Add( x => x.Year );
@@ -81,35 +82,8 @@ namespace TVTower.SQL
 			definition.Add( x => x.ViewersRate );
 			definition.Add( x => x.BoxOfficeRate );
 
-			//Zusatzinfos
-			AdditionalFields( definition );
-
-			definition.AddSubDefinition( x => x.Staff, GetStaffSQLDefinition() );
-
-			return definition;
-		}
-
-		public static SQLDefinition<TVTEpisode> GetEpisodeSQLDefinition()
-		{
-			var definition = new SQLDefinition<TVTEpisode>();
-			definition.Table = "tvt_episodes";
-
-			AddNamesSQLDefinition( definition );
-
-			definition.Add( x => x.FakeDescriptionDE );
-			definition.Add( x => x.FakeDescriptionEN );
-
-			//definition.Add( x => x.Director, null, "_id" );
-			//definition.Add( x => x.Participants, "participant1_id", null, 0 );
-			//definition.Add( x => x.Participants, "participant2_id", null, 1 );
-			//definition.Add( x => x.Participants, "participant3_id", null, 2 );
-
-			definition.Add( x => x.CriticsRate );
-			definition.Add( x => x.ViewersRate );
-
-			//definition.Add(x => x.SeriesMaster, "series_id");
-			definition.Add( x => x.SeriesId, "series_id" );
-			definition.Add( x => x.EpisodeIndex );
+            definition.Add( x => x.MasterId );
+            definition.Add( x => x.EpisodeIndex );
 
 			//Zusatzinfos
 			AdditionalFields( definition );
@@ -118,6 +92,36 @@ namespace TVTower.SQL
 
 			return definition;
 		}
+
+        //public static SQLDefinition<TVTEpisode> GetEpisodeSQLDefinition()
+        //{
+        //    var definition = new SQLDefinition<TVTEpisode>();
+        //    definition.Table = "tvt_episodes";
+
+        //    AddNamesSQLDefinition( definition );
+
+        //    definition.Add( x => x.FakeDescriptionDE );
+        //    definition.Add( x => x.FakeDescriptionEN );
+
+        //    //definition.Add( x => x.Director, null, "_id" );
+        //    //definition.Add( x => x.Participants, "participant1_id", null, 0 );
+        //    //definition.Add( x => x.Participants, "participant2_id", null, 1 );
+        //    //definition.Add( x => x.Participants, "participant3_id", null, 2 );
+
+        //    definition.Add( x => x.CriticsRate );
+        //    definition.Add( x => x.ViewersRate );
+
+        //    //definition.Add(x => x.SeriesMaster, "series_id");
+        //    definition.Add( x => x.SeriesId, "series_id" );
+        //    definition.Add( x => x.EpisodeIndex );
+
+        //    //Zusatzinfos
+        //    AdditionalFields( definition );
+
+        //    definition.AddSubDefinition( x => x.Staff, GetStaffSQLDefinition() );
+
+        //    return definition;
+        //}
 
 		public static SQLDefinition<TVTAdvertising> GetAdvertisingSQLDefinition()
 		{

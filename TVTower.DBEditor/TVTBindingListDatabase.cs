@@ -8,7 +8,7 @@ namespace TVTower.DBEditor
 	public class TVTBindingListDatabase : ITVTDatabase
 	{
 		public SortedBindingList<TVTProgramme> ProgrammeData { get; set; }
-		public SortedBindingList<TVTEpisode> EpisodeData { get; set; }
+		//public SortedBindingList<TVTEpisode> EpisodeData { get; set; }
 		public SortedBindingList<TVTPerson> PersonData { get; set; }
 		public SortedBindingList<TVTAdvertising> AdvertisingData { get; set; }
 		public SortedBindingList<TVTNews> NewsData { get; set; }
@@ -18,8 +18,8 @@ namespace TVTower.DBEditor
 			if ( ProgrammeData == null )
 				ProgrammeData = new SortedBindingList<TVTProgramme>();
 
-			if ( EpisodeData == null )
-				EpisodeData = new SortedBindingList<TVTEpisode>();
+            //if ( EpisodeData == null )
+            //    EpisodeData = new SortedBindingList<TVTEpisode>();
 
 			if ( PersonData == null )
 				PersonData = new SortedBindingList<TVTPerson>();
@@ -54,16 +54,16 @@ namespace TVTower.DBEditor
 				AddProgramme( programme );
 		}
 
-		public void AddEpisode( TVTEpisode episode )
-		{
-			EpisodeData.Add( episode );
-		}
+        //public void AddEpisode( TVTEpisode episode )
+        //{
+        //    EpisodeData.Add( episode );
+        //}
 
-		public void AddEpisodes( IEnumerable<TVTEpisode> episodes )
-		{
-			foreach ( var episode in episodes )
-				AddEpisode( episode );
-		}
+        //public void AddEpisodes( IEnumerable<TVTEpisode> episodes )
+        //{
+        //    foreach ( var episode in episodes )
+        //        AddEpisode( episode );
+        //}
 
 		public void AddPerson( TVTPerson person )
 		{
@@ -104,21 +104,21 @@ namespace TVTower.DBEditor
 			if ( withSeries )
 				result.AddRange( ProgrammeData );
 			else
-				result.AddRange( ProgrammeData.Where( x => x.ProgrammeType != TVTProgrammeType.Series ) );
+                result.AddRange( ProgrammeData.Where( x => x.ProductType != TVTProductType.Series ) );
 			return result;
 		}
 
 		public IEnumerable<TVTProgramme> GetAllSeries()
 		{
 			var result = new List<TVTProgramme>();
-			result.AddRange( ProgrammeData.Where( x => x.ProgrammeType == TVTProgrammeType.Series ) );
+			result.AddRange( ProgrammeData.Where( x => x.ProductType == TVTProductType.Series ) );
 			return result;
 		}
 
-		public IEnumerable<TVTEpisode> GetAllEpisodes()
+		public IEnumerable<TVTProgramme> GetAllEpisodes()
 		{
-			var result = new List<TVTEpisode>();
-			result.AddRange( EpisodeData );
+			var result = new List<TVTProgramme>();
+            result.AddRange( ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode ));
 			return result;
 		}
 
@@ -171,9 +171,10 @@ namespace TVTower.DBEditor
 				return PersonData.FirstOrDefault( x => x.FakeFullName != null ? x.FakeFullName.Trim() == name.Trim() : false );
 		}
 
-		public IEnumerable<TVTEpisode> GetEpisodesOfSeries( Guid seriesId )
+		public IEnumerable<TVTProgramme> GetEpisodesOfSeries( Guid seriesId )
 		{
-			return EpisodeData.Where( x => x.SeriesId == seriesId );
+            var seriesIdTemp = seriesId.ToString();
+            return ProgrammeData.Where( x => x.MasterId == seriesIdTemp );
 		}
 
 		public void RefreshPersonProgrammeCount()
@@ -192,14 +193,14 @@ namespace TVTower.DBEditor
 				}
 			}
 
-			foreach ( var episode in this.EpisodeData )
-			{
-				foreach ( var staff in episode.Staff )
-				{
-					var currPerson = GetPersonById( staff.Person.Id );
-					currPerson.ProgrammeCount++;
-				}
-			}
+            //foreach ( var episode in this.EpisodeData )
+            //{
+            //    foreach ( var staff in episode.Staff )
+            //    {
+            //        var currPerson = GetPersonById( staff.Person.Id );
+            //        currPerson.ProgrammeCount++;
+            //    }
+            //}
 
 			foreach ( var person in PersonData )
 			{
@@ -220,10 +221,10 @@ namespace TVTower.DBEditor
 			}
 
 			//Episode muss vor Programmes kommen
-			foreach ( var episode in this.EpisodeData )
-			{
-				episode.RefreshReferences( this );
-			}
+            foreach ( var episode in this.ProgrammeData.Where(x => x.ProductType == TVTProductType.Episode) )
+            {
+                episode.RefreshReferences( this );
+            }
 
 			foreach ( var programme in this.ProgrammeData )
 			{
@@ -253,10 +254,10 @@ namespace TVTower.DBEditor
 				programme.RefreshStatus();
 			}
 
-			foreach ( var episode in this.EpisodeData )
-			{
-				episode.RefreshStatus();
-			}
+            //foreach ( var episode in this.EpisodeData )
+            //{
+            //    episode.RefreshStatus();
+            //}
 
 			foreach ( var advertising in this.AdvertisingData )
 			{

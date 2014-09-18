@@ -69,7 +69,7 @@ namespace TVTower.UnitTests
 			{
 				TVTCommandsV3.Insert<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), database.GetAllPeople() );
 				TVTCommandsV3.Insert<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), database.GetAllProgrammes( true ) );
-				TVTCommandsV3.Insert<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), database.GetAllEpisodes() );
+				//TVTCommandsV3.Insert<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), database.GetAllEpisodes() );
 				TVTCommandsV3.Insert<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), database.GetAllAdvertisings() );
 				TVTCommandsV3.Insert<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), database.GetAllNews() );
 			}
@@ -90,11 +90,11 @@ namespace TVTower.UnitTests
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )
 			{
-				var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), "fake_title_de, title_de" );
+                var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), "master_id, episode_index, fake_title_de, title_de" );
 				database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
 
-				var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), "fake_title_de, title_de" );
-				database.AddEpisodes( episodes );
+                //var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), "fake_title_de, title_de" );
+                //database.AddEpisodes( episodes );
 
 				var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), "fake_title_de, title_de" );
 				database.AddAdvertisings( ads );
@@ -109,7 +109,7 @@ namespace TVTower.UnitTests
 			}
 
 			var persister = new XmlPersister();
-			persister.SaveXML( database, "ExportTVTDatabaseV3Original.xml", DatabaseVersion.V3, DataStructure.FakeData );
+			persister.SaveXML( database, "TVTDatabaseV3.xml", DatabaseVersion.V3, DataStructure.FakeData );
 		}
 
 	}

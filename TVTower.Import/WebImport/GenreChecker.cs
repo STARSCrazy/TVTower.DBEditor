@@ -40,25 +40,25 @@ namespace TVTower.Import
 		public const int GENRE_SHOW = 17;
 		public const int IGNORE_GENRE = -1000;
 
-		private List<TVTMovieFlag> GetFlags( int movieDbGenreId )
+		private List<TVTProgrammeFlag> GetFlags( int movieDbGenreId )
 		{
-			var result = new List<TVTMovieFlag>();
+			var result = new List<TVTProgrammeFlag>();
 
 			switch ( movieDbGenreId )
 			{
 				case 16: //Animation = 86					
-					result.Add( TVTMovieFlag.Animation );
+					result.Add( TVTProgrammeFlag.Animation );
 					break;
 				case 9805: //Sport = 2				
 				case 10757: //Sport Film = 9
 					//result.Add( TVTMovieFlag.Sport );
 					break;
 				case 10755: //Short = 6								
-					result.Add( TVTMovieFlag.Culture );
+					result.Add( TVTProgrammeFlag.Culture );
 					break;
 				case 10753: //Film noir = Eigentlich Drama oder Krimi = 9
 				case 10754: //Neo-noir = 2
-					result.Add( TVTMovieFlag.Culture );
+					result.Add( TVTProgrammeFlag.Culture );
 					break;
 				case 10402: //Musik = 24
 				case 22: //Musical = 11

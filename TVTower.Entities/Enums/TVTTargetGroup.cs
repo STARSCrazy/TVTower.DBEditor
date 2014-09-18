@@ -3,6 +3,7 @@ namespace TVTower.Entities
 {
 	public enum TVTTargetGroup
 	{
+		Inhert = -1,
 		All = 0,
 		Children = 1,
 		Teenagers = 2,

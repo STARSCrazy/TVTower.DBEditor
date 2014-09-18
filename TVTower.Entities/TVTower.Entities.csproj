@@ -48,6 +48,7 @@
     <Compile Include="Entities\TVTEntity.cs" />
     <Compile Include="Entities\TVTResource.cs" />
     <Compile Include="Entities\TVTStaff.cs" />
+    <Compile Include="Enums\TVTProductType.cs" />
     <Compile Include="Enums\TVTDistributionChannel.cs" />
     <Compile Include="Enums\TVTNewsEffectType.cs" />
     <Compile Include="Helper\IndexingList.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="Enums\TVTPersonFunction.cs" />
     <Compile Include="Enums\TVTPressureGroup.cs" />
     <Compile Include="Enums\TVTProgrammeGenre.cs" />
-    <Compile Include="Enums\TVTMovieFlag.cs" />
+    <Compile Include="Enums\TVTProgrammeFlag.cs" />
     <Compile Include="Helper\EntityHelper.cs" />
     <Compile Include="ITVTDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

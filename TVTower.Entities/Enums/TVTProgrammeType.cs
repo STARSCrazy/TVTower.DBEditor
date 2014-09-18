@@ -4,12 +4,10 @@
 	{
         Undefined = 0,
         Movie = 1,
-        Series = 2,
-        Show = 3,
-        Reportage = 4,
-        Commercial = 5,
-        CallIn = 6,
-        Event = 7,
-        Misc = 8
+        Show = 2,
+        Reportage = 3,
+        Commercial = 4,
+        Event = 5,
+        Misc = 6
 	}
 }

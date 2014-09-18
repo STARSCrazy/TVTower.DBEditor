@@ -7,6 +7,7 @@ namespace TVTower.Entities
 {
     public enum TVTDistributionChannel
     {
+        Inherit = -1,
         None = 0,
         Sale = 1,
         Auction = 2,

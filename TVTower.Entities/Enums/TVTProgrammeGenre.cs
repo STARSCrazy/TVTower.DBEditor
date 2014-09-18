@@ -3,6 +3,7 @@ namespace TVTower.Entities
 {
 	public enum TVTProgrammeGenre
 	{
+		Inherit = -1,
 		Undefined = 0,
 
 		//Movie-Genre 1+

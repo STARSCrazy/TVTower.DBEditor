@@ -1,8 +1,9 @@
 ﻿
 namespace TVTower.Entities
 {
-	public enum TVTMovieFlag
+	public enum TVTProgrammeFlag
 	{
+		Inhert = -1,
 		Live = 1,			//Genereller Quotenbonus!
 		Animation = 2,		//Bonus bei Kindern / Jugendlichen. Malues bei Rentnern / Managern.
 		Culture = 4,		//Bonus bei Betty und bei Managern
@@ -11,7 +12,6 @@ namespace TVTower.Entities
 		BMovie = 32,		//Nochmal deutlich verringerter Preis. Verringert die Nachteile des Filmalters. Bonus bei Jugendlichen. Malus bei allen anderen Zielgruppen. Bonus in der Nacht!
 		XRated = 64,		//Kleiner Bonus für Jugendliche, Arbeitnehmer, Arbeitslose, (Männer). Kleiner Malus für Kinder, Hausfrauen, Rentner, (Frauen).
 		Paid = 128,			//Call-In-Shows
-		Series = 256,		//Ist ne Serie! Vielleicht besser als den ProgrammeType... so kann auch ne Reportage ne Serie sein.
 
 		//TG_Children,
 		//TG_Teenagers,

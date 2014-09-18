@@ -170,6 +170,7 @@ namespace TVTower.Converter
 				if ( movSrc.parentID == 0 ) //Film
 				{
 					var programme = new TVTProgramme();
+                    programme.ProductType = TVTProductType.Programme;
 					programme.ProgrammeType = TVTProgrammeType.Movie;
 					programme.Approved = movSrc.approved;
 
@@ -191,17 +192,19 @@ namespace TVTower.Converter
 
 					ConvertGenreAndFlags( programme, movSrc );
 
-					if ( programme.Flags.Contains( TVTMovieFlag.Live ) && movSrc.time > 0 )
+					if ( programme.Flags.Contains( TVTProgrammeFlag.Live ) && movSrc.time > 0 )
 						programme.LiveHour = movSrc.time;
 
 					if ( movSrc.xrated )
-						programme.Flags.Add( TVTMovieFlag.XRated );
+						programme.Flags.Add( TVTProgrammeFlag.XRated );
 
 					database.AddProgramme( programme );
 				}
 				else //Serien-Episode
 				{
-					var episode = new TVTEpisode();
+					var episode = new TVTProgramme();
+                    episode.ProductType = TVTProductType.Episode;
+                    episode.ProgrammeType = TVTProgrammeType.Movie;
 					episode.Approved = movSrc.approved;
 					ConvertEpisode( movSrc, episode, database );
 
@@ -215,7 +218,18 @@ namespace TVTower.Converter
 						episode.ViewersRate = -1;
 					episode.EpisodeIndex = movSrc.episode;
 
-					database.AddEpisode( episode );
+                    episode.DistributionChannel = TVTDistributionChannel.Inherit; 
+                    episode.MainGenre = TVTProgrammeGenre.Inherit;
+                    episode.SubGenre = TVTProgrammeGenre.Inherit;
+                    episode.Flags.Add( TVTProgrammeFlag.Inhert );
+
+                    episode.LiveHour = -1;
+
+                    episode.TargetGroups.Add( TVTTargetGroup.Inhert );
+                    episode.ProPressureGroups.Add( TVTPressureGroup.Inhert );
+                    episode.ContraPressureGroups.Add( TVTPressureGroup.Inhert );
+
+					database.AddProgramme( episode );
 				}
 			}
 
@@ -226,7 +240,7 @@ namespace TVTower.Converter
 				var series = allMovies.FirstOrDefault( x => x.AltId.CompareTo( current.Tag ) == 0 );
 				if ( series != null )
 				{
-					series.ProgrammeType = TVTProgrammeType.Series;
+					series.ProductType = TVTProductType.Series;
 					current.SeriesMaster = new CodeKnight.Core.WeakReference<TVTProgramme>( series );
 				}
 				else
@@ -407,7 +421,7 @@ namespace TVTower.Converter
 					break;
 				case 8:  //live
 					movie.ProgrammeType = TVTProgrammeType.Event;
-					movie.Flags.Add( TVTMovieFlag.Live );
+					movie.Flags.Add( TVTProgrammeFlag.Live );
 					break;
 				case 9:  //kidsmovie
 					movie.MainGenre = TVTProgrammeGenre.Family;
@@ -415,7 +429,7 @@ namespace TVTower.Converter
 					break;
 				case 10:  //cartoon
 					movie.MainGenre = TVTProgrammeGenre.Animation;
-					movie.Flags.Add( TVTMovieFlag.Animation );
+					movie.Flags.Add( TVTProgrammeFlag.Animation );
 					break;
 				case 11:  //music
 					movie.ProgrammeType = TVTProgrammeType.Event;
@@ -427,7 +441,7 @@ namespace TVTower.Converter
 					break;
 				case 13:  //culture
 					movie.MainGenre = TVTProgrammeGenre.Documentary;
-					movie.Flags.Add( TVTMovieFlag.Culture );
+					movie.Flags.Add( TVTProgrammeFlag.Culture );
 					break;
 				case 14:  //fantasy
 					movie.ProgrammeType = TVTProgrammeType.Movie;
@@ -448,16 +462,16 @@ namespace TVTower.Converter
 				case 18:  //monumental
 					movie.ProgrammeType = TVTProgrammeType.Movie;
 					movie.MainGenre = TVTProgrammeGenre.Monumental;
-					movie.Flags.Add( TVTMovieFlag.Cult );
+					movie.Flags.Add( TVTProgrammeFlag.Cult );
 					break;
 				case 19:  //fillers
 					movie.ProgrammeType = TVTProgrammeType.Misc;
 					movie.MainGenre = TVTProgrammeGenre.Undefined;
-					movie.Flags.Add( TVTMovieFlag.Trash );
+					movie.Flags.Add( TVTProgrammeFlag.Trash );
 					break;
 				case 20:  //paid programing
 					movie.ProgrammeType = TVTProgrammeType.Commercial;
-					movie.Flags.Add( TVTMovieFlag.Paid );
+					movie.Flags.Add( TVTProgrammeFlag.Paid );
 					break;
 				default:
 					throw new Exception();
