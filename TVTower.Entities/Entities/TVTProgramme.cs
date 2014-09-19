@@ -53,7 +53,7 @@ namespace TVTower.Entities
         public string ImageUrl { get; set; }			//Von hier kann die Bildquelle geladen werden
 
         //Für Serien
-        public List<TVTProgramme> Episodes { get; set; }
+        public List<TVTProgramme> Children { get; set; }
         public TVTMovieAdditional MovieAdditional { get; set; }
 
         //Für Episoden
@@ -88,25 +88,25 @@ namespace TVTower.Entities
             {
                 var EpisodesIndexes = new List<int>();
 
-                if ( Episodes.Count == 0 )
+                if ( Children.Count == 0 )
                     return TVTDataStatus.Incomplete;
 
-                foreach ( var episode in Episodes )
+                foreach ( var children in Children )
                 {
-                    var episodeStatus = episode.RefreshStatus();
-                    if ( episodeStatus == TVTDataStatus.Incorrect || episodeStatus == TVTDataStatus.Incomplete )
+                    var childrenStatus = children.RefreshStatus();
+                    if ( childrenStatus == TVTDataStatus.Incorrect || childrenStatus == TVTDataStatus.Incomplete )
                     {
-                        DataStatus = episodeStatus;
+                        DataStatus = childrenStatus;
                         return DataStatus;
                     }
 
-                    if ( !episode.EpisodeIndex.HasValue || EpisodesIndexes.Contains( episode.EpisodeIndex.Value ) )
+                    if ( !children.EpisodeIndex.HasValue || EpisodesIndexes.Contains( children.EpisodeIndex.Value ) )
                     {
                         DataStatus = TVTDataStatus.Incorrect;
                         return DataStatus;
                     }
                     else
-                        EpisodesIndexes.Add( episode.EpisodeIndex.Value );
+                        EpisodesIndexes.Add( children.EpisodeIndex.Value );
                 }
             }
 
@@ -187,7 +187,7 @@ namespace TVTower.Entities
             }
             else if ( this.ProductType == TVTProductType.Series )
             {
-                Episodes = database.GetEpisodesOfSeries( this.Id ).OrderBy( x => x.EpisodeIndex ).ToList<TVTProgramme>();
+                Children = database.GetEpisodesOfSeries( this.Id ).OrderBy( x => x.EpisodeIndex ).ToList<TVTProgramme>();
                 MasterId = Id.ToString();
             }
         }
