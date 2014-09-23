@@ -40,7 +40,7 @@ namespace TVTower.UnitTests
 		[TestMethod]
 		public void ConvertOldToNewDataTest()
 		{
-			var database = new TVTBindingListDatabase();
+			var database = new TVTBindingListDatabaseOld();
 			database.Initialize();
 
 			using ( var connection = TVTSQLSession.GetSession() )
@@ -85,7 +85,7 @@ namespace TVTower.UnitTests
 		[TestMethod]
 		public void CreateXMLTest()
 		{
-			var database = new TVTBindingListDatabase();
+			var database = new TVTBindingListDatabaseOld();
 			database.Initialize();
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )

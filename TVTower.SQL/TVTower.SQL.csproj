@@ -44,6 +44,7 @@
     <Compile Include="SQLDefinition.cs" />
     <Compile Include="TVTCommandsV3.cs" />
     <Compile Include="SQLReaderOldV2.cs" />
+    <Compile Include="TVTSQLDatabase.cs" />
     <Compile Include="TVTSQLSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TVTCommandsV2.cs" />

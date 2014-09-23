@@ -5,7 +5,7 @@ using TVTower.Entities;
 
 namespace TVTower.DBEditor
 {
-	public class TVTBindingListDatabase : ITVTDatabase
+	public class TVTBindingListDatabaseOld : ITVTDatabase
 	{
 		public SortedBindingList<TVTProgramme> ProgrammeData { get; set; }
 		//public SortedBindingList<TVTEpisode> EpisodeData { get; set; }
@@ -271,6 +271,14 @@ namespace TVTower.DBEditor
 				news.RefreshStatus();
 			}
 		}
+
+        public void Clear()
+        {
+            ProgrammeData.Clear();
+            PersonData.Clear();
+            AdvertisingData.Clear();
+            NewsData.Clear();
+        }
 
 		#endregion
 	}

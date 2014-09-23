@@ -22,5 +22,28 @@ namespace TVTower.DBEditorGUI.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SERVER=localhost;DATABASE=tvtower_new;UID=TVTowerUser;PASSWORD=123")]
+        public string DBConnection {
+            get {
+                return ((string)(this["DBConnection"]));
+            }
+            set {
+                this["DBConnection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"Haftungsausschluss!
+
+Bitte bestätigen Sie durch das Aktivieren der Schaltfläche ""Akzeptieren"", dass Sie alle Einschränkungen bezüglich des Schutz des Namensrechts (§ 12 BGB) als auch des Titelschutzes (§§ 5, 15 MarkenG) bei der Bearbeitung von Film- und Personendaten beachten, sofern Sie nicht alle erforderlichen Berechtigungen besitzen oder in Ihrem Wohnsitz keine Notwendigkeit besteht, solche Rechte einzuholen. Die Autoren dieses Software-Programmes übernehmen keinerlei Haftung.")]
+        public string Disclaimer {
+            get {
+                return ((string)(this["Disclaimer"]));
+            }
+        }
     }
 }

@@ -254,9 +254,7 @@ namespace TVTower.Converter
 			{
 				var ad = new TVTAdvertising();
 
-				ConvertCommon( adSrc, ad, database, true );
-				ad.FakeDescriptionDE = adSrc.description;
-				ad.FakeDescriptionEN = adSrc.descriptionEnglish;
+                ConvertCommonMinimal( adSrc, ad, database );
 				ad.DescriptionDE = null;
 				ad.DescriptionEN = null;
 

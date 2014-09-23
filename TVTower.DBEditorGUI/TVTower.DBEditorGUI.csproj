@@ -12,6 +12,21 @@
     <AssemblyName>TVTower.DBEditorGUI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -45,12 +60,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Disclaimer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Disclaimer.Designer.cs">
+      <DependentUpon>Disclaimer.cs</DependentUpon>
+    </Compile>
     <Compile Include="EntityForms\AdvertisingForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="EntityForms\AdvertisingForm.Designer.cs">
       <DependentUpon>AdvertisingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListViewDefinitions\AdvertisingListViewDefinition.cs" />
+    <Compile Include="ListViewDefinitions\BaseListViewDefinition.cs" />
+    <Compile Include="ListViewDefinitions\IListViewDefinition.cs" />
+    <Compile Include="Controls\TVTGenericColumnHeader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListViewDefinitions\ListViewKey.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +87,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controls\TVTColumnHeader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TVTDatabase.cs" />
+    <Compile Include="TVTEditorApplication.cs" />
+    <EmbeddedResource Include="Disclaimer.resx">
+      <DependentUpon>Disclaimer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EntityForms\AdvertisingForm.resx">
       <DependentUpon>AdvertisingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -75,6 +111,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -86,6 +123,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">
+      <Project>{A12F5069-3DCE-406A-A9AB-42184F211121}</Project>
+      <Name>CodeKnight.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TVTower.Entities\TVTower.Entities.csproj">
       <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>
       <Name>TVTower.Entities</Name>
@@ -94,6 +135,28 @@
       <Project>{CBA79910-0D80-4E84-AAB6-92DE2A99C74D}</Project>
       <Name>TVTower.SQL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

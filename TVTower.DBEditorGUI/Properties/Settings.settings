@@ -1,7 +1,14 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TVTower.DBEditorGUI.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DBConnection" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SERVER=localhost;DATABASE=tvtower_new;UID=TVTowerUser;PASSWORD=123</Value>
+    </Setting>
+    <Setting Name="Disclaimer" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Haftungsausschluss!
+
+Bitte bestätigen Sie durch das Aktivieren der Schaltfläche "Akzeptieren", dass Sie alle Einschränkungen bezüglich des Schutz des Namensrechts (§ 12 BGB) als auch des Titelschutzes (§§ 5, 15 MarkenG) bei der Bearbeitung von Film- und Personendaten beachten, sofern Sie nicht alle erforderlichen Berechtigungen besitzen oder in Ihrem Wohnsitz keine Notwendigkeit besteht, solche Rechte einzuholen. Die Autoren dieses Software-Programmes übernehmen keinerlei Haftung.</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

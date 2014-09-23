@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "DBEditorGUI" )]
-[assembly: AssemblyDescription( "" )]
+[assembly: AssemblyTitle( "TVTower Editor" )]
+[assembly: AssemblyDescription( "Editor for TVTower" )]
 [assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "DBEditorGUI" )]
-[assembly: AssemblyCopyright( "Copyright ©  2014" )]
+[assembly: AssemblyCompany( "http://tvgigant.de" )]
+[assembly: AssemblyProduct( "TVTowerEditor" )]
+[assembly: AssemblyCopyright( "Manuel Vögele ©  2014" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 

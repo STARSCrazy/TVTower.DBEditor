@@ -13,7 +13,7 @@ namespace TVTower.DBEditor
 	{
 		//private SortedBindingList<TVTMovieExtended> movieDataList;
 		//private SortedBindingList<TVTPerson> personDataList;
-		private TVTBindingListDatabase database;
+		private TVTBindingListDatabaseOld database;
 
 		private Thread WorkerThread;
 		private System.Windows.Forms.Timer timer;
@@ -23,7 +23,7 @@ namespace TVTower.DBEditor
 		{
 			InitializeComponent();
 
-			database = new TVTBindingListDatabase();
+			database = new TVTBindingListDatabaseOld();
 			database.Initialize();
 
 			var movieDataList = new SortedBindingList<TVTProgramme>();
@@ -140,7 +140,7 @@ namespace TVTower.DBEditor
 				database.Initialize();
 
 				XmlPersister persister = new XmlPersister();
-				var tempDatabase = new TVTBindingListDatabase();
+				var tempDatabase = new TVTBindingListDatabaseOld();
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );
@@ -155,7 +155,7 @@ namespace TVTower.DBEditor
 			if ( openFileDialog.ShowDialog() == DialogResult.OK )
 			{
 				XmlPersister persister = new XmlPersister();
-				var tempDatabase = new TVTBindingListDatabase();
+				var tempDatabase = new TVTBindingListDatabaseOld();
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
 				database.AddPeople( tempDatabase.GetAllPeople() );

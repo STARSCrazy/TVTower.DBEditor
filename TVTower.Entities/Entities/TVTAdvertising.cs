@@ -2,17 +2,12 @@
 
 namespace TVTower.Entities
 {
-	public class TVTAdvertising : TVTEntity, ITVTNames
+	public class TVTAdvertising : TVTEntity, ITVTNamesBasic
 	{
 		public string TitleDE { get; set; }
 		public string TitleEN { get; set; }
 		public string DescriptionDE { get; set; }
 		public string DescriptionEN { get; set; }
-
-		public string FakeTitleDE { get; set; }
-		public string FakeTitleEN { get; set; }
-		public string FakeDescriptionDE { get; set; }
-		public string FakeDescriptionEN { get; set; }
 
 		public bool Infomercial { get; set; }
 		public int Quality { get; set; }        //Wenn als Infomercial gesendet!

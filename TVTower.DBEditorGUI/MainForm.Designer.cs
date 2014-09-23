@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("gdfdf");
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.listViewAdvertising = new System.Windows.Forms.ListView();
-            this.colHeaderTitleDE = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabControlListViews = new System.Windows.Forms.TabControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.dateiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToDatabaseMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +48,7 @@
             // 
             // mainSplitContainer.Panel1
             // 
-            this.mainSplitContainer.Panel1.Controls.Add(this.listViewAdvertising);
+            this.mainSplitContainer.Panel1.Controls.Add(this.tabControlListViews);
             this.mainSplitContainer.Panel1.Controls.Add(this.menuStrip1);
             this.mainSplitContainer.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             // 
@@ -62,24 +60,14 @@
             this.mainSplitContainer.SplitterDistance = 318;
             this.mainSplitContainer.TabIndex = 0;
             // 
-            // listViewAdvertising
+            // tabControlListViews
             // 
-            this.listViewAdvertising.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colHeaderTitleDE});
-            this.listViewAdvertising.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewAdvertising.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-            this.listViewAdvertising.Location = new System.Drawing.Point(0, 24);
-            this.listViewAdvertising.Name = "listViewAdvertising";
-            this.listViewAdvertising.Size = new System.Drawing.Size(1015, 294);
-            this.listViewAdvertising.TabIndex = 0;
-            this.listViewAdvertising.UseCompatibleStateImageBehavior = false;
-            this.listViewAdvertising.View = System.Windows.Forms.View.Details;
-            // 
-            // colHeaderTitleDE
-            // 
-            this.colHeaderTitleDE.Text = "Titel (de)";
-            this.colHeaderTitleDE.Width = 170;
+            this.tabControlListViews.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlListViews.Location = new System.Drawing.Point(0, 24);
+            this.tabControlListViews.Name = "tabControlListViews";
+            this.tabControlListViews.SelectedIndex = 0;
+            this.tabControlListViews.Size = new System.Drawing.Size(1015, 294);
+            this.tabControlListViews.TabIndex = 2;
             // 
             // menuStrip1
             // 
@@ -102,8 +90,8 @@
             // connectToDatabaseMenuItem
             // 
             this.connectToDatabaseMenuItem.Name = "connectToDatabaseMenuItem";
-            this.connectToDatabaseMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.connectToDatabaseMenuItem.Text = "Verbinde Datenbank";
+            this.connectToDatabaseMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.connectToDatabaseMenuItem.Text = "Verbinde mit Datenbank";
             this.connectToDatabaseMenuItem.Click += new System.EventHandler(this.connectToDatabaseMenuItem_Click);
             // 
             // MainForm
@@ -114,6 +102,7 @@
             this.Controls.Add(this.mainSplitContainer);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.mainSplitContainer.Panel1.ResumeLayout(false);
             this.mainSplitContainer.Panel1.PerformLayout();
@@ -128,11 +117,10 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer mainSplitContainer;
-        private System.Windows.Forms.ListView listViewAdvertising;
-        private System.Windows.Forms.ColumnHeader colHeaderTitleDE;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem dateiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectToDatabaseMenuItem;
+        private System.Windows.Forms.TabControl tabControlListViews;
     }
 }
 

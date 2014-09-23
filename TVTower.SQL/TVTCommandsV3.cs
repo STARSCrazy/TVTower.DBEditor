@@ -128,10 +128,7 @@ namespace TVTower.SQL
 			var definition = new SQLDefinition<TVTAdvertising>();
 			definition.Table = "tvt_advertisings";
 
-			AddNamesSQLDefinition( definition );
-
-			definition.Add( x => x.FakeDescriptionDE );
-			definition.Add( x => x.FakeDescriptionEN );
+            AddNamesBasicSQLDefinition( definition );
 
 			definition.Add( x => x.Infomercial );
 			definition.Add( x => x.Quality );

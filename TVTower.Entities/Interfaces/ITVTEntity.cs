@@ -1,8 +1,9 @@
 ﻿using System;
+using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
-	public interface ITVTEntity
+    public interface ITVTEntity : IIdEntity
 	{
 		Guid Id { get; set; }
 		string AltId { get; set; }

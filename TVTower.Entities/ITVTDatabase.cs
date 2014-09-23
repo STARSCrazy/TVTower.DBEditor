@@ -8,8 +8,8 @@ namespace TVTower.Entities
 		void AddProgramme( TVTProgramme movie );
 		void AddProgrammes( IEnumerable<TVTProgramme> movies );
 
-        //void AddEpisode( TVTEpisode episode );
-        //void AddEpisodes( IEnumerable<TVTEpisode> episodes );
+		//void AddEpisode( TVTEpisode episode );
+		//void AddEpisodes( IEnumerable<TVTEpisode> episodes );
 
 		void AddPerson( TVTPerson person );
 		void AddPeople( IEnumerable<TVTPerson> people );
@@ -22,7 +22,7 @@ namespace TVTower.Entities
 
 		IEnumerable<TVTProgramme> GetAllProgrammes( bool withSeries = false, bool withEpisodes = false );
 		IEnumerable<TVTProgramme> GetAllSeries();
-        IEnumerable<TVTProgramme> GetAllEpisodes();
+		IEnumerable<TVTProgramme> GetAllEpisodes();
 		IEnumerable<TVTPerson> GetAllPeople();
 		IEnumerable<TVTAdvertising> GetAllAdvertisings();
 		IEnumerable<TVTNews> GetAllNews();
@@ -35,5 +35,9 @@ namespace TVTower.Entities
 		TVTPerson GetPersonByName( string name );
 
 		void RefreshPersonProgrammeCount();
+		void RefreshReferences();
+		void RefreshStatus();
+
+		void Clear();
 	}
 }

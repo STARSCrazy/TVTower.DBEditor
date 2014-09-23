@@ -3,7 +3,7 @@ using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
-	public abstract class TVTEntity : ITVTEntity, IIdEntity
+	public abstract class TVTEntity : ITVTEntity
 	{
 		public Guid Id { get; set; }
 		public string AltId { get; set; }
