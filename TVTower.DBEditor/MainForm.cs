@@ -63,7 +63,7 @@ namespace TVTower.DBEditor
 
 		private void btnExcelExport_Click( object sender, EventArgs e )
 		{
-			XmlPersister persister = new XmlPersister();
+			XmlPersisterV3 persister = new XmlPersisterV3();
 			persister.SaveXML( database, "ExportDatabaseFull.xml", DatabaseVersion.V3, DataStructure.Full );
 		}
 
@@ -127,7 +127,7 @@ namespace TVTower.DBEditor
 
 		private void btnSaveOldFormat_Click( object sender, EventArgs e )
 		{
-			XmlPersister persister = new XmlPersister();
+			XmlPersisterV3 persister = new XmlPersisterV3();
 			persister.SaveXML( database, "ExportDatabaseFakeDataOldFormat.xml", DatabaseVersion.V2, DataStructure.FakeData );
 		}
 
@@ -139,7 +139,7 @@ namespace TVTower.DBEditor
 			{
 				database.Initialize();
 
-				XmlPersister persister = new XmlPersister();
+				XmlPersisterV3 persister = new XmlPersisterV3();
 				var tempDatabase = new TVTBindingListDatabaseOld();
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
@@ -154,7 +154,7 @@ namespace TVTower.DBEditor
 
 			if ( openFileDialog.ShowDialog() == DialogResult.OK )
 			{
-				XmlPersister persister = new XmlPersister();
+				XmlPersisterV3 persister = new XmlPersisterV3();
 				var tempDatabase = new TVTBindingListDatabaseOld();
 				tempDatabase.Initialize();
 				persister.LoadXML( openFileDialog.FileName, tempDatabase );
@@ -172,31 +172,31 @@ namespace TVTower.DBEditor
 
 		private void miSaveAll_Click( object sender, EventArgs e )
 		{
-			XmlPersister persister = new XmlPersister();
+			XmlPersisterV3 persister = new XmlPersisterV3();
 			persister.SaveXML( database, "TVTDatabaseV3Full.xml", DatabaseVersion.V3, DataStructure.Full );
 		}
 
 		private void miExportV3Original_Click( object sender, EventArgs e )
 		{
-			XmlPersister persister = new XmlPersister();
+			XmlPersisterV3 persister = new XmlPersisterV3();
 			persister.SaveXML( database, "ExportTVTDatabaseV3Original.xml", DatabaseVersion.V3, DataStructure.OriginalData );
 		}
 
 		private void miExportV3Fake_Click( object sender, EventArgs e )
 		{
-			XmlPersister persister = new XmlPersister();
+			XmlPersisterV3 persister = new XmlPersisterV3();
 			persister.SaveXML( database, "ExportTVTDatabaseV3Fake.xml", DatabaseVersion.V3, DataStructure.FakeData );
 		}
 
 		private void miExportV2Original_Click( object sender, EventArgs e )
 		{
-			XmlPersister persister = new XmlPersister();
+			XmlPersisterV3 persister = new XmlPersisterV3();
 			persister.SaveXML( database, "ExportTVTDatabaseV2Original.xml", DatabaseVersion.V2, DataStructure.OriginalData );
 		}
 
 		private void miExportV2Fake_Click( object sender, EventArgs e )
 		{
-			XmlPersister persister = new XmlPersister();
+			XmlPersisterV3 persister = new XmlPersisterV3();
 			persister.SaveXML( database, "ExportTVTDatabaseV2Fake.xml", DatabaseVersion.V2, DataStructure.FakeData );
 		}
 

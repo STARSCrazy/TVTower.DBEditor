@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
@@ -83,6 +84,45 @@ namespace TVTower.UnitTests
 		}
 
 		[TestMethod]
+		[DeploymentItem( "TestData\\database.xml" )]
+		public void ReadXMLV2Test()
+		{
+			Assert.IsTrue( File.Exists( "database.xml" ) );
+
+			var database = new TVTBindingListDatabaseOld();
+			database.Initialize();
+
+			var persister = new XmlPersisterV2();
+			persister.LoadXML( "database.xml", database );
+
+			//var database = new TVTBindingListDatabaseOld();
+			//database.Initialize();
+
+			//using ( var connection = TVTSQLSession.GetSessionNewDB() )
+			//{
+			//    var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), "master_id, episode_index, fake_title_de, title_de" );
+			//    database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
+
+			//    //var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), "fake_title_de, title_de" );
+			//    //database.AddEpisodes( episodes );
+
+			//    var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), "fake_title_de, title_de" );
+			//    database.AddAdvertisings( ads );
+
+			//    var people = TVTCommandsV3.Read<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), "fake_last_name, fake_first_name, last_name" );
+			//    database.AddPeople( people );
+
+			//    var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), "title_de" );
+			//    database.AddNews( news );
+
+			//    database.RefreshReferences();
+			//}
+
+			//var persister = new XmlPersister();
+			//persister.SaveXML( database, "TVTDatabaseV3.xml", DatabaseVersion.V3, DataStructure.FakeData );
+		}
+
+		[TestMethod]
 		public void CreateXMLTest()
 		{
 			var database = new TVTBindingListDatabaseOld();
@@ -90,11 +130,11 @@ namespace TVTower.UnitTests
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )
 			{
-                var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), "master_id, episode_index, fake_title_de, title_de" );
+				var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), "master_id, episode_index, fake_title_de, title_de" );
 				database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
 
-                //var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), "fake_title_de, title_de" );
-                //database.AddEpisodes( episodes );
+				//var episodes = TVTCommandsV3.Read<TVTEpisode>( connection, TVTCommandsV3.GetEpisodeSQLDefinition(), "fake_title_de, title_de" );
+				//database.AddEpisodes( episodes );
 
 				var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), "fake_title_de, title_de" );
 				database.AddAdvertisings( ads );
@@ -108,7 +148,7 @@ namespace TVTower.UnitTests
 				database.RefreshReferences();
 			}
 
-			var persister = new XmlPersister();
+			var persister = new XmlPersisterV3();
 			persister.SaveXML( database, "TVTDatabaseV3.xml", DatabaseVersion.V3, DataStructure.FakeData );
 		}
 

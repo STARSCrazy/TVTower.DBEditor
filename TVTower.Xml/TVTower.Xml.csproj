@@ -43,14 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="XmlPersisterV2.cs" />
     <Compile Include="Persister\TVTSeriesMoviePersister.cs" />
     <Compile Include="Persister\TVTMovieExtendedPersister.cs" />
-    <Compile Include="Persister\TVTMoviePersister.cs" />
+    <Compile Include="Persister\TVTProgrammePersisterV2.cs" />
     <Compile Include="Persister\TVTEntityPersister.cs" />
-    <Compile Include="Persister\TVTEpisodePersister.cs" />
+    <Compile Include="Persister\TVTEpisodePersisterV2.cs" />
     <Compile Include="XmlPersisterExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlPersister.cs" />
+    <Compile Include="XmlPersisterV3.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">

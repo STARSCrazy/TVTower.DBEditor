@@ -170,7 +170,7 @@ namespace TVTower.Converter
 				if ( movSrc.parentID == 0 ) //Film
 				{
 					var programme = new TVTProgramme();
-                    programme.ProductType = TVTProductType.Programme;
+					programme.ProductType = TVTProductType.Programme;
 					programme.ProgrammeType = TVTProgrammeType.Movie;
 					programme.Approved = movSrc.approved;
 
@@ -203,8 +203,8 @@ namespace TVTower.Converter
 				else //Serien-Episode
 				{
 					var episode = new TVTProgramme();
-                    episode.ProductType = TVTProductType.Episode;
-                    episode.ProgrammeType = TVTProgrammeType.Movie;
+					episode.ProductType = TVTProductType.Episode;
+					episode.ProgrammeType = TVTProgrammeType.Movie;
 					episode.Approved = movSrc.approved;
 					ConvertEpisode( movSrc, episode, database );
 
@@ -218,23 +218,23 @@ namespace TVTower.Converter
 						episode.ViewersRate = -1;
 					episode.EpisodeIndex = movSrc.episode;
 
-                    episode.DistributionChannel = TVTDistributionChannel.Inherit; 
-                    episode.MainGenre = TVTProgrammeGenre.Inherit;
-                    episode.SubGenre = TVTProgrammeGenre.Inherit;
-                    episode.Flags.Add( TVTProgrammeFlag.Inhert );
+					episode.DistributionChannel = TVTDistributionChannel.Inherit;
+					episode.MainGenre = TVTProgrammeGenre.Inherit;
+					episode.SubGenre = TVTProgrammeGenre.Inherit;
+					episode.Flags.Add( TVTProgrammeFlag.Inhert );
 
-                    episode.LiveHour = -1;
+					episode.LiveHour = -1;
 
-                    episode.TargetGroups.Add( TVTTargetGroup.Inhert );
-                    episode.ProPressureGroups.Add( TVTPressureGroup.Inhert );
-                    episode.ContraPressureGroups.Add( TVTPressureGroup.Inhert );
+					episode.TargetGroups.Add( TVTTargetGroup.Inhert );
+					episode.ProPressureGroups.Add( TVTPressureGroup.Inhert );
+					episode.ContraPressureGroups.Add( TVTPressureGroup.Inhert );
 
 					database.AddProgramme( episode );
 				}
 			}
 
 			//Nachträglich die Parents auf IsSeries setzen
-			var allMovies = database.GetAllProgrammes();
+			var allMovies = database.GetAllProgrammes( true );
 			foreach ( var current in database.GetAllEpisodes() )
 			{
 				var series = allMovies.FirstOrDefault( x => x.AltId.CompareTo( current.Tag ) == 0 );
@@ -254,7 +254,7 @@ namespace TVTower.Converter
 			{
 				var ad = new TVTAdvertising();
 
-                ConvertCommonMinimal( adSrc, ad, database );
+				ConvertCommonMinimal( adSrc, ad, database );
 				ad.DescriptionDE = null;
 				ad.DescriptionEN = null;
 

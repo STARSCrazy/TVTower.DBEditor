@@ -21,7 +21,7 @@ namespace TVTower.Xml
         OriginalData
     }
 
-    public class XmlPersister
+    public class XmlPersisterV3
     {
         public const int CURRENT_VERSION = 3;
 

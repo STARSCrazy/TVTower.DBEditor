@@ -3,12 +3,12 @@ using TVTower.Entities;
 
 namespace TVTower.Xml.Persister
 {
-    public class TVTEpisodePersister<T> : TVTEntityPersister<T>
+    public class TVTEpisodePersisterV2<T> : TVTEntityPersisterV2<T>
         where T : ITVTEpisode
     {
-        public override void Load(XmlNode xmlNode, T episode, ITVTDatabase database, DatabaseVersion dbVersion, DataStructure dataStructure)
+        public override void Load(XmlNode xmlNode, T episode, ITVTDatabase database)
         {
-            //base.Load(xmlNode, episode, database, dbVersion, dataStructure);
+            base.Load(xmlNode, episode, database);
 
             //foreach (var movieChild in xmlNode.ChildNodes)
             //{
