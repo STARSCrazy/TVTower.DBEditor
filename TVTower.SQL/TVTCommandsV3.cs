@@ -458,6 +458,7 @@ namespace TVTower.SQL
 		{
 			definition.Add( x => x.DataType );
 			definition.Add( x => x.DataStatus );
+            definition.Add( x => x.DataRoot );
 			definition.Add( x => x.Approved );
 			definition.Add( x => x.AdditionalInfo );
 

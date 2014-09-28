@@ -12,6 +12,7 @@ namespace TVTower.Entities
 
 		public TVTDataType DataType { get; set; }
 		public TVTDataStatus DataStatus { get; set; }
+        public TVTDataRoot DataRoot { get; set; }
 
 		public object Tag { get; set; }
 		public string AdditionalInfo { get; set; }
@@ -20,6 +21,8 @@ namespace TVTower.Entities
 		public string CreatorId { get; set; }
 		public string EditorId { get; set; }
 		public DateTime LastModified { get; set; }
+
+        public bool Changed { get; set; } //Changed-Flag für das schreiben in die DB.
 
 		public TVTEntity MySelf
 		{

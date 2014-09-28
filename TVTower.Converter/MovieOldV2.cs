@@ -23,6 +23,6 @@ namespace TVTower.Converter
         public bool approved;
         public int time;
         public bool deleted;
-        public bool custom;
+        public bool custom;        
     }
 }

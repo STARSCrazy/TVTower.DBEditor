@@ -177,105 +177,105 @@ namespace TVTower.DBEditorGUI
 
 		#endregion
 
-        public void RefreshPersonProgrammeCount()
-        {
-            foreach ( var person in this.PersonData )
-            {
-                person.ProgrammeCount = 0;
-            }
+		public void RefreshPersonProgrammeCount()
+		{
+			foreach ( var person in this.PersonData )
+			{
+				person.ProgrammeCount = 0;
+			}
 
-            foreach ( var movie in this.ProgrammeData )
-            {
-                foreach ( var staff in movie.Staff )
-                {
-                    var currPerson = GetPersonById( staff.Person.Id );
-                    currPerson.ProgrammeCount++;
-                }
-            }
+			foreach ( var movie in this.ProgrammeData )
+			{
+				foreach ( var staff in movie.Staff )
+				{
+					var currPerson = GetPersonById( staff.Person.Id );
+					currPerson.ProgrammeCount++;
+				}
+			}
 
-            //foreach ( var episode in this.EpisodeData )
-            //{
-            //    foreach ( var staff in episode.Staff )
-            //    {
-            //        var currPerson = GetPersonById( staff.Person.Id );
-            //        currPerson.ProgrammeCount++;
-            //    }
-            //}
+			//foreach ( var episode in this.EpisodeData )
+			//{
+			//    foreach ( var staff in episode.Staff )
+			//    {
+			//        var currPerson = GetPersonById( staff.Person.Id );
+			//        currPerson.ProgrammeCount++;
+			//    }
+			//}
 
-            foreach ( var person in PersonData )
-            {
-                if ( person.ProgrammeCount >= 8 )
-                    person.Prominence = 1;
-                else if ( person.ProgrammeCount >= 4 )
-                    person.Prominence = 2;
-                else
-                    person.Prominence = 3;
-            }
-        }
+			foreach ( var person in PersonData )
+			{
+				if ( person.ProgrammeCount >= 8 )
+					person.Prominence = 1;
+				else if ( person.ProgrammeCount >= 4 )
+					person.Prominence = 2;
+				else
+					person.Prominence = 3;
+			}
+		}
 
-        public void RefreshReferences()
-        {
-            foreach ( var person in this.PersonData )
-            {
-                person.RefreshReferences( this );
-            }
+		public void RefreshReferences()
+		{
+			foreach ( var person in this.PersonData )
+			{
+				person.RefreshReferences( this );
+			}
 
-            //Episode muss vor Programmes kommen
-            foreach ( var episode in this.ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode ) )
-            {
-                episode.RefreshReferences( this );
-            }
+			//Episode muss vor Programmes kommen
+			foreach ( var episode in this.ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode ) )
+			{
+				episode.RefreshReferences( this );
+			}
 
-            foreach ( var programme in this.ProgrammeData )
-            {
-                programme.RefreshReferences( this );
-            }
+			foreach ( var programme in this.ProgrammeData )
+			{
+				programme.RefreshReferences( this );
+			}
 
-            foreach ( var advertising in this.AdvertisingData )
-            {
-                advertising.RefreshReferences( this );
-            }
+			foreach ( var advertising in this.AdvertisingData )
+			{
+				advertising.RefreshReferences( this );
+			}
 
-            foreach ( var news in this.NewsData )
-            {
-                news.RefreshReferences( this );
-            }
-        }
+			foreach ( var news in this.NewsData )
+			{
+				news.RefreshReferences( this );
+			}
+		}
 
-        public void RefreshStatus()
-        {
-            foreach ( var person in this.PersonData )
-            {
-                person.RefreshStatus();
-            }
+		public void RefreshStatus()
+		{
+			foreach ( var person in this.PersonData )
+			{
+				person.RefreshStatus();
+			}
 
-            foreach ( var programme in this.ProgrammeData )
-            {
-                programme.RefreshStatus();
-            }
+			foreach ( var programme in this.ProgrammeData )
+			{
+				programme.RefreshStatus();
+			}
 
-            //foreach ( var episode in this.EpisodeData )
-            //{
-            //    episode.RefreshStatus();
-            //}
+			//foreach ( var episode in this.EpisodeData )
+			//{
+			//    episode.RefreshStatus();
+			//}
 
-            foreach ( var advertising in this.AdvertisingData )
-            {
-                advertising.RefreshStatus();
-            }
+			foreach ( var advertising in this.AdvertisingData )
+			{
+				advertising.RefreshStatus();
+			}
 
-            foreach ( var news in this.NewsData )
-            {
-                news.RefreshStatus();
-            }
-        }
+			foreach ( var news in this.NewsData )
+			{
+				news.RefreshStatus();
+			}
+		}
 
-        public void Clear()
-        {
-            ProgrammeData.Clear();
-            PersonData.Clear();
-            AdvertisingData.Clear();
-            NewsData.Clear();
-        }
+		public void Clear()
+		{
+			ProgrammeData.Clear();
+			PersonData.Clear();
+			AdvertisingData.Clear();
+			NewsData.Clear();
+		}
 	}
 }
