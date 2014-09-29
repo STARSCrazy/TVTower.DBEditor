@@ -151,11 +151,11 @@ namespace TVTower.Xml
 				switch ( movieChild.Name )
 				{
 					case "title":
-						if ( isFake )
-							result.titleFake = movieChild.GetElementValue();
-						else
+						//if ( isFake )
+						//    result.titleFake = movieChild.GetElementValue();
+						//else
 							result.title = movieChild.GetElementValue();
-						break;
+						//break;
 						break;
 					case "description":
 						result.description = movieChild.GetElementValue();

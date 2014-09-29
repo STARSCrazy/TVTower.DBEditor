@@ -259,8 +259,8 @@ namespace TVTower.Converter
 				ad.DataRoot = dataRoot;
 
 				ConvertCommonMinimal( adSrc, ad, database );
-				ad.DescriptionDE = null;
-				ad.DescriptionEN = null;
+				ad.DescriptionDE = adSrc.description;
+				ad.DescriptionEN = adSrc.descriptionEnglish;
 
 				ad.CreatorId = adSrc.creatorID;
 				ad.EditorId = adSrc.editorID;

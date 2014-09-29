@@ -178,11 +178,14 @@ namespace TVTower.Database
 		public TVTNews GetNewsThreadInitial( string threadId )
 		{
 			var results = NewsData.Where( x => x.NewsThreadId == threadId && x.NewsType == TVTNewsType.InitialNews );
+            var t2 = results.ToList();
 
-			if ( results.Count() == 1 )
-				return results.First();
-			else
-				throw new Exception( "More than one thread initial!" );
+            if ( results.Count() == 1 )
+                return results.First();
+            else if ( results.Count() == 0 )
+                return null;
+            else
+                throw new Exception( "More than one thread initial!" );
 		}
 
 		#endregion

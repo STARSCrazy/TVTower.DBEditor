@@ -65,6 +65,26 @@ namespace TVTower.SQL
 					changedNews.ToList().ForEach( x => { x.IsChanged = false; } );
 				}
 
+                {
+                    var newAds = database.GetAllAdvertisings().Where( x => x.IsNew );
+                    TVTCommandsV3.Insert<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), newAds );
+                    newAds.ToList().ForEach( x => { x.IsNew = false; x.IsChanged = false; } );
+
+                    var changedAds = database.GetAllAdvertisings().Where( x => x.IsChanged );
+                    TVTCommandsV3.Update<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), changedAds );
+                    changedAds.ToList().ForEach( x => { x.IsChanged = false; } );
+                }
+
+                {
+                    var newPeople = database.GetAllPeople().Where( x => x.IsNew );
+                    TVTCommandsV3.Insert<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), newPeople );
+                    newPeople.ToList().ForEach( x => { x.IsNew = false; x.IsChanged = false; } );
+
+                    var changedPeople = database.GetAllPeople().Where( x => x.IsChanged );
+                    TVTCommandsV3.Update<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), changedPeople );
+                    changedPeople.ToList().ForEach( x => { x.IsChanged = false; } );
+                }
+
 				//database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
 				//database.AddProgrammes( programmes );
 

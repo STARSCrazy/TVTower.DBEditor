@@ -25,7 +25,7 @@ namespace TVTower.Xml
     {
         public const int CURRENT_VERSION = 3;
 
-        public void SaveXML( ITVTDatabase database, string filename, DatabaseVersion dbVersion, DataStructure dataStructure )
+        public void SaveXML( ITVTDatabase database, string filename, DatabaseVersion dbVersion, DataStructure dataStructure, bool onlyApproved = true )
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -51,7 +51,8 @@ namespace TVTower.Xml
 
                 foreach ( var movie in database.GetAllProgrammes( true, false ) )
                 {
-                    SetProgrammeDetailNode( doc, allmovies, movie, dbVersion, dataStructure );
+                    if ( movie.Approved || !onlyApproved )
+                        SetProgrammeDetailNode( doc, allmovies, movie, dbVersion, dataStructure );
                 }
             }
 
@@ -76,7 +77,7 @@ namespace TVTower.Xml
                 {
                     person.RefreshStatus();
 
-                    if ( person.DataStatus == TVTDataStatus.Approved && person.Approved && person.Prominence != 3 )
+                    if ( ( person.DataStatus == TVTDataStatus.Approved && person.Approved || !onlyApproved ) && person.Prominence != 3 )
                         SetCelebrityPersonDetailNode( doc, allpeople, person, dbVersion, dataStructure );
                 }
             }
@@ -91,7 +92,7 @@ namespace TVTower.Xml
                 {
                     if ( person.Prominence == 3 )
                     {
-                        if ( person.DataStatus == TVTDataStatus.Approved && person.Approved && person.Prominence == 3 )
+                        if ( ( person.DataStatus == TVTDataStatus.Approved && person.Approved || !onlyApproved ) && person.Prominence == 3 )
                             SetInsignificantPersonDetailNode( doc, allpeople, person, dbVersion, dataStructure );
                     }
                 }
@@ -105,7 +106,7 @@ namespace TVTower.Xml
 
                 foreach ( var ad in database.GetAllAdvertisings() )
                 {
-                    if ( ad.Approved )
+                    if ( ad.Approved || !onlyApproved )
                         SetAdvertisingDetailNode( doc, allads, ad, dbVersion, dataStructure );
                 }
             }
@@ -118,7 +119,7 @@ namespace TVTower.Xml
 
                 foreach ( var news in database.GetAllNews() )
                 {
-                    if ( news.Approved )
+                    if ( news.Approved || !onlyApproved )
                         SetNewsDetailNode( doc, allnews, news, dbVersion, dataStructure );
                 }
             }

@@ -15,7 +15,7 @@ namespace TVTower.Entities
 			Id = Guid.NewGuid();
 		}
 
-		public TVTStaff(TVTPerson person, TVTPersonFunction function)
+		public TVTStaff(TVTPerson person, TVTPersonFunction function, int? index = null)
 		{
 			if ( person == null )
 				throw new ArgumentNullException();
@@ -23,6 +23,8 @@ namespace TVTower.Entities
 			Id = Guid.NewGuid();
 			Person = person;
 			Function = function;
+            if ( index.HasValue )
+                Index = index.Value;
 		}
 
 		public int SortIndex()

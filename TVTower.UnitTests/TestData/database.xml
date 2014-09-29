@@ -1993,7 +1993,7 @@ Ein Muss für jede Hausfrau, ein Fluch für harte Männer.</description>
 			<episode number="2">
 				<title>Renate aus Chemnitz</title>
 				<description>Erika trifft auf die 105jährige Renate aus Chemnitz. Kriegsjahre, Besatzungszeit, Wendejahre aber auch das neue Millenium werden thematisiert. Authentisch!</description>
-				<data  director="Gustav Klein" year="2001" genre="15" 	price="25"	critics="20"	speed="5" />
+				<data  year="2001" genre="15" 	price="25"	critics="20"	speed="5" />
 			</episode>
 			<episode number="3">
 				<title>Erich aus Köln</title>
