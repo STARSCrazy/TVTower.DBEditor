@@ -1,5 +1,4 @@
 ﻿using System;
-using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
@@ -12,7 +11,7 @@ namespace TVTower.Entities
 
 		public TVTDataType DataType { get; set; }
 		public TVTDataStatus DataStatus { get; set; }
-        public TVTDataRoot DataRoot { get; set; }
+		public TVTDataRoot DataRoot { get; set; }
 
 		public object Tag { get; set; }
 		public string AdditionalInfo { get; set; }
@@ -22,7 +21,8 @@ namespace TVTower.Entities
 		public string EditorId { get; set; }
 		public DateTime LastModified { get; set; }
 
-        public bool Changed { get; set; } //Changed-Flag für das schreiben in die DB.
+		public bool IsNew { get; set; } //IsNew-Flag für das schreiben in die DB.
+		public bool IsChanged { get; set; } //IsChanged-Flag für das schreiben in die DB.
 
 		public TVTEntity MySelf
 		{

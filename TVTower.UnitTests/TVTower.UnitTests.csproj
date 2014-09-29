@@ -54,6 +54,10 @@
       <Project>{AFD86351-F554-4DBA-9505-76D6E4008279}</Project>
       <Name>TVTower.Converter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TVTower.Database\TVTower.Database.csproj">
+      <Project>{136F71C1-7EA4-4256-A93F-23751E8AC679}</Project>
+      <Name>TVTower.Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TVTower.DBEditorGUI\TVTower.DBEditorGUI.csproj">
       <Project>{05974C12-A448-406B-A98A-BB3C59D95BC9}</Project>
       <Name>TVTower.DBEditorGUI</Name>

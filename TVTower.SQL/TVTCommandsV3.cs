@@ -24,7 +24,7 @@ namespace TVTower.SQL
 		public static void AddNamesBasicSQLDefinition<T>( SQLDefinition<T> definition )
 			where T : ITVTNamesBasic
 		{
-			definition.Add( x => x.Id );
+			definition.Add( x => x.Id ).IsKeyField = true;
 			definition.Add( x => x.TitleDE );
 			definition.Add( x => x.TitleEN );
 			definition.Add( x => x.DescriptionDE );
@@ -49,7 +49,7 @@ namespace TVTower.SQL
 			definition.Add( x => x.FakeDescriptionDE );
 			definition.Add( x => x.FakeDescriptionEN );
 
-            definition.Add( x => x.ProductType );
+			definition.Add( x => x.ProductType );
 			definition.Add( x => x.ProgrammeType );
 			definition.Add( x => x.Country );
 			definition.Add( x => x.Year );
@@ -82,8 +82,8 @@ namespace TVTower.SQL
 			definition.Add( x => x.ViewersRate );
 			definition.Add( x => x.BoxOfficeRate );
 
-            definition.Add( x => x.MasterId );
-            definition.Add( x => x.EpisodeIndex );
+			definition.Add( x => x.MasterId );
+			definition.Add( x => x.EpisodeIndex );
 
 			//Zusatzinfos
 			AdditionalFields( definition );
@@ -93,42 +93,42 @@ namespace TVTower.SQL
 			return definition;
 		}
 
-        //public static SQLDefinition<TVTEpisode> GetEpisodeSQLDefinition()
-        //{
-        //    var definition = new SQLDefinition<TVTEpisode>();
-        //    definition.Table = "tvt_episodes";
+		//public static SQLDefinition<TVTEpisode> GetEpisodeSQLDefinition()
+		//{
+		//    var definition = new SQLDefinition<TVTEpisode>();
+		//    definition.Table = "tvt_episodes";
 
-        //    AddNamesSQLDefinition( definition );
+		//    AddNamesSQLDefinition( definition );
 
-        //    definition.Add( x => x.FakeDescriptionDE );
-        //    definition.Add( x => x.FakeDescriptionEN );
+		//    definition.Add( x => x.FakeDescriptionDE );
+		//    definition.Add( x => x.FakeDescriptionEN );
 
-        //    //definition.Add( x => x.Director, null, "_id" );
-        //    //definition.Add( x => x.Participants, "participant1_id", null, 0 );
-        //    //definition.Add( x => x.Participants, "participant2_id", null, 1 );
-        //    //definition.Add( x => x.Participants, "participant3_id", null, 2 );
+		//    //definition.Add( x => x.Director, null, "_id" );
+		//    //definition.Add( x => x.Participants, "participant1_id", null, 0 );
+		//    //definition.Add( x => x.Participants, "participant2_id", null, 1 );
+		//    //definition.Add( x => x.Participants, "participant3_id", null, 2 );
 
-        //    definition.Add( x => x.CriticsRate );
-        //    definition.Add( x => x.ViewersRate );
+		//    definition.Add( x => x.CriticsRate );
+		//    definition.Add( x => x.ViewersRate );
 
-        //    //definition.Add(x => x.SeriesMaster, "series_id");
-        //    definition.Add( x => x.SeriesId, "series_id" );
-        //    definition.Add( x => x.EpisodeIndex );
+		//    //definition.Add(x => x.SeriesMaster, "series_id");
+		//    definition.Add( x => x.SeriesId, "series_id" );
+		//    definition.Add( x => x.EpisodeIndex );
 
-        //    //Zusatzinfos
-        //    AdditionalFields( definition );
+		//    //Zusatzinfos
+		//    AdditionalFields( definition );
 
-        //    definition.AddSubDefinition( x => x.Staff, GetStaffSQLDefinition() );
+		//    definition.AddSubDefinition( x => x.Staff, GetStaffSQLDefinition() );
 
-        //    return definition;
-        //}
+		//    return definition;
+		//}
 
 		public static SQLDefinition<TVTAdvertising> GetAdvertisingSQLDefinition()
 		{
 			var definition = new SQLDefinition<TVTAdvertising>();
 			definition.Table = "tvt_advertisings";
 
-            AddNamesBasicSQLDefinition( definition );
+			AddNamesBasicSQLDefinition( definition );
 
 			definition.Add( x => x.Infomercial );
 			definition.Add( x => x.Quality );
@@ -340,6 +340,60 @@ namespace TVTower.SQL
 		//    return result;
 		//}
 
+		public static void Update<T>( MySqlConnection connection, SQLDefinition<T> definition, IEnumerable<T> elements ) where T : IIdEntity
+		{
+			//var command = connection.CreateCommand();
+			//command.CommandText = "UPDATE " + definition.Table + " SET ";
+			//command.CommandText = "UPDATE " + definition.Table + " (" + definition.GetFieldNames( ',' ) + ") VALUES (" + definition.GetFieldNames( ',', "?" ) + ")";
+
+			foreach ( var element in elements )
+			{
+				var command = connection.CreateCommand();
+				command.CommandText = "UPDATE " + connection.Database + "." + definition.Table + " SET ";
+
+				bool IsFirst = true;
+
+				var enumerator = definition.GetEnumerator();
+				while ( enumerator.MoveNext() )
+				{
+					var field = enumerator.Current;
+					if ( !field.IsKeyField )
+					{
+						if ( !IsFirst )
+							command.CommandText += ", ";
+
+						command.CommandText += string.Format( "{0} = ?{0}", field.FieldName );
+						IsFirst = false;
+					}
+					//	var field = enumerator.Current;
+					command.Parameters.AddWithValue( "?" + field.FieldName, field.GetValue( element ) );
+				}
+				command.CommandText += " WHERE id = '" + element.Id.ToString() + "'";
+				command.ExecuteNonQuery();
+
+				//if ( definition.SubDefinitions.Count > 0 )
+				//{
+				//    foreach ( var subDef in definition.SubDefinitions )
+				//    {
+				//        var subDefinition = subDef.Value;
+
+				//        var fieldDef = subDefinition.GetFieldDefinition( subDefinition.OwnerIdField );
+				//        if ( fieldDef == null )
+				//            subDefinition.Add( new SQLDefinitionFieldFunc( subDefinition.OwnerIdField, x => { return element.Id.ToString(); } ) );
+				//        else
+				//            (fieldDef as SQLDefinitionFieldFunc).GetValueFunc = x => { return element.Id.ToString(); };
+
+				//        var propertyValue = subDef.Key.GetValue( element, null );
+				//        var insertMethod = typeof( TVTCommandsV3 ).GetMethod( "Insert" );
+				//        var insertMethodGeneric = insertMethod.MakeGenericMethod( subDef.Key.PropertyType.GetGenericArguments()[0] );
+				//        insertMethodGeneric.Invoke( null, new object[] { connection, subDefinition, propertyValue } );
+				//    }
+				//}
+			}
+
+
+		}
+
 		public static List<T> Read<T>( MySqlConnection connection, SQLDefinition<T> definition, string orderBy = null ) where T : IIdEntity
 		{
 			var result = new List<T>();
@@ -440,9 +494,9 @@ namespace TVTower.SQL
 
 						var fieldDef = subDefinition.GetFieldDefinition( subDefinition.OwnerIdField );
 						if ( fieldDef == null )
-							subDefinition.Add( new SQLDefinitionFieldFunc( subDefinition.OwnerIdField, x => { return element.Id.ToString(); } ) );
+							subDefinition.Add( new SQLDefinitionFieldFunc( subDefinition.OwnerIdField, ( x, y ) => { return element.Id.ToString(); } ) );
 						else
-							(fieldDef as SQLDefinitionFieldFunc).GetValueFunc = x => { return element.Id.ToString(); };
+							(fieldDef as SQLDefinitionFieldFunc).GetValueFunc = ( x, y ) => { return element.Id.ToString(); };
 
 						var propertyValue = subDef.Key.GetValue( element, null );
 						var insertMethod = typeof( TVTCommandsV3 ).GetMethod( "Insert" );
@@ -458,7 +512,7 @@ namespace TVTower.SQL
 		{
 			definition.Add( x => x.DataType );
 			definition.Add( x => x.DataStatus );
-            definition.Add( x => x.DataRoot );
+			definition.Add( x => x.DataRoot );
 			definition.Add( x => x.Approved );
 			definition.Add( x => x.AdditionalInfo );
 

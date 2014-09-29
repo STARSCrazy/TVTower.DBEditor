@@ -15,7 +15,7 @@ namespace TVTower.SQL
 	{
 		string OwnerIdField { get; set; }
 
-		void Add( ISQLDefinitionField field );
+		ISQLDefinitionField Add( ISQLDefinitionField field );
 
 		ISQLDefinitionField GetFieldDefinition( string fieldName );
 	}
@@ -28,14 +28,17 @@ namespace TVTower.SQL
 		public Dictionary<PropertyInfo, ISQLDefinition> SubDefinitions = new Dictionary<PropertyInfo, ISQLDefinition>();
 		public Action<MySqlConnection, T> AfterInsert = null;
 
-		public void Add<TProperty>( Expression<Func<T, TProperty>> expression, string fieldName = null, string suffix = null, int? listIndex = null )
+		public SQLDefinitionField Add<TProperty>( Expression<Func<T, TProperty>> expression, string fieldName = null, string suffix = null, int? listIndex = null )
 		{
-			Definition.Add( new SQLDefinitionField( PInfo<T>.Info( expression, false ), fieldName, suffix, listIndex ) );
+			var result = new SQLDefinitionField( PInfo<T>.Info( expression, false ), fieldName, suffix, listIndex );
+			Definition.Add( result );
+			return result;
 		}
 
-		public void Add( ISQLDefinitionField field )
+		public ISQLDefinitionField Add( ISQLDefinitionField field )
 		{
 			Definition.Add( field );
+			return field;
 		}
 
 		public void AddSubDefinition<TProperty>( Expression<Func<T, TProperty>> expression, ISQLDefinition subDefinition )
@@ -67,27 +70,29 @@ namespace TVTower.SQL
 	public interface ISQLDefinitionField
 	{
 		string FieldName { get; set; }
+		bool IsKeyField { get; set; }
 
-		object GetValue( object model );
+		object GetValue( object model, bool withQuotemarks = false );
 		void Read( MySqlDataReader reader, object model );
 	}
 
 	public class SQLDefinitionFieldFunc : ISQLDefinitionField
 	{
 		public string FieldName { get; set; }
-		public Func<object, object> GetValueFunc { get; set; }
+		public bool IsKeyField { get; set; }
+		public Func<object, bool, object> GetValueFunc { get; set; }
 		public Action<MySqlDataReader, object> ReadAction { get; set; }
 
-		public SQLDefinitionFieldFunc( string fieldName, Func<object, object> getValueFunc = null, Action<MySqlDataReader, object> readAction = null )
+		public SQLDefinitionFieldFunc( string fieldName, Func<object, bool, object> getValueFunc = null, Action<MySqlDataReader, object> readAction = null )
 		{
 			FieldName = fieldName;
 			GetValueFunc = getValueFunc;
 			ReadAction = readAction;
 		}
 
-		public object GetValue( object model )
+		public object GetValue( object model, bool withQuotemarks = false )
 		{
-			return GetValueFunc.Invoke( model );
+			return GetValueFunc.Invoke( model, withQuotemarks );
 		}
 
 		public void Read( MySqlDataReader reader, object model )
@@ -101,9 +106,11 @@ namespace TVTower.SQL
 		public string FieldName { get; set; }
 		public PropertyInfo PropertyInfo { get; set; }
 		public int? ListIndex { get; set; }
+		public bool IsKeyField { get; set; }
 
 		public SQLDefinitionField( PropertyInfo propertyInfo, string fieldName = null, string suffix = null, int? listIndex = null )
 		{
+			this.IsKeyField = false;
 			this.PropertyInfo = propertyInfo;
 
 			this.ListIndex = listIndex;
@@ -147,7 +154,7 @@ namespace TVTower.SQL
 				FieldName = FieldName + suffix;
 		}
 
-		public object GetValue( object model )
+		public object GetValue( object model, bool withQuotemarks = false )
 		{
 			var value = PropertyInfo.GetValue( model, null );
 
@@ -172,6 +179,14 @@ namespace TVTower.SQL
 			}
 			else if ( value is IIdEntity )
 				return (value as IIdEntity).Id;
+			else if ( value is DateTime )
+				return value;
+			else if ( value is Enum )
+				return (int)value;
+			else if ( value is int || value is float )
+				return value;
+			else if ( withQuotemarks )
+				return "'" + value + "'";
 			else
 				return value;
 		}

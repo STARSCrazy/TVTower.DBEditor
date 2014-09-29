@@ -90,7 +90,6 @@
     <Compile Include="Controls\TVTColumnHeader.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TVTDatabase.cs" />
     <Compile Include="TVTEditorApplication.cs" />
     <EmbeddedResource Include="Disclaimer.resx">
       <DependentUpon>Disclaimer.cs</DependentUpon>
@@ -126,6 +125,10 @@
     <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">
       <Project>{A12F5069-3DCE-406A-A9AB-42184F211121}</Project>
       <Name>CodeKnight.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TVTower.Database\TVTower.Database.csproj">
+      <Project>{136F71C1-7EA4-4256-A93F-23751E8AC679}</Project>
+      <Name>TVTower.Database</Name>
     </ProjectReference>
     <ProjectReference Include="..\TVTower.Entities\TVTower.Entities.csproj">
       <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>

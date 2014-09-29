@@ -34,6 +34,8 @@ namespace TVTower.Entities
 		public List<TVTPressureGroup> ProPressureGroups { get; set; }
 		public List<TVTPressureGroup> ContraPressureGroups { get; set; }
 
+		public TVTNews NewsThreadInitial { get; set; }
+
 		public TVTNews()
 		{
 			Effects = new List<TVTNewsEffect>();
@@ -73,6 +75,16 @@ namespace TVTower.Entities
 			}
 
 			return DataStatus;
+		}
+
+		public override void RefreshReferences( ITVTDatabase database )
+		{
+			base.RefreshReferences( database );
+
+			if ( !string.IsNullOrEmpty( NewsThreadId ) )
+			{
+				NewsThreadInitial = database.GetNewsThreadInitial( NewsThreadId );
+			}
 		}
 	}
 }

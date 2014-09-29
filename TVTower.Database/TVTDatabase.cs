@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TVTower.Entities;
 
-namespace TVTower.DBEditorGUI
+namespace TVTower.Database
 {
 	public class TVTDatabase : ITVTDatabase
 	{
@@ -116,7 +116,7 @@ namespace TVTower.DBEditorGUI
 		public IEnumerable<TVTProgramme> GetAllEpisodes()
 		{
 			var result = new List<TVTProgramme>();
-			result.AddRange( ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode ));
+			result.AddRange( ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode ) );
 			return result;
 		}
 
@@ -173,6 +173,16 @@ namespace TVTower.DBEditorGUI
 		{
 			var seriesIdTemp = seriesId.ToString();
 			return ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode && x.MasterId == seriesIdTemp );
+		}
+
+		public TVTNews GetNewsThreadInitial( string threadId )
+		{
+			var results = NewsData.Where( x => x.NewsThreadId == threadId && x.NewsType == TVTNewsType.InitialNews );
+
+			if ( results.Count() == 1 )
+				return results.First();
+			else
+				throw new Exception( "More than one thread initial!" );
 		}
 
 		#endregion

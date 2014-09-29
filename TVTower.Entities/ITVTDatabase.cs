@@ -34,6 +34,8 @@ namespace TVTower.Entities
 		TVTPerson GetPersonByTmdbId( int tmdbId );
 		TVTPerson GetPersonByName( string name );
 
+		TVTNews GetNewsThreadInitial( string threadId );
+
 		void RefreshPersonProgrammeCount();
 		void RefreshReferences();
 		void RefreshStatus();
