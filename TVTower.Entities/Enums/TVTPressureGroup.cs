@@ -1,6 +1,7 @@
 ﻿
 namespace TVTower.Entities
 {
+	//[Flags]
 	public enum TVTPressureGroup
 	{
 		Inhert = -1,

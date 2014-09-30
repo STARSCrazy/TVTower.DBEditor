@@ -2011,12 +2011,6 @@ Ein Muss für jede Hausfrau, ein Fluch für harte Männer.</description>
 				<data  year="2001" genre="15"  blocks="2"	price="43"	critics="7"	speed="50" />
 			</episode>
 		</serie>
-		<serie>
-			<title>Sterngaed</title>
-			<description>Unter der Leitung von Colonel Jack O'Neill bricht das Team SG-1 auf in fremde Welten.
-Mit 10 Staffeln die erfolgreichste Science-Fiction-Serie aller Zeiten</description>
-			<data  actors="Ricardo Dream Handerson" director="Div." country="USA" year="1997" genre="2"  blocks="1" time="0" price="150" critics="144" speed="180" outcome="240" />
-		</serie>
 	</allseries>
 	<allnews>
 		<news>
@@ -3028,7 +3022,7 @@ Die GS2 ist der Nachfolger der GS aus dem Hause Sunny.</description>
 			<data minaudience="200"  repetitions="1"  profit="15" penalty="20" targetgroup="1" duration="1" />
 		</ad>
 		<ad>
-			<title>Hanz Tomato Ketchup</title>
+			<title>Hanzis Tomatenketchup</title>
 			<description>Das Ketchup für diejenigen, die ihre Pommes nicht in Mayonnaise ersäufen. Auch geeignet für Buletten, Wurst und Hühnchen.</description>
 			<data minaudience="100"  repetitions="2"  profit="10" penalty="5" targetgroup="0" duration="3" />
 		</ad>
@@ -3069,7 +3063,7 @@ Aktionswoche: Pfandfrei.</description>
 			<data minaudience="100"  repetitions="1" fixedprice="1" profit="24000" penalty="0" targetgroup="0" duration="1" />
 		</ad>
 		<ad>
-			<title>Lacoast</title>
+			<title>La Côte</title>
 			<description>Die Markenkleidung mit dem Sonnenschirm. Modische Schnitte und trendige Farben inklusive.</description>
 			<data minaudience="200"  repetitions="5"  profit="20" penalty="20" targetgroup="0" duration="5" />
 		</ad>
@@ -3100,7 +3094,7 @@ Ich fühl mich wohl mit Lemor</description>
 			<data minaudience="50" minimage="100" repetitions="3"  profit="30" penalty="45" targetgroup="8" duration="4" />
 		</ad>
 		<ad>
-			<title>Märzedes</title>
+			<title>Bonze</title>
 			<description>Der neueste Luxus-Schlitten aus dem Hause Märzedes: Ästethisch einwandfreies Design, robust, klassisch.</description>
 			<data minaudience="225"  repetitions="6"  profit="25" penalty="20" targetgroup="6" duration="2" />
 		</ad>
@@ -3145,7 +3139,7 @@ Ich fühl mich wohl mit Lemor</description>
 			<data minaudience="75"  repetitions="5"  profit="100" penalty="50" targetgroup="-1" duration="7" />
 		</ad>
 		<ad>
-			<title>Okea</title>
+			<title>Möbler</title>
 			<description>Regale, Tische, Stühle, Schränke etc. - das haben wir zu bieten.
 Habt Ihr das zu bieten? Alter Schwede!</description>
 			<data minaudience="125"  repetitions="5"  profit="20" penalty="15" targetgroup="-1" duration="2" />
@@ -3218,7 +3212,7 @@ Der Vorteil: Kein Porto für Überweisungsträger</description>
 			<data minaudience="100" minimage="150" repetitions="2"  profit="45" penalty="60" targetgroup="0" duration="4" />
 		</ad>
 		<ad>
-			<title>Saratti</title>
+			<title>Schorotti</title>
 			<description>Der Saratti-Mohr bietet traumhafte Schokolade. Zugreifen und dahinschmelzen.</description>
 			<data minaudience="75"  repetitions="3"  profit="100" penalty="15" targetgroup="-1" duration="4" />
 		</ad>
@@ -3233,7 +3227,7 @@ Der Vorteil: Kein Porto für Überweisungsträger</description>
 			<data minaudience="100" minimage="150" repetitions="3"  profit="20" penalty="15" targetgroup="8" duration="6" />
 		</ad>
 		<ad>
-			<title>Snuckers</title>
+			<title>Trickers</title>
 			<description>Der leckere Riegel mit dem hohen Erdnußanteil.
 Daran hat man zu kauen.</description>
 			<data minaudience="100"  repetitions="3"  profit="100" penalty="15" targetgroup="2" duration="3" />
@@ -3249,7 +3243,7 @@ Daran hat man zu kauen.</description>
 			<data minaudience="100" minimage="50" repetitions="5"  profit="28" penalty="42" targetgroup="2" duration="7" />
 		</ad>
 		<ad>
-			<title>StyleDJ</title>
+			<title>Stilvento</title>
 			<description>Ist ihre Party mal wieder total langweilig? Buchen Sie StyleDJ und ihr Anlass ist gerettet.</description>
 			<data minaudience="30" minimage="10" repetitions="2"  profit="100" penalty="20" targetgroup="0" duration="1" />
 		</ad>
@@ -3285,7 +3279,7 @@ It's a sunny</description>
 			<data minaudience="30" minimage="10" repetitions="4"  profit="30" penalty="25" targetgroup="5" duration="3" />
 		</ad>
 		<ad>
-			<title>Tublerone</title>
+			<title>Tubenkrone</title>
 			<description>Na und?
 Tublerone - Schokolade mit Charakter.</description>
 			<data minaudience="125"  repetitions="2"  profit="100" penalty="100" targetgroup="-1" duration="1" />
@@ -3322,7 +3316,7 @@ Aber nur mit Ulbricht Umzüge!</description>
 			<data minaudience="50"  repetitions="4"  profit="100" penalty="15" targetgroup="9" duration="2" />
 		</ad>
 		<ad>
-			<title>Zaturn</title>
+			<title>Zaturno</title>
 			<description>Geiz sei geil, so die Botschaft dieser Werbung.</description>
 			<data minaudience="150" minimage="150" repetitions="4"  profit="15" penalty="20" targetgroup="0" duration="2" />
 		</ad>

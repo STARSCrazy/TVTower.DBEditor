@@ -154,7 +154,7 @@ namespace TVTower.Xml
 						//if ( isFake )
 						//    result.titleFake = movieChild.GetElementValue();
 						//else
-							result.title = movieChild.GetElementValue();
+						result.title = movieChild.GetElementValue();
 						//break;
 						break;
 					case "description":
@@ -280,37 +280,7 @@ namespace TVTower.Xml
 
 			database.RefreshReferences();
 
-
-			//{
-			//    var allSeries = doc.GetElementsByTagName( "allseries" );
-			//    var seriesPersister = new TVTSeriesMoviePersister();
-
-			//    foreach ( XmlNode xmlSeries in allSeries )
-			//    {
-			//        foreach ( XmlNode childNode in xmlSeries.ChildNodes )
-			//        {
-			//            var movie = new TVTProgramme();
-			//            movie.MovieAdditional = new TVTMovieAdditional();
-			//            if ( version == 2 )
-			//            {
-			//                movie.GenerateGuid();
-			//                movie.DataContent = defaultType;
-			//            }
-
-			//            switch ( childNode.Name )
-			//            {
-			//                case "serie":
-			//                    seriesPersister.Load( childNode, movie, result, dbVersion, DataStructure.FakeData );
-			//                    break;
-			//            }
-
-			//            ConvertOldMovieData( movie, version );
-			//            result.AddMovie( movie );
-			//        }
-			//    }
-			//}
-
-			//var allSeries = doc.GetElementsByTagName( "allseries" );
+			OldV2Converter.RefreshMovieDescriptions( database );
 
 			return result;
 		}

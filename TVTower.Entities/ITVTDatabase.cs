@@ -29,6 +29,9 @@ namespace TVTower.Entities
 
 		IEnumerable<TVTProgramme> GetEpisodesOfSeries( Guid seriesId );
 
+		TVTProgramme GetProgrammeById( Guid id );
+		TVTProgramme GetProgrammeByStringId( string id );
+
 		TVTPerson GetPersonById( Guid id );
 		TVTPerson GetPersonByStringId( string id );
 		TVTPerson GetPersonByTmdbId( int tmdbId );

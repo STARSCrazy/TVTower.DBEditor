@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -22,15 +23,15 @@ namespace TVTower.Xml
 			node.Attributes.Append( myAttribute );
 		}
 
-        public static void AddAttributeC( this XmlNode node, string name, string innerText )
-        {
-            if ( !string.IsNullOrEmpty( innerText ) && innerText != "-1" )
-            {
-                var myAttribute = node.OwnerDocument.CreateAttribute( name );
-                myAttribute.InnerText = innerText;
-                node.Attributes.Append( myAttribute );
-            }
-        }
+		public static void AddAttributeC( this XmlNode node, string name, string innerText )
+		{
+			if ( !string.IsNullOrEmpty( innerText ) && innerText != "-1" )
+			{
+				var myAttribute = node.OwnerDocument.CreateAttribute( name );
+				myAttribute.InnerText = innerText;
+				node.Attributes.Append( myAttribute );
+			}
+		}
 
 		public static string GetAttribute( this XmlNode node, string name )
 		{
@@ -52,6 +53,15 @@ namespace TVTower.Xml
 			var attr = node.Attributes[name];
 			if ( attr != null )
 				return int.Parse( attr.Value );
+			else
+				return 0;
+		}
+
+		public static float GetAttributeFloat( this XmlNode node, string name )
+		{
+			var attr = node.Attributes[name];
+			if ( attr != null )
+				return float.Parse( attr.Value, CultureInfo.InvariantCulture );
 			else
 				return 0;
 		}

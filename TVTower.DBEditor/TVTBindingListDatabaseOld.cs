@@ -145,6 +145,20 @@ namespace TVTower.DBEditor
 			return result;
 		}
 
+		public TVTProgramme GetProgrammeById( Guid id )
+		{
+			return ProgrammeData.FirstOrDefault( x => x.Id == id );
+		}
+
+		public TVTProgramme GetProgrammeByStringId( string id )
+		{
+			Guid guidId;
+			if ( Guid.TryParse( id, out guidId ) )
+				return GetProgrammeById( guidId );
+			else
+				return null;
+		}
+
 		public TVTPerson GetPersonById( Guid id )
 		{
 			return PersonData.FirstOrDefault( x => x.Id == id );

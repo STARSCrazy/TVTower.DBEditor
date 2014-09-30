@@ -9,7 +9,6 @@ using TVTower.DBEditor;
 using TVTower.Entities;
 using TVTower.SQL;
 using TVTower.Xml;
-using System.Collections.Generic;
 
 namespace TVTower.UnitTests
 {
@@ -120,39 +119,39 @@ namespace TVTower.UnitTests
 					var found = merging.FindProgrammeMatch( currMovie );
 					if ( found != null )
 					{
-                        merging.MergeProgrammeData( found, currMovie, true );
+						merging.MergeProgrammeData( found, currMovie, true );
 						found.DataRoot = TVTDataRoot.V2InUse;
 						found.IsChanged = true;
-                        foreach ( var member in found.Staff )
-                        {
-                            if ( member.Person != null )
-                            {
-                                member.Person.DataRoot = TVTDataRoot.V2InUse;
-                                member.Person.IsChanged = true;
-                            }
-                        }
+						foreach ( var member in found.Staff )
+						{
+							if ( member.Person != null )
+							{
+								member.Person.DataRoot = TVTDataRoot.V2InUse;
+								member.Person.IsChanged = true;
+							}
+						}
 
 					}
 					else
 					{
 						var newProgramme = new TVTProgramme();
 						newProgramme.GenerateGuid();
-                        merging.MergeProgrammeData( newProgramme, currMovie );
+						merging.MergeProgrammeData( newProgramme, currMovie );
 						newProgramme.DataRoot = TVTDataRoot.V2InUse;
 						newProgramme.IsNew = true;
 						newProgramme.IsChanged = true;
-                        foreach ( var member in newProgramme.Staff )
-                        {
-                            member.Person.DataRoot = TVTDataRoot.V2InUse;
-                            member.Person.IsChanged = true;
-                        }
+						foreach ( var member in newProgramme.Staff )
+						{
+							member.Person.DataRoot = TVTDataRoot.V2InUse;
+							member.Person.IsChanged = true;
+						}
 						sqlDB.AddProgramme( newProgramme );
 					}
 				}
 			}
 
 			{
-				foreach ( var currNews in databaseV2.GetAllNews( ) )
+				foreach ( var currNews in databaseV2.GetAllNews() )
 				{
 					var found = merging.FindNewsMatchWithV2( currNews );
 					if ( found != null )
@@ -174,28 +173,28 @@ namespace TVTower.UnitTests
 				}
 			}
 
-            {
-                foreach ( var currAd in databaseV2.GetAllAdvertisings() )
-                {
-                    var found = merging.FindAdMatchWithV2( currAd );
-                    if ( found != null )
-                    {
-                        merging.CopyPropertyValues<TVTAdvertising>( found, currAd );
-                        found.DataRoot = TVTDataRoot.V2InUse;
-                        found.IsChanged = true;
-                    }
-                    else
-                    {
-                        var newAd = new TVTAdvertising();
-                        newAd.GenerateGuid();
-                        merging.CopyPropertyValues<TVTAdvertising>( newAd, currAd );
-                        newAd.DataRoot = TVTDataRoot.V2InUse;
-                        newAd.IsNew = true;
-                        newAd.IsChanged = true;
-                        sqlDB.AddAdvertising( newAd );
-                    }
-                }
-            }
+			{
+				foreach ( var currAd in databaseV2.GetAllAdvertisings() )
+				{
+					var found = merging.FindAdMatchWithV2( currAd );
+					if ( found != null )
+					{
+						merging.CopyPropertyValues<TVTAdvertising>( found, currAd );
+						found.DataRoot = TVTDataRoot.V2InUse;
+						found.IsChanged = true;
+					}
+					else
+					{
+						var newAd = new TVTAdvertising();
+						newAd.GenerateGuid();
+						merging.CopyPropertyValues<TVTAdvertising>( newAd, currAd );
+						newAd.DataRoot = TVTDataRoot.V2InUse;
+						newAd.IsNew = true;
+						newAd.IsChanged = true;
+						sqlDB.AddAdvertising( newAd );
+					}
+				}
+			}
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )
 			{
@@ -210,27 +209,95 @@ namespace TVTower.UnitTests
 		}
 
 		[TestMethod]
+		[DeploymentItem( "TestData\\ads-changes.xml" )]
+		public void ReadXMLV2AdChangesTest()
+		{
+			System.Diagnostics.Trace.WriteLine( Directory.GetCurrentDirectory() );
+			Assert.IsTrue( File.Exists( "ads-changes.xml" ) );
+
+			var databaseV3 = new TVTDatabase();
+			databaseV3.Initialize();
+
+			var persister = new XmlPersisterV3();
+			persister.LoadXML( "ads-changes.xml", databaseV3 );
+
+			var sqlDB = new TVTDatabase();
+			sqlDB.Initialize();
+			sqlDB.Clear();
+			using ( var connection = TVTSQLSession.GetSessionNewDB() )
+			{
+				string myConnectionString = "SERVER=localhost;" +
+											"DATABASE=tvtower_new;" +
+											"UID=TVTowerUser;" +
+											"PASSWORD=123;";
+
+				var mvSQLDatabase = new TVTSQLDatabase( myConnectionString );
+				mvSQLDatabase.FillTVTDatabase( sqlDB );
+			}
+
+			var merging = new DatabaseMerging( sqlDB );
+
+			{
+				foreach ( var currAd in databaseV3.GetAllAdvertisings() )
+				{
+					var found = merging.FindAdMatchWithV2( currAd );
+					if ( found != null )
+					{
+						merging.CopyPropertyValues<TVTAdvertising>( found, currAd );
+						found.DataRoot = TVTDataRoot.V2InUse;
+						found.IsChanged = true;
+					}
+					else
+					{
+						var newAd = new TVTAdvertising();
+						newAd.GenerateGuid();
+						merging.CopyPropertyValues<TVTAdvertising>( newAd, currAd );
+						newAd.DataRoot = TVTDataRoot.V2InUse;
+						newAd.IsNew = true;
+						newAd.IsChanged = true;
+						sqlDB.AddAdvertising( newAd );
+					}
+				}
+			}
+
+			using ( var connection = TVTSQLSession.GetSessionNewDB() )
+			{
+				string myConnectionString = "SERVER=localhost;" +
+											"DATABASE=tvtower_new;" +
+											"UID=TVTowerUser;" +
+											"PASSWORD=123;";
+
+				var mvSQLDatabase = new TVTSQLDatabase( myConnectionString );
+				mvSQLDatabase.WriteChangesToDatabase( sqlDB );
+			}
+		}
+
+
+
+		[TestMethod]
 		public void CreateXMLTest()
 		{
 			var database = new TVTBindingListDatabaseOld();
 			database.Initialize();
 
-            var dataRoot = TVTDataRoot.V2InUse;
+			var dataRoot = TVTDataRoot.V2InUse;
 
 			using ( var connection = TVTSQLSession.GetSessionNewDB() )
 			{
 				var programmes = TVTCommandsV3.Read<TVTProgramme>( connection, TVTCommandsV3.GetProgrammeSQLDefinition(), "master_id, episode_index, fake_title_de, title_de" );
 				//database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
-                database.AddProgrammes( programmes.Where( x => x.DataRoot == dataRoot ) );
+				//var yames = programmes.Where( x => x.FakeTitleDE != null && x.FakeTitleDE.StartsWith( "Yams Pond" ) ).ToList();
+				//var yames2 = yames.Where( x => x.DataRoot == dataRoot ).ToList();
+				database.AddProgrammes( programmes.Where( x => x.DataRoot == dataRoot ) );
 
 				var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), "fake_title_de, title_de" );
-                database.AddAdvertisings( ads.Where( x => x.DataRoot == dataRoot ) );
+				database.AddAdvertisings( ads.Where( x => x.DataRoot == dataRoot ) );
 
 				var people = TVTCommandsV3.Read<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), "fake_last_name, fake_first_name, last_name" );
-                database.AddPeople( people.Where( x => x.DataRoot == dataRoot ) );
+				database.AddPeople( people.Where( x => x.DataRoot == dataRoot ) );
 
 				var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), "title_de" );
-                database.AddNews( news.Where( x => x.DataRoot == dataRoot ) );
+				database.AddNews( news.Where( x => x.DataRoot == dataRoot ) );
 
 				database.RefreshReferences();
 			}

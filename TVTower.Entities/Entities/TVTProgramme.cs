@@ -182,7 +182,16 @@ namespace TVTower.Entities
 		{
 			if ( ProductType == TVTProductType.Episode )
 			{
-				if ( SeriesMaster != null && SeriesMaster.IsAlive )
+				if ( !string.IsNullOrEmpty( MasterId ) )
+				{
+					if ( SeriesMaster == null )
+					{
+						var master = database.GetProgrammeByStringId( MasterId );
+						if ( master != null )
+							SeriesMaster = new WeakReference<TVTProgramme>( master );
+					}
+				}
+				else if ( SeriesMaster != null && SeriesMaster.IsAlive )
 					MasterId = SeriesMaster.TargetGeneric.Id.ToString();
 			}
 			else if ( this.ProductType == TVTProductType.Series )
