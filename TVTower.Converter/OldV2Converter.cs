@@ -116,7 +116,7 @@ namespace TVTower.Converter
 		private static void ConvertCommonMinimal( CommonOldV2 common, ITVTNamesBasic names, ITVTDatabase database )
 		{
 			names.GenerateGuid();
-			names.AltId = common.id.ToString();
+			names.OldId = common.id.ToString();
 			names.TitleDE = HttpUtility.HtmlDecode( common.title ); ;
 			names.TitleEN = common.titleEnglish;
 			names.DescriptionDE = common.description;
@@ -240,7 +240,7 @@ namespace TVTower.Converter
 			var allMovies = database.GetAllProgrammes( true );
 			foreach ( var current in database.GetAllEpisodes() )
 			{
-				var series = allMovies.FirstOrDefault( x => x.AltId.CompareTo( current.Tag ) == 0 );
+				var series = allMovies.FirstOrDefault( x => x.OldId.CompareTo( current.Tag ) == 0 );
 				if ( series != null )
 				{
 					series.ProductType = TVTProductType.Series;
@@ -295,7 +295,7 @@ namespace TVTower.Converter
 				{
 					news.NewsType = TVTNewsType.InitialNews;
 					news.NewsThreadId = newsSrc.id.ToString();
-					news.Tag = 0;
+					news.Tag = -1;
 				}
 				else
 				{
@@ -328,6 +328,32 @@ namespace TVTower.Converter
 
 			var allNews = database.GetAllNews();
 
+			List<string> threadsDone = new List<string>();
+
+			//Episoden-ID fixen
+			foreach ( var news in allNews )
+			{
+				if ( !threadsDone.Contains( news.NewsThreadId ) )
+				{
+					var newsThread = allNews.Where( x => x.NewsThreadId == news.NewsThreadId );
+
+					var start = newsThread.FirstOrDefault( x => (int)x.Tag == -1 );
+					start.Tag = 0;
+
+					var rest = newsThread.ToList();
+					rest.Remove( start );
+
+					var episode = 1;
+					foreach ( var restNews in rest.OrderBy( x => x.Tag ).ToList() )
+					{
+						restNews.Tag = episode;
+						episode++;
+					}
+
+					threadsDone.Add( news.NewsThreadId );
+				}
+			}
+
 			foreach ( var news in allNews )
 			{
 				var episode = (int)news.Tag;
@@ -340,7 +366,7 @@ namespace TVTower.Converter
 				}
 				else
 				{
-					if ( news.NewsThreadId == news.AltId )
+					if ( news.NewsThreadId == news.OldId )
 						news.NewsType = TVTNewsType.InitialNews;
 					else
 						news.NewsType = TVTNewsType.FollowingNews;
@@ -353,7 +379,7 @@ namespace TVTower.Converter
 				//    news.NewsThreadId = null;
 				//else
 				//{
-				TVTNews thread_owner = allNews.FirstOrDefault( x => x.AltId == news.NewsThreadId );
+				TVTNews thread_owner = allNews.FirstOrDefault( x => x.OldId == news.NewsThreadId );
 				news.NewsThreadId = thread_owner.Id.ToString();
 				//}
 			}

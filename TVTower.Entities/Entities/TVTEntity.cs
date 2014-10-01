@@ -5,7 +5,7 @@ namespace TVTower.Entities
 	public abstract class TVTEntity : ITVTEntity
 	{
 		public Guid Id { get; set; }
-		public string AltId { get; set; }
+		public string OldId { get; set; }
 
 		public bool OnlyReference { get; set; }
 

@@ -6,7 +6,7 @@ namespace TVTower.Entities
     public interface ITVTEntity : IIdEntity
 	{
 		Guid Id { get; set; }
-		string AltId { get; set; }
+		string OldId { get; set; }
 
 		TVTDataType DataType { get; set; }
 		TVTDataStatus DataStatus { get; set; }

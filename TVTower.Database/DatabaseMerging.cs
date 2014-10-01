@@ -303,8 +303,29 @@ namespace TVTower.Database
 					}
 				}
 			}
+		}
 
-			target.Children = null;
+		public void MergeNewsData( TVTNews target, TVTNews leading, bool mergeNoEffects = false )
+		{
+			var type = typeof( TVTNews );
+			foreach ( var property in type.GetProperties() )
+			{
+				if ( mergeNoEffects && property.Name == "Effects" )
+				{
+					//Nichts machen
+					var i = 5;
+				}
+				else
+				{
+					if ( property.Name != "Id" )
+					{
+						if ( property.CanWrite && property.CanRead )
+						{
+							property.SetValue( target, property.GetValue( leading, null ), null );
+						}
+					}
+				}
+			}
 		}
 
 		public void CopyPropertyValues<T>( T target, T source, List<string> dontCopyList = null ) where T : IIdEntity

@@ -60,6 +60,7 @@ namespace TVTower.UnitTests
 				OldV2Converter.Convert( ads, database, TVTDataRoot.V2InStorage );
 
 				var news = TVTCommandsV2.LoadNewsOldV2( connection );
+				var tt = news.FirstOrDefault( x => x.title.StartsWith( "Programmierer" ) );
 				OldV2Converter.Convert( news, database, TVTDataRoot.V2InStorage );
 
 				database.RefreshPersonProgrammeCount();
@@ -156,7 +157,7 @@ namespace TVTower.UnitTests
 					var found = merging.FindNewsMatchWithV2( currNews );
 					if ( found != null )
 					{
-						merging.CopyPropertyValues<TVTNews>( found, currNews );
+						merging.MergeNewsData( found, currNews, true );
 						found.DataRoot = TVTDataRoot.V2InUse;
 						found.IsChanged = true;
 					}
@@ -296,7 +297,7 @@ namespace TVTower.UnitTests
 				var people = TVTCommandsV3.Read<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), "fake_last_name, fake_first_name, last_name" );
 				database.AddPeople( people.Where( x => x.DataRoot == dataRoot ) );
 
-				var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), "title_de" );
+				var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), "news_thread_id, news_type, title_de" );
 				database.AddNews( news.Where( x => x.DataRoot == dataRoot ) );
 
 				database.RefreshReferences();
