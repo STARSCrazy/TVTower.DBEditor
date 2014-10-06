@@ -2067,36 +2067,7 @@ Ein Muss für jede Hausfrau, ein Fluch für harte Männer.</description>
 			<description>Nach jahrelanger Tennis-Abstinenz plant Boris Wecker sein Come-back. Konkurenten freuen sich auf legendäre Hechtsprünge.</description>
 			<data genre="2" price="0" topicality="100" />
 		</news>
-		<news>
-			<title>Bretz neuer Trainer in Berlin?</title>
-			<description>Dem Rekordtorschützen Michel Bretz wurde von seinem alten Verein der Trainerposten angeboten. Bretz sei interessiert, so der Vorstand.</description>
-			<data genre="2" price="0" topicality="125" />
-			<episode number="1">
-				<title>Bretz neuer Trainer in Berlin?</title>
-				<description>Dem Rekordtorschützen Michel Bretz wurde von seinem alten Verein der Trainerposten angeboten. Bretz sei interessiert, so der Vorstand.</description>
-				<data genre="2" price="0" topicality="175" />
-			</episode>
-			<episode number="2">
-				<title>Trainerschein für M. Bretz?</title>
-			<description>Die Chancen stehen gut: Ich möchte zuerst die Trainerlizenz erwerben, danach kann man mit mir reden.&quot;, so der Herthaner. Berlin darf hoffen.</description>
-				<data genre="2" price="0" topicality="75" />
-			</episode>
-			<episode number="3">
-				<title>Probleme für Bretz &amp; Co</title>
-				<description>Da der frühere Kapitän der Berliner bisher keinen Trainerschein besitzt, könnte die Entscheidung des Stürmers noch auf sich warten lassen...</description>
-				<data genre="2" price="0" topicality="125" />
-			</episode>
-			<episode number="4">
-				<title>Und nun, Herr Bretz?</title>
-				<description>Alt-Herthaner Michel Bretz hat gestern den Trainerschein ausgestellt bekommen. Gespräche über die Zukunft seien nun am Laufen, so Bretz' Berater.</description>
-				<data genre="2" price="0" topicality="100" />
-			</episode>
-			<episode number="5">
-				<title>Hertho BSV holt Bretz</title>
-				<description>Perfekt: Michel Bretz wird den Trainerposten in der Hauptstadt übernehmen. Er freue sich auf diese Herausforderung, so Bretz, langjährige Nr. 11.</description>
-				<data genre="2" price="0" topicality="150" />
-			</episode>
-		</news>
+
 		<news>
 			<title>Bundeskanzler lehnt Filmhauptrolle ab</title>
 			<description>Kanzler Schröler lehnte die Hauptrolle in dem Film &quot;Lügen ist meine Leidenschaft&quot; verärgert ab. Filmpartnerin Angie Mertel ist bitter enttäuscht.</description>
@@ -3059,7 +3030,7 @@ Aktionswoche: Pfandfrei.</description>
 		<ad>
 			<title>La Baguette</title>
 			<description>Ihre Baguettes in 1, 2 oder 3 Meter Länge!</description>
-			<data minaudience="100"  repetitions="1" fixedprice="1" profit="24000" penalty="0" targetgroup="0" duration="1" />
+			<data minaudience="100"  repetitions="1" fixedprice="1" profit="24000" penalty="3000" targetgroup="0" duration="1" />
 		</ad>
 		<ad>
 			<title>La Côte</title>

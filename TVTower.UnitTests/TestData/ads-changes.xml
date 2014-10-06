@@ -412,7 +412,7 @@ Aktionswoche: Pfandfrei.</de>
 				<en></en>
 			</description>
 			<conditions min_audience="5" min_image="0" target_group="0" />
-			<data infomercial="0" quality="0" repetitions="1" duration="1" fix_price="1" profit="58" penalty="32" pro_pressure_groups="0" contra_pressure_groups="0" />
+			<data infomercial="0" quality="0" repetitions="1" duration="1" fix_price="1" profit="24000" penalty="3000" pro_pressure_groups="0" contra_pressure_groups="0" />
 		</ad>
 		<ad id="5cff333f-6a6d-46b0-82f4-f986224fcfdc" creator="5458">
 			<title>

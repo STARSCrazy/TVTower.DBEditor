@@ -15,36 +15,74 @@ namespace TVTower.Converter
 			programme.AddRange( database.GetAllEpisodes() );
 
 			foreach ( var person in database.GetAllPeople() )
-			{
+			{                
 				var foundProgrammes = programme.Where( x => x.Staff.FirstOrDefault( y => y.Person == person ) != null );
 				foreach ( var foundProgramme in foundProgrammes )
 				{
 					var index = foundProgramme.Staff.FirstOrDefault( y => y.Person == person ).Index;
 
-					if ( person.FullName != " " && foundProgramme.DescriptionDE.Contains( person.FullName ) )
-						foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FullName, string.Format( "[{0}|Full]", index ) );
+                    if ( !string.IsNullOrEmpty( foundProgramme.DescriptionDE ) )
+                    {
+                        if ( person.FullName != " " && foundProgramme.DescriptionDE.Contains( person.FullName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FullName, string.Format( "[{0}|Full]", index ) );
 
-					if ( !string.IsNullOrEmpty( person.FirstName ) && foundProgramme.DescriptionDE.Contains( person.FirstName ) )
-						foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FirstName, string.Format( "[{0}|First]", index ) );
+                        if ( !string.IsNullOrEmpty( person.FirstName ) && foundProgramme.DescriptionDE.Contains( person.FirstName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FirstName, string.Format( "[{0}|First]", index ) );
 
-					if ( !string.IsNullOrEmpty( person.LastName ) && foundProgramme.DescriptionDE.Contains( person.LastName ) )
-						foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FirstName, string.Format( "[{0}|Last]", index ) );
+                        if ( !string.IsNullOrEmpty( person.LastName ) && foundProgramme.DescriptionDE.Contains( person.LastName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.LastName, string.Format( "[{0}|Last]", index ) );
 
-					if ( !string.IsNullOrEmpty( person.NickName ) && foundProgramme.DescriptionDE.Contains( person.NickName ) )
-						foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FirstName, string.Format( "[{0}|Nick]", index ) );
+                        if ( !string.IsNullOrEmpty( person.NickName ) && foundProgramme.DescriptionDE.Contains( person.NickName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.NickName, string.Format( "[{0}|Nick]", index ) );
+                    }
 
 
-					if ( person.FullName != " " && foundProgramme.DescriptionEN.Contains( person.FullName ) )
-						foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FullName, string.Format( "[{0}|Full]", index ) );
+                    if ( !string.IsNullOrEmpty( foundProgramme.DescriptionEN ) )
+                    {
+                        if ( person.FullName != " " && foundProgramme.DescriptionEN.Contains( person.FullName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FullName, string.Format( "[{0}|Full]", index ) );
 
-					if ( !string.IsNullOrEmpty( person.FirstName ) && foundProgramme.DescriptionEN.Contains( person.FirstName ) )
-						foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FirstName, string.Format( "[{0}|First]", index ) );
+                        if ( !string.IsNullOrEmpty( person.FirstName ) && foundProgramme.DescriptionEN.Contains( person.FirstName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FirstName, string.Format( "[{0}|First]", index ) );
 
-					if ( !string.IsNullOrEmpty( person.LastName ) && foundProgramme.DescriptionEN.Contains( person.LastName ) )
-						foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FirstName, string.Format( "[{0}|Last]", index ) );
+                        if ( !string.IsNullOrEmpty( person.LastName ) && foundProgramme.DescriptionEN.Contains( person.LastName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.LastName, string.Format( "[{0}|Last]", index ) );
 
-					if ( !string.IsNullOrEmpty( person.NickName ) && foundProgramme.DescriptionEN.Contains( person.NickName ) )
-						foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FirstName, string.Format( "[{0}|Nick]", index ) );
+                        if ( !string.IsNullOrEmpty( person.NickName ) && foundProgramme.DescriptionEN.Contains( person.NickName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.NickName, string.Format( "[{0}|Nick]", index ) );
+                    }
+
+
+
+                    if ( !string.IsNullOrEmpty( foundProgramme.DescriptionDE ) )
+                    {
+                        if ( person.FakeFullName != " " && foundProgramme.DescriptionDE.Contains( person.FakeFullName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FakeFullName, string.Format( "[{0}|Full]", index ) );
+
+                        if ( !string.IsNullOrEmpty( person.FakeFirstName ) && foundProgramme.DescriptionDE.Contains( person.FakeFirstName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FakeFirstName, string.Format( "[{0}|First]", index ) );
+
+                        if ( !string.IsNullOrEmpty( person.FakeLastName ) && foundProgramme.DescriptionDE.Contains( person.FakeLastName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FakeLastName, string.Format( "[{0}|Last]", index ) );
+
+                        if ( !string.IsNullOrEmpty( person.FakeNickName ) && foundProgramme.DescriptionDE.Contains( person.FakeNickName ) )
+                            foundProgramme.DescriptionDE = foundProgramme.DescriptionDE.Replace( person.FakeNickName, string.Format( "[{0}|Nick]", index ) );
+                    }
+
+                    if ( !string.IsNullOrEmpty( foundProgramme.DescriptionEN ) )
+                    {
+                        if ( person.FakeFullName != " " && foundProgramme.DescriptionEN.Contains( person.FakeFullName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FakeFullName, string.Format( "[{0}|Full]", index ) );
+
+                        if ( !string.IsNullOrEmpty( person.FakeFirstName ) && foundProgramme.DescriptionEN.Contains( person.FakeFirstName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FakeFirstName, string.Format( "[{0}|First]", index ) );
+
+                        if ( !string.IsNullOrEmpty( person.FakeLastName ) && foundProgramme.DescriptionEN.Contains( person.FakeLastName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FakeLastName, string.Format( "[{0}|Last]", index ) );
+
+                        if ( !string.IsNullOrEmpty( person.FakeNickName ) && foundProgramme.DescriptionEN.Contains( person.FakeNickName ) )
+                            foundProgramme.DescriptionEN = foundProgramme.DescriptionEN.Replace( person.FakeNickName, string.Format( "[{0}|Nick]", index ) );
+                    }
 				}
 			}
 		}
