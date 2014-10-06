@@ -307,7 +307,6 @@ namespace TVTower.Converter
 				//PossibleFollower - erst später ermitteln;
 				news.Genre = (TVTNewsGenre)newsSrc.genre;
 
-				news.FixYear = -1;
 				news.AvailableAfterDays = -1;
 				news.YearRangeFrom = -1;
 				news.YearRangeTo = -1;
@@ -316,7 +315,7 @@ namespace TVTower.Converter
 				news.TimeRangeTo = -1;
 
 				news.Price = ConvertOldToNewValue( newsSrc.price );
-				news.Topicality = ConvertOldToNewValue( newsSrc.topicality );
+				news.Quality = ConvertOldToNewValue( newsSrc.topicality );
 
 				news.Resource1Type = null;
 				news.Resource2Type = null;

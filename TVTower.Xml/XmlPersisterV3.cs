@@ -263,7 +263,7 @@ namespace TVTower.Xml
 
 				dataNode.AddAttribute( "genre", ((int)news.Genre).ToString() );
 				dataNode.AddAttribute( "price", news.Price.ToString() );
-				dataNode.AddAttribute( "topicality", news.Topicality.ToString() );
+				dataNode.AddAttribute( "quality", news.Quality.ToString() );
 
 				newsNode.AppendChild( dataNode );
 			}
@@ -286,7 +286,6 @@ namespace TVTower.Xml
 			{
 				XmlNode dataCond = doc.CreateElement( "conditions" );
 
-				dataCond.AddAttribute( "fix_year", news.FixYear.ToString() );
 				//dataCond.AddAttribute("available_after_days", news.AvailableAfterDays.ToString());
 				dataCond.AddAttribute( "year_range_from", news.YearRangeFrom.ToString() );
 				dataCond.AddAttribute( "year_range_to", news.YearRangeTo.ToString() );

@@ -202,8 +202,11 @@ namespace TVTower.SQL
 
 					var news = result.FirstOrDefault( x => x.id == id );
 
-					news.title = reader.GetString( "title" );
-					news.description = reader.GetString( "text" );
+					if ( news != null )
+					{
+						news.title = reader.GetString( "title" );
+						news.description = reader.GetString( "text" );
+					}
 				}
 			}
 			finally

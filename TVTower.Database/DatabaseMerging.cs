@@ -49,9 +49,6 @@ namespace TVTower.Database
 					if ( xI.MainGenre != otherI.MainGenre )
 						return false;
 
-					if ( xI.CriticsRate == otherI.CriticsRate && xI.ViewersRate == otherI.ViewersRate && xI.BoxOfficeRate == otherI.BoxOfficeRate )
-						return true;
-
 					if ( x.ProductType != otherI.ProductType )
 						return false;
 
@@ -60,6 +57,9 @@ namespace TVTower.Database
 						if ( x.EpisodeIndex != otherI.EpisodeIndex )
 							return false;
 					}
+
+					if ( xI.CriticsRate == otherI.CriticsRate && xI.ViewersRate == otherI.ViewersRate && xI.BoxOfficeRate == otherI.BoxOfficeRate )
+						return true;
 
 					var directorTemp = xI.Staff != null ? xI.Staff.FirstOrDefault( z => z.Function == TVTPersonFunction.Director ) : null;
 					if ( directorTemp != null && directorTemp.Person != null )
@@ -96,7 +96,7 @@ namespace TVTower.Database
 
 				var results2 = allNews.Where( new Func<TVTNews, bool>( x =>
 				{
-					if ( x.Genre == other.Genre && x.Topicality == other.Topicality && x.NewsType == other.NewsType && x.Price == other.Price )
+					if ( x.Genre == other.Genre && x.Quality == other.Quality && x.NewsType == other.NewsType && x.Price == other.Price )
 					{
 						if ( x.NewsType == TVTNewsType.FollowingNews && !string.IsNullOrEmpty( x.NewsThreadId ) && !string.IsNullOrEmpty( other.NewsThreadId ) )
 						{

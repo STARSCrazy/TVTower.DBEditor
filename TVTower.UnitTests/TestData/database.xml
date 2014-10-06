@@ -85,32 +85,31 @@ Klassiker mit Hunfrey Boguecard.</description>
 			<data  actors="Stephen Siegel, Timmy-Leon Jonas" director="André Dervicz" country="USA" year="1992" genre="0"  blocks="2" price="146" critics="74" speed="168" outcome="153" />
 		</movie>
 		<movie>
-			<title>Spacefreak - das gruselige Ding...</title>
-			<description>...aus einer fremden Welt
-Riddle Irish durfte für sein Werk eine Menge Lob und Quoten ernten.</description>
+			<title>Extraterrestrial - Das schreckliche Wesen aus dem All</title>
+			<description>Offizierin Eileen Replay flieht vor einem außerirdisches Monster, dass ein Crew-Mitglied nach dem anderen tötet.
+			Visuell beeindruckender Science-Fiction-Horror von Riddle Irish.</description>
 			<data  actors="Signme Weber" director="Riddle Irish" country="GB" year="1979" genre="2"  blocks="2" time="20" price="150" critics="48" speed="96" outcome="168" />
 		</movie>
 		<movie>
-			<title>Spacefreak - Die Reinkarnation</title>
-			<description>Ripley darf einfach nicht in Frieden ruhen: Jetzt wird sie auch noch geklont!</description>
-			<data  actors="Signme Weber" director="Paul-Pierre Maison" country="USA" year="1997" genre="2"  blocks="2" time="0" price="150" critics="24" speed="108" outcome="72" />
-		</movie>
-		<movie>
-			<title>Spacefreak gegen Jäger</title>
-			<description>In der Antarktis raufen sich Spacefreak und Jäger.
-Aus einem solchen Zusammentreffen hätte man wohl mehr machen können</description>
-			<data  actors="XXX" director="Peter Bendersen" country="USA" year="2004" genre="2"  blocks="2" time="0" price="200" critics="24" speed="96" outcome="96" />
-		</movie>
-		<movie>
-			<title>Spacefreak - Sie sind zurück</title>
-			<description>Ripley erwacht aus dem Kälteschlaf. Da ihr niemand ihre Geschichte abnimmt, muß sie sich erneut in den Kampf stürzen.</description>
+			<title>Extraterrestrial - Sie sind zurück</title>
+			<description>Eileen Replay erwacht aus dem Kälteschlaf. Da ihr niemand ihre Geschichte abnimmt, muß sie sich erneut in den Kampf stürzen.</description>
 			<data  actors="Signme Weber" director="Yames Kamerun" country="USA" year="1986" genre="2"  blocks="3" time="0" price="100" critics="72" speed="84" outcome="180" />
 		</movie>
 		<movie>
-			<title>Spacefreak³</title>
-			<description>Alien-Battle auf einem Gefängnisplaneten, Ripley mit geschorenem Haupt.
-Überflüssig</description>
+			<title>Extraterrestrial 3</title>
+			<description>Alien-Battle auf einem Gefängnisplaneten. Eileen Replay mit geschorenem Haupt.</description>
 			<data  actors="Signme Weber" director="Dawid Tuencher" country="USA" year="1992" genre="2"  blocks="2" time="0" price="200" critics="24" speed="84" outcome="96" />
+		</movie>		
+		<movie>
+			<title>Extraterrestrial - Die Reinkarnation</title>
+			<description>Eileen Replay darf einfach nicht in Frieden ruhen: Jetzt wird sie auch noch geklont!</description>
+			<data  actors="Signme Weber" director="Paul-Pierre Maison" country="USA" year="1997" genre="2"  blocks="2" time="0" price="150" critics="24" speed="108" outcome="72" />
+		</movie>
+		<movie>
+			<title>Extraterrestrials gegen Jäger</title>
+			<description>In der Antarktis raufen sich Extraterrestrials und Jäger-Aliens.
+Aus einem solchen Zusammentreffen hätte man wohl mehr machen können</description>
+			<data  actors="Lanaa Sathan" director="Peter Bendersen" country="USA" year="2004" genre="2"  blocks="2" time="0" price="200" critics="24" speed="96" outcome="96" />
 		</movie>
 		<movie>
 			<title>Mozart</title>
@@ -1837,7 +1836,7 @@ Ein Muss für jede Hausfrau, ein Fluch für harte Männer.</description>
 			</episode>
 		</serie>
 		<serie>
-			<title>XXX</title>
+			<title>Die Nachtshow</title>
 			<description>Nighttalk mit Kultmoderator Jey Lenault</description>
 			<data  actors="Jey Lenault" director="-" country="USA" year="2003" genre="17"  blocks="1" time="20" price="150" critics="120" speed="180" outcome="120" />
 			<episode number="1">
@@ -1904,56 +1903,56 @@ Ein Muss für jede Hausfrau, ein Fluch für harte Männer.</description>
 		<serie>
 			<title>Robota Cup: Erstdirektive</title>
 			<description>Robota Cup tut noch immer seinen Dienst in Delta City, dem ehemaligen Detroit. Er muß sich Gegnern wie Bone Machine oder seinem eigenen Doppelgänger stellen.</description>
-			<data  actors="XXX" director="Alan Smithee" country="CAN" year="2003" genre="2"  blocks="2" price="100" critics="12" speed="180" outcome="72" />
+			<data  actors="Richardo Paradise, Nette Yvipar" director="Alan Smithee" country="CAN" year="1994" genre="2"  blocks="1" price="100" critics="12" speed="180" outcome="72" />
 			<episode number="1">
 				<title>Fiese Gerechtigkeit</title>
 				<description></description>
-				<data  country="CAN" year="2000" genre="2"  blocks="2" />
+				<data  country="CAN" year="1994" genre="2"  blocks="1" />
 			</episode>
 			<episode number="2">
 				<title>Schmelztiegel</title>
 				<description></description>
-				<data  director="Alan Smithee" country="CAN" year="2000" genre="2"  blocks="2" />
+				<data  director="Alan Smithee" country="CAN" year="1994" genre="2"  blocks="1" />
 			</episode>
 			<episode number="3">
 				<title>Die Wiedergeburt</title>
 				<description></description>
-				<data  director="Alan Smithee" country="CAN" year="2000" genre="2"  blocks="2" />
+				<data  director="Alan Smithee" country="CAN" year="1994" genre="2"  blocks="1" />
 			</episode>
 			<episode number="4">
 				<title>Chaos</title>
 				<description></description>
-				<data  country="CAN" year="2000" genre="2"  blocks="2" />
+				<data  country="CAN" year="1994" genre="2"  blocks="1" />
 			</episode>
 		</serie>
 		<serie>
-			<title>XXX besucht...</title>
-			<description>Der bekannte Moderator XXX besucht Menschen die keiner kennt, deren Wirkung aber unvergessen bleibt.</description>
-			<data  actors="XXX" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1" time="0" price="100" critics="0" speed="84" outcome="0" betty="60" />
+			<title>Rolf Krall besucht...</title>
+			<description>Der bekannte Moderator Rolf Krall besucht Menschen die keiner kennt, deren Wirkung aber unvergessen bleibt.</description>
+			<data  actors="Rolf Krall" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1" time="0" price="100" critics="0" speed="84" outcome="0" betty="60" />
 			<episode number="1">
-				<title>XXX besucht... Madame Krussaud</title>
+				<title>Rolf Krall besucht... Madame Krussaud</title>
 				<description>Im Schatten ihrer Schwester bastelt Madame Krussaud Figuren aus von Fans bereitgestelltem Ohrenschmalz.</description>
-				<data  actors="XXX" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="72"	speed="84" />
+				<data  actors="Rolf Krall" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="72"	speed="84" />
 			</episode>
 			<episode number="2">
-				<title>XXX besucht... Jens Flumme</title>
-				<description>XXX zu Besuch bei Jens Flumme. Ausführlich wird im Gespräch erklärt, wie es zur fabulösen Erfindung des Multifunktions-Radiergummis kam.</description>
-				<data  actors="XXX" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="96"	speed="108"	outcome="60" />
+				<title>Rolf Krall besucht... Jens Flumme</title>
+				<description>Rolf Krall zu Besuch bei Jens Flumme. Ausführlich wird im Gespräch erklärt, wie es zur fabulösen Erfindung des Multifunktions-Radiergummis kam.</description>
+				<data  actors="Rolf Krall" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="96"	speed="108"	outcome="60" />
 			</episode>
 			<episode number="3">
-				<title>XXX besucht... Martin Zeck</title>
-				<description>XXX zu Besuch bei Martin Zeck. In geselliger Runde spricht Krall über die umgreifende Problematik der Flaschenpfandproblematik.</description>
-				<data  actors="XXX" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="95"	speed="117"	outcome="57" />
+				<title>Rolf Krall besucht... Martin Zeck</title>
+				<description>Rolf Krall zu Besuch bei Martin Zeck. In geselliger Runde spricht Krall über die umgreifende Problematik der Flaschenpfandproblematik.</description>
+				<data  actors="Rolf Krall" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="95"	speed="117"	outcome="57" />
 			</episode>
 			<episode number="4">
-				<title>XXX besucht... Peter Kruste</title>
-				<description>Bei leckerem Brot plaudert XXX mit Peter Kruste darüber, wie Kruste darauf kam, dem Brot die schmackhafte Kante zu geben.</description>
-				<data  actors="XXX" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="72"	speed="144"	outcome="60" />
+				<title>Rolf Krall besucht... Peter Kruste</title>
+				<description>Bei leckerem Brot plaudert Rolf Krall mit Peter Kruste darüber, wie Kruste darauf kam, dem Brot die schmackhafte Kante zu geben.</description>
+				<data  actors="Rolf Krall" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="72"	speed="144"	outcome="60" />
 			</episode>
 			<episode number="5">
-				<title>XXX besucht... seine Mutter</title>
-				<description>Zum Abschluss der Serie besucht XXX seine eigene Mutter, kitzelt ein paar urige Rezepte aus ihr heraus und plaudert über intime Details des immer populärer werdenden Moderators.</description>
-				<data  actors="XXX" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="120"	speed="168"	outcome="108" />
+				<title>Rolf Krall besucht... seine Mutter</title>
+				<description>Zum Abschluss der Serie besucht Rolf Krall seine eigene Mutter, kitzelt ein paar urige Rezepte aus ihr heraus und plaudert über intime Details des immer populärer werdenden Moderators.</description>
+				<data  actors="Rolf Krall" director="Alan Smithee" country="D" year="1992" genre="13"  blocks="1"	price="50"	critics="120"	speed="168"	outcome="108" />
 			</episode>
 		</serie>
 		<serie>

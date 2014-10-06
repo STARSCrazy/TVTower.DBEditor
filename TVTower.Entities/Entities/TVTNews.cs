@@ -14,9 +14,8 @@ namespace TVTower.Entities
 		public TVTNewsGenre Genre { get; set; }
 
 		public int Price { get; set; }		//0 - 1000		
-		public int Topicality { get; set; } //0 - 100
+		public int Quality { get; set; } //0 - 100   (früher Topicality)
 
-		public int FixYear { get; set; }
 		public int AvailableAfterDays { get; set; }
 		public int YearRangeFrom { get; set; }
 		public int YearRangeTo { get; set; }

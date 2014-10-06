@@ -248,9 +248,8 @@ namespace TVTower.SQL
 			definition.Add( x => x.Genre );
 
 			definition.Add( x => x.Price );
-			definition.Add( x => x.Topicality );
+			definition.Add( x => x.Quality );
 
-			definition.Add( x => x.FixYear );
 			definition.Add( x => x.AvailableAfterDays );
 			definition.Add( x => x.YearRangeFrom );
 			definition.Add( x => x.YearRangeTo );
