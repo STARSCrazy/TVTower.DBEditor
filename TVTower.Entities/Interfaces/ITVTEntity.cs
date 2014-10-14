@@ -3,9 +3,9 @@ using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
-    public interface ITVTEntity : IIdEntity
+	public interface ITVTEntity : IIdEntity
 	{
-		Guid Id { get; set; }
+		string Id { get; set; }
 		string OldId { get; set; }
 
 		TVTDataType DataType { get; set; }

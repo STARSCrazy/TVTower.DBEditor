@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TVTower.Entities
 {
@@ -27,13 +26,11 @@ namespace TVTower.Entities
 		IEnumerable<TVTAdvertising> GetAllAdvertisings();
 		IEnumerable<TVTNews> GetAllNews();
 
-		IEnumerable<TVTProgramme> GetEpisodesOfSeries( Guid seriesId );
+		IEnumerable<TVTProgramme> GetEpisodesOfSeries( string seriesId );
 
-		TVTProgramme GetProgrammeById( Guid id );
-		TVTProgramme GetProgrammeByStringId( string id );
+		TVTProgramme GetProgrammeById( string id );
 
-		TVTPerson GetPersonById( Guid id );
-		TVTPerson GetPersonByStringId( string id );
+		TVTPerson GetPersonById( string id );
 		TVTPerson GetPersonByTmdbId( int tmdbId );
 		TVTPerson GetPersonByName( string name );
 

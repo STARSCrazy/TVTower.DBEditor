@@ -446,7 +446,7 @@ namespace TVTower.SQL
 			Action<MySqlDataReader, object> ownerReadAction = ( r, x ) =>
 			{
 				var ownerIdTemp = r[subDefinition.OwnerIdField];
-				var ownerId = Guid.Parse( ownerIdTemp.ToString() );
+				var ownerId = ownerIdTemp.ToString();
 
 				var owner = possibleOwner.FirstOrDefault( z => z.Id == ownerId );
 				if ( owner != null )

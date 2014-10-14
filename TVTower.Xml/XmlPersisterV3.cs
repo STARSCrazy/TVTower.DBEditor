@@ -638,7 +638,7 @@ namespace TVTower.Xml
 		public TVTAdvertising LoadAd( XmlNode xmlNode, bool isFake )
 		{
 			var result = new TVTAdvertising();
-			result.Id = new Guid( xmlNode.GetAttribute( "id" ) );
+			result.Id = xmlNode.GetAttribute( "id" );
 
 			foreach ( XmlLinkedNode movieChild in xmlNode.ChildNodes )
 			{

@@ -145,32 +145,14 @@ namespace TVTower.DBEditor
 			return result;
 		}
 
-		public TVTProgramme GetProgrammeById( Guid id )
+		public TVTProgramme GetProgrammeById( string id )
 		{
 			return ProgrammeData.FirstOrDefault( x => x.Id == id );
 		}
 
-		public TVTProgramme GetProgrammeByStringId( string id )
-		{
-			Guid guidId;
-			if ( Guid.TryParse( id, out guidId ) )
-				return GetProgrammeById( guidId );
-			else
-				return null;
-		}
-
-		public TVTPerson GetPersonById( Guid id )
+		public TVTPerson GetPersonById( string id )
 		{
 			return PersonData.FirstOrDefault( x => x.Id == id );
-		}
-
-		public TVTPerson GetPersonByStringId( string id )
-		{
-			Guid guidId;
-			if ( Guid.TryParse( id, out guidId ) )
-				return GetPersonById( guidId );
-			else
-				return null;
 		}
 
 		public TVTPerson GetPersonByTmdbId( int tmdbId )
@@ -187,10 +169,9 @@ namespace TVTower.DBEditor
 				return PersonData.FirstOrDefault( x => x.FakeFullName != null ? x.FakeFullName.Trim() == name.Trim() : false );
 		}
 
-		public IEnumerable<TVTProgramme> GetEpisodesOfSeries( Guid seriesId )
+		public IEnumerable<TVTProgramme> GetEpisodesOfSeries( string seriesId )
 		{
-			var seriesIdTemp = seriesId.ToString();
-			return ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode && x.MasterId == seriesIdTemp );
+			return ProgrammeData.Where( x => x.ProductType == TVTProductType.Episode && x.MasterId == seriesId );
 		}
 
 		public TVTNews GetNewsThreadInitial( string threadId )

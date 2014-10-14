@@ -96,14 +96,8 @@ namespace TVTower.Converter
                     var result = (TVTEntity)Activator.CreateInstance(type);
                     result.OnlyReference = true;
                     
-                    Guid guid;
-                    if (Guid.TryParse(value.ToString(), out guid))
-                    {
-                        result.Id = guid;
-                        return result;
-                    }
-                    else
-                        return null;
+					result.Id = value.ToString();
+                    return result;
                 }
                 else
                     return null;
@@ -114,7 +108,7 @@ namespace TVTower.Converter
                 {
                     var result = (TVTEntity)Activator.CreateInstance(type);
                     result.OnlyReference = true;
-                    result.Id = Guid.Parse(value.ToString());
+                    result.Id = value.ToString();
                     return result;
                 }
                 else
@@ -126,7 +120,7 @@ namespace TVTower.Converter
                 {
                     var result = (TVTEntity)Activator.CreateInstance(type);
                     result.OnlyReference = true;
-                    result.Id = Guid.Parse(value.ToString());
+                    result.Id = value.ToString();
                     return result;
                 }
                 else

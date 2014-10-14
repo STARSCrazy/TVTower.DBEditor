@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using CodeKnight.Core;
+﻿using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
@@ -26,7 +24,7 @@ namespace TVTower.Entities
 		public int ViewersRate { get; set; }
 
 		public WeakReference<TVTProgramme> SeriesMaster { get; set; }
-		public Guid SeriesId { get; set; } //Redundanz
+		public string SeriesId { get; set; } //Redundanz
 		public int? EpisodeIndex { get; set; }
 
 		public TVTEpisodeOld()
@@ -44,7 +42,7 @@ namespace TVTower.Entities
 				!SeriesMaster.IsAlive ||
 				SeriesMaster.Target == null ||
 				EpisodeIndex == 0 ||
-				SeriesId == Guid.Empty )
+				string.IsNullOrEmpty( SeriesId ) )
 			{
 				DataStatus = TVTDataStatus.Incomplete;
 				return DataStatus;

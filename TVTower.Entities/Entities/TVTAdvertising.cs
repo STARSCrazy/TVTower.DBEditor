@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
@@ -34,6 +35,11 @@ namespace TVTower.Entities
 		{
 			ProPressureGroups = new List<TVTPressureGroup>();
 			ContraPressureGroups = new List<TVTPressureGroup>();
+		}
+
+		public override void GenerateGuid()
+		{
+			Id = "A" + UniqueIdGenerator.GetInstance().GetBase32UniqueId( 9 ).Insert( 4, "_" );
 		}
 	}
 }

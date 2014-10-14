@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
 	public class TVTNewsEffect : IIdEntity
 	{
-		public Guid Id { get; set; }
+		public string Id { get; set; }
 		public TVTNewsEffectType Type { get; set; }
 		public List<string> EffectParameters { get; set; }
 
 		public TVTNewsEffect()
 		{
-			Id = Guid.NewGuid();
+			Id = "E" + UniqueIdGenerator.GetInstance().GetBase32UniqueId( 9 ).Insert( 4, "_" );
 			EffectParameters = new List<string>();
 		}
 
 		public TVTNewsEffect( TVTNewsEffectType type, string param1 = null, string param2 = null, string param3 = null )
 		{
-			Id = Guid.NewGuid();
+			Id = "E" + UniqueIdGenerator.GetInstance().GetBase32UniqueId( 9 ).Insert( 4, "_" );
 			this.Type = type;
 			EffectParameters = new List<string>();
 

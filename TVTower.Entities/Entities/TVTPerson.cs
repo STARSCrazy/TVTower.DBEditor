@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CodeKnight.Core;
 
 namespace TVTower.Entities
 {
@@ -47,6 +48,11 @@ namespace TVTower.Entities
 		public TVTPerson()
 		{
 			Functions = new List<TVTPersonFunction>();
+		}
+
+		public override void GenerateGuid()
+		{
+			Id = "P" + UniqueIdGenerator.GetInstance().GetBase32UniqueId( 8 ).Insert( 4, "_" );
 		}
 
 		public override TVTDataStatus RefreshStatus()

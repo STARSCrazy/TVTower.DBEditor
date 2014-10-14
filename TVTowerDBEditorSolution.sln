@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVTower.DBEditorGUI", "TVTo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVTower.Database", "TVTower.Database\TVTower.Database.csproj", "{136F71C1-7EA4-4256-A93F-23751E8AC679}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeKnight.Core.Test", "CodeKnight.Core.Test\CodeKnight.Core.Test.csproj", "{80F323B9-E5C0-449C-ABA0-3450506F23AD}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TVTowerDBEditorSolution2.vsmdi
@@ -153,6 +155,16 @@ Global
 		{136F71C1-7EA4-4256-A93F-23751E8AC679}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{136F71C1-7EA4-4256-A93F-23751E8AC679}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{136F71C1-7EA4-4256-A93F-23751E8AC679}.Release|x86.ActiveCfg = Release|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{80F323B9-E5C0-449C-ABA0-3450506F23AD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

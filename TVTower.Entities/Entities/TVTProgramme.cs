@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CodeKnight.Core;
-using System;
 
 namespace TVTower.Entities
 {
@@ -76,6 +76,11 @@ namespace TVTower.Entities
 			BoxOfficeRate = -1;
 			Year = -1;
 			Blocks = -1;
+		}
+
+		public override void GenerateGuid()
+		{
+			Id = "M" + UniqueIdGenerator.GetInstance().GetBase32UniqueId( 9 ).Insert( 4, "_" );
 		}
 
 		public override TVTDataStatus RefreshStatus()
@@ -186,7 +191,7 @@ namespace TVTower.Entities
 				{
 					if ( SeriesMaster == null )
 					{
-						var master = database.GetProgrammeByStringId( MasterId );
+						var master = database.GetProgrammeById( MasterId );
 						if ( master != null )
 							SeriesMaster = new WeakReference<TVTProgramme>( master );
 					}

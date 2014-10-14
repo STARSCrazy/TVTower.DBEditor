@@ -4,7 +4,7 @@ namespace TVTower.Entities
 {
 	public abstract class TVTEntity : ITVTEntity
 	{
-		public Guid Id { get; set; }
+		public string Id { get; set; }
 		public string OldId { get; set; }
 
 		public bool OnlyReference { get; set; }
@@ -29,16 +29,16 @@ namespace TVTower.Entities
 			get { return this; }
 		}
 
-		public void GenerateGuid()
+		public virtual void GenerateGuid()
 		{
-			Id = Guid.NewGuid();
+			throw new NotImplementedException();
 		}
 
 		public virtual TVTDataStatus RefreshStatus()
 		{
 			DataStatus = TVTDataStatus.Complete;
 
-			if ( Id == Guid.Empty )
+			if ( string.IsNullOrEmpty( Id ) )
 			{
 				DataStatus = TVTDataStatus.Incorrect;
 				return DataStatus;
