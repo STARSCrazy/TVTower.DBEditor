@@ -7,6 +7,7 @@ namespace TVTower.DBEditorGUI
 {
     public enum ListViewKey
     {
-        Advertisings
+        Advertisings,
+        People
     }
 }

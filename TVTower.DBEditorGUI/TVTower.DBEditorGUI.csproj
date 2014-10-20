@@ -72,8 +72,18 @@
     <Compile Include="EntityForms\AdvertisingForm.Designer.cs">
       <DependentUpon>AdvertisingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EntityForms\EntityForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EntityForms\PersonForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EntityForms\PersonForm.Designer.cs">
+      <DependentUpon>PersonForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListViewDefinitions\AdvertisingListViewDefinition.cs" />
     <Compile Include="ListViewDefinitions\BaseListViewDefinition.cs" />
+    <Compile Include="ListViewDefinitions\PersonListViewDefinition.cs" />
     <Compile Include="ListViewDefinitions\IListViewDefinition.cs" />
     <Compile Include="Controls\TVTGenericColumnHeader.cs">
       <SubType>Component</SubType>
@@ -96,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EntityForms\AdvertisingForm.resx">
       <DependentUpon>AdvertisingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EntityForms\PersonForm.resx">
+      <DependentUpon>PersonForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -12,6 +12,7 @@ using TVTower.DBEditorGUI.Properties;
 using TVTower.Entities;
 using TVTower.DBEditorGUI.ListViewDefinitions;
 using TVTower.DBEditorGUI.Controls;
+using CodeKnight.Core;
 
 namespace DBEditorGUI
 {
@@ -21,6 +22,8 @@ namespace DBEditorGUI
 
         public AdvertisingForm advertisingForm = new AdvertisingForm();
 
+        public TabPage CurrentFormTab = null;
+
         public MainForm()
         {
             InitializeComponent();
@@ -28,6 +31,15 @@ namespace DBEditorGUI
             ListViews = new Dictionary<ListViewKey, ListView>();
             
             InitializeListView( ListViewKey.Advertisings, new AdvertisingListViewDefinition() );
+            InitializeListView( ListViewKey.People, new PersonListViewDefinition() );
+
+            CurrentFormTab = new TabPage();
+            CurrentFormTab.Name = "CurrentFormTabPage";
+            CurrentFormTab.Padding = new Padding( 3 );
+            CurrentFormTab.Text = "Aktuell";
+            CurrentFormTab.UseVisualStyleBackColor = true;
+
+            tabControlForms.Controls.Add( CurrentFormTab );
         }
 
         public void RefreshAllViews()
@@ -37,50 +49,63 @@ namespace DBEditorGUI
                 var key = listViewKV.Key;
                 var listView = listViewKV.Value;
 
-                listView.Items.Clear();
-
-                var advertisings = TVTEditorApplication.Instance.InternalDatabase.GetAllAdvertisings();
-
-                foreach ( var entity in advertisings )
+                if ( key == ListViewKey.Advertisings )
                 {
-                    var item = new ListViewItem();
-                    item.Tag = entity;
-                    item.Text = entity.TitleDE;
-                    item.SubItems.Clear();
-
-                    var colIndex = 0;
-
-                    foreach ( var column in listView.Columns )
-                    {                        
-                        if ( column is TVTGenericColumnHeader<TVTAdvertising> )
-                        {
-                            var colAd = column as TVTGenericColumnHeader<TVTAdvertising>;
-
-                            ListViewItem.ListViewSubItem subItem = null;
-
-                            if ( item.SubItems.Count >= colIndex + 1 )
-                                subItem = item.SubItems[0];
-                            else
-                            {
-                                subItem = new ListViewItem.ListViewSubItem();
-                                item.SubItems.Add( subItem );
-                            }
-
-                            subItem.Text = colAd.GetValueString( entity );                            
-                            
-                            colIndex++;
-                        }
-                    }
-
-                    listView.Items.Add( item );
+                    var advertisings = TVTEditorApplication.Instance.InternalDatabase.GetAllAdvertisings();
+                    LoadViewItems( listView, advertisings, x => x.TitleDE );
                 }
+                else if ( key == ListViewKey.People )
+                {
+                    var people = TVTEditorApplication.Instance.InternalDatabase.GetAllPeople();
+                    LoadViewItems( listView, people, x => x.FullName );
+                }
+            }
+        }
+
+        public void LoadViewItems<T>( ListView listView, IEnumerable<T> entities, Func<T, string> textMethod )
+            where T : IIdEntity
+        {
+            listView.Items.Clear();
+
+            foreach ( var entity in entities )
+            {
+                var item = new ListViewItem();
+                item.Tag = entity;
+                item.Text = textMethod.Invoke( entity );
+                item.SubItems.Clear();
+
+                var colIndex = 0;
+
+                foreach ( var column in listView.Columns )
+                {
+                    if ( column is TVTGenericColumnHeader<T> )
+                    {
+                        var colAd = column as TVTGenericColumnHeader<T>;
+
+                        ListViewItem.ListViewSubItem subItem = null;
+
+                        if ( item.SubItems.Count >= colIndex + 1 )
+                            subItem = item.SubItems[0];
+                        else
+                        {
+                            subItem = new ListViewItem.ListViewSubItem();
+                            item.SubItems.Add( subItem );
+                        }
+
+                        subItem.Text = colAd.GetValueString( entity );
+
+                        colIndex++;
+                    }
+                }
+
+                listView.Items.Add( item );
             }
         }
 
         private void InitializeListView( ListViewKey key, IListViewDefinition listViewDefinition )
         {
             var listView = CreateListView( key, listViewDefinition.GetColumnDefinition() );
-            ListViews.Add( ListViewKey.Advertisings, listView );
+            ListViews.Add( key, listView );
 
             var tabPage = new TabPage();
             tabPage.Name = key.ToString() + "TabPage";
@@ -92,6 +117,33 @@ namespace DBEditorGUI
             tabControlListViews.Controls.Add( tabPage );
         }
 
+        private void OpenForm(ListViewKey key, ITVTEntity entity)
+        {
+            UserControl form = null;
+
+            switch (key)
+            {
+                case ListViewKey.Advertisings:
+                    OpenFormInternal<TVTAdvertising>( new AdvertisingForm(), key, (TVTAdvertising)entity );
+                    break;
+                case ListViewKey.People:
+                    OpenFormInternal<TVTPerson>( new PersonForm(), key, (TVTPerson)entity );
+                    break;
+            }
+        }
+
+        private void OpenFormInternal<T>( EntityForm<T> form, ListViewKey key, T entity )
+            where T : IIdEntity
+        {
+            form.LoadEntity( entity );
+
+            form.Dock = DockStyle.Fill;
+            form.Name = key.ToString() + "Form";
+
+            CurrentFormTab.Controls.Clear();
+            CurrentFormTab.Controls.Add( form );
+        }
+
         private ListView CreateListView( ListViewKey key, List<TVTColumnHeader> columns )
         {
             var view = new ListView();
@@ -100,11 +152,26 @@ namespace DBEditorGUI
             view.UseCompatibleStateImageBehavior = false;
             view.View = View.Details;
             view.FullRowSelect = true;
+            view.FullRowSelect = true;
+            view.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler( view_ItemSelectionChanged );
+            view.Tag = key;
 
             if ( columns != null )
                 view.Columns.AddRange( columns.ToArray() );
 
             return view;
+        }
+
+        void view_ItemSelectionChanged( object sender, ListViewItemSelectionChangedEventArgs e )
+        {
+            if ( e.IsSelected && e.Item != null && e.Item.Tag is ITVTEntity )
+            {
+                var key = (ListViewKey)((ListView)sender).Tag;
+
+                var entity = (ITVTEntity)e.Item.Tag;
+
+                OpenForm(key, entity);
+            }
         }
 
         private void connectToDatabaseMenuItem_Click( object sender, EventArgs e )

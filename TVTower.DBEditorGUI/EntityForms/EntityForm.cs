@@ -7,19 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using TVTower.Entities;
+using CodeKnight.Core;
 
 namespace TVTower.DBEditorGUI.EntityForms
 {
-    public partial class AdvertisingForm : EntityForm<TVTAdvertising>
+    public abstract class EntityForm<T> : UserControl
+        where T : IIdEntity
     {
-        public AdvertisingForm()
+        public EntityForm()
         {
-            InitializeComponent();
         }
 
-        public override void LoadEntity( TVTAdvertising entity )
-        {
-            cTitleDE.Text = entity.TitleDE;
-        }
+        public abstract void LoadEntity( T entity );
     }
 }

@@ -33,8 +33,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.dateiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToDatabaseMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControlForms = new System.Windows.Forms.TabControl();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
             this.mainSplitContainer.Panel1.SuspendLayout();
+            this.mainSplitContainer.Panel2.SuspendLayout();
             this.mainSplitContainer.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -55,6 +57,7 @@
             // mainSplitContainer.Panel2
             // 
             this.mainSplitContainer.Panel2.AccessibleName = "FormPanel";
+            this.mainSplitContainer.Panel2.Controls.Add(this.tabControlForms);
             this.mainSplitContainer.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.mainSplitContainer.Size = new System.Drawing.Size(1015, 664);
             this.mainSplitContainer.SplitterDistance = 318;
@@ -94,6 +97,15 @@
             this.connectToDatabaseMenuItem.Text = "Verbinde mit Datenbank";
             this.connectToDatabaseMenuItem.Click += new System.EventHandler(this.connectToDatabaseMenuItem_Click);
             // 
+            // tabControlForms
+            // 
+            this.tabControlForms.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlForms.Location = new System.Drawing.Point(0, 0);
+            this.tabControlForms.Name = "tabControlForms";
+            this.tabControlForms.SelectedIndex = 0;
+            this.tabControlForms.Size = new System.Drawing.Size(1015, 342);
+            this.tabControlForms.TabIndex = 3;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -106,6 +118,7 @@
             this.Text = "Form1";
             this.mainSplitContainer.Panel1.ResumeLayout(false);
             this.mainSplitContainer.Panel1.PerformLayout();
+            this.mainSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).EndInit();
             this.mainSplitContainer.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
@@ -121,6 +134,7 @@
         private System.Windows.Forms.ToolStripMenuItem dateiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectToDatabaseMenuItem;
         private System.Windows.Forms.TabControl tabControlListViews;
+        private System.Windows.Forms.TabControl tabControlForms;
     }
 }
 

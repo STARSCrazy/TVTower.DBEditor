@@ -10,16 +10,17 @@ using TVTower.Entities;
 
 namespace TVTower.DBEditorGUI.EntityForms
 {
-    public partial class AdvertisingForm : EntityForm<TVTAdvertising>
+    public partial class PersonForm : EntityForm<TVTPerson>
     {
-        public AdvertisingForm()
+        public PersonForm()
         {
             InitializeComponent();
         }
 
-        public override void LoadEntity( TVTAdvertising entity )
+        public override void LoadEntity( TVTPerson entity )
         {
-            cTitleDE.Text = entity.TitleDE;
+            cFirstName.Text = entity.FirstName;
+            cLastName.Text = entity.LastName;
         }
     }
 }
