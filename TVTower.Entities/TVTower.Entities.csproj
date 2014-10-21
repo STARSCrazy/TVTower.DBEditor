@@ -48,6 +48,7 @@
     <Compile Include="Entities\TVTEntity.cs" />
     <Compile Include="Entities\TVTResource.cs" />
     <Compile Include="Entities\TVTStaff.cs" />
+    <Compile Include="Enums\TVTDataUsage.cs" />
     <Compile Include="Enums\TVTDataRoot.cs" />
     <Compile Include="Enums\TVTProductType.cs" />
     <Compile Include="Enums\TVTDistributionChannel.cs" />

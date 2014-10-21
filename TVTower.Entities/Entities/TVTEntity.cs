@@ -12,6 +12,7 @@ namespace TVTower.Entities
 		public TVTDataType DataType { get; set; }
 		public TVTDataStatus DataStatus { get; set; }
 		public TVTDataRoot DataRoot { get; set; }
+		public TVTDataUsage DataUsage { get; set; }
 
 		public object Tag { get; set; }
 		public string AdditionalInfo { get; set; }

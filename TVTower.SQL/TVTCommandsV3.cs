@@ -215,6 +215,7 @@ namespace TVTower.SQL
 
 			definition.Add( x => x.Id );
 			definition.Add( x => x.Type );
+			definition.Add( x => x.Chance );
 			definition.Add( x => x.EffectParameters, "value1", null, 0 );
 			definition.Add( x => x.EffectParameters, "value2", null, 1 );
 			definition.Add( x => x.EffectParameters, "value3", null, 2 );
@@ -512,8 +513,10 @@ namespace TVTower.SQL
 			definition.Add( x => x.DataType );
 			definition.Add( x => x.DataStatus );
 			definition.Add( x => x.DataRoot );
+			definition.Add( x => x.DataUsage );
 			definition.Add( x => x.Approved );
 			definition.Add( x => x.AdditionalInfo );
+			definition.Add( x => x.OldId );
 
 			definition.Add( x => x.CreatorId );
 			definition.Add( x => x.EditorId );

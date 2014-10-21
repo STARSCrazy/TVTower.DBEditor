@@ -5,7 +5,6 @@ namespace TVTower.Entities
 {
 	public interface ITVTEntity : IIdEntity
 	{
-		string Id { get; set; }
 		string OldId { get; set; }
 
 		TVTDataType DataType { get; set; }

@@ -244,6 +244,8 @@ namespace TVTower.Xml
 					{
 						var effectNode = doc.CreateElement( "effect" );
 						effectNode.AddAttribute( "type", effect.Type.ToString().ToLower() );
+						if ( effect.Chance != 100 )
+							effectNode.AddAttribute( "chance", effect.Chance.ToString() );
 						if ( effect.EffectParameters.Count == 1 )
 							effectNode.AddAttribute( "parameter1", effect.EffectParameters[0] );
 						if ( effect.EffectParameters.Count == 2 )

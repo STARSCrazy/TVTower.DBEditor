@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MySql.Data.MySqlClient;
 using TVTower.Converter;
 using TVTower.Database;
 using TVTower.DBEditor;
@@ -16,31 +14,7 @@ namespace TVTower.UnitTests
 	public class MySQLTest
 	{
 		[TestMethod]
-		public void ConnectTest()
-		{
-			string myConnectionString = "SERVER=localhost;" +
-										"DATABASE=tvtower;" +
-										"UID=TVTowerUser;" +
-										"PASSWORD=123;";
-
-			MySqlConnection connection = new MySqlConnection( myConnectionString );
-			MySqlCommand command = connection.CreateCommand();
-			command.CommandText = "SELECT * FROM tvt_filme";
-			MySqlDataReader Reader;
-			connection.Open();
-			Reader = command.ExecuteReader();
-			while ( Reader.Read() )
-			{
-				string row = "";
-				for ( int i = 0; i < Reader.FieldCount; i++ )
-					row += Reader.GetValue( i ).ToString() + ", ";
-				Console.WriteLine( row );
-			}
-			connection.Close();
-		}
-
-		[TestMethod]
-		public void ConvertOldToNewDataTest()
+		public void A_ConvertOldToNewData()
 		{
 			var database = new TVTBindingListDatabaseOld();
 			database.Initialize();
@@ -79,15 +53,8 @@ namespace TVTower.UnitTests
 		}
 
 		[TestMethod]
-		public void SQLDefinitiontest()
-		{
-			var definition = new SQLDefinition<TVTProgramme>();
-			definition.Add( x => x.FakeTitleDE );
-		}
-
-		[TestMethod]
 		[DeploymentItem( "TestData\\database.xml" )]
-		public void ReadXMLV2Test()
+		public void B_ReadXMLV2AndMerge()
 		{
 			System.Diagnostics.Trace.WriteLine( Directory.GetCurrentDirectory() );
 			Assert.IsTrue( File.Exists( "database.xml" ) );
@@ -211,7 +178,7 @@ namespace TVTower.UnitTests
 
 		[TestMethod]
 		[DeploymentItem( "TestData\\ads-changes.xml" )]
-		public void ReadXMLV2AdChangesTest()
+		public void C_ReadXMLV2AndMergeAdChanges()
 		{
 			System.Diagnostics.Trace.WriteLine( Directory.GetCurrentDirectory() );
 			Assert.IsTrue( File.Exists( "ads-changes.xml" ) );
@@ -276,7 +243,7 @@ namespace TVTower.UnitTests
 
 
 		[TestMethod]
-		public void CreateXMLTest()
+		public void D_CreateXMLV3()
 		{
 			var database = new TVTBindingListDatabaseOld();
 			database.Initialize();
