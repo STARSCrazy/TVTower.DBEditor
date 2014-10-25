@@ -62,10 +62,6 @@
       <Project>{05974C12-A448-406B-A98A-BB3C59D95BC9}</Project>
       <Name>TVTower.DBEditorGUI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TVTower.DBEditor\TVTower.DBEditor.csproj">
-      <Project>{CADB51F1-127E-4732-9A59-BA2CBDB9FAB1}</Project>
-      <Name>TVTower.DBEditor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TVTower.Entities\TVTower.Entities.csproj">
       <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>
       <Name>TVTower.Entities</Name>

@@ -313,7 +313,6 @@ namespace TVTower.Database
 				if ( mergeNoEffects && property.Name == "Effects" )
 				{
 					//Nichts machen
-					var i = 5;
 				}
 				else
 				{

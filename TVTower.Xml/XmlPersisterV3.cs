@@ -203,7 +203,7 @@ namespace TVTower.Xml
 
 			{
 				XmlNode dataNode = doc.CreateElement( "data" );
-				dataNode.AddAttribute( "infomercial", ad.Infomercial ? "1" : "0" );
+				//dataNode.AddAttribute( "infomercial", ad.Infomercial ? "1" : "0" );
 				dataNode.AddAttribute( "quality", ad.Quality.ToString() );
 				dataNode.AddAttribute( "repetitions", ad.Repetitions.ToString() );
 				dataNode.AddAttribute( "duration", ad.Duration.ToString() );
@@ -680,7 +680,7 @@ namespace TVTower.Xml
 						result.TargetGroup = (TVTTargetGroup)movieChild.GetAttributeInteger( "target_group" );
 						break;
 					case "data":
-						result.Infomercial = movieChild.GetAttributeInteger( "infomercial" ) == 1;
+						//result.Infomercial = movieChild.GetAttributeInteger( "infomercial" ) == 1;
 						result.Quality = movieChild.GetAttributeInteger( "quality" );
 						result.Repetitions = movieChild.GetAttributeInteger( "repetitions" );
 						result.Duration = movieChild.GetAttributeInteger( "duration" );
@@ -785,6 +785,112 @@ namespace TVTower.Xml
 						{
 							case "ad":
 								ads.Add( LoadAd( childNode, true ) );
+								break;
+							default:
+								throw new NotSupportedException( "Only 'news'-tags are supported." );
+						}
+					}
+				}
+				database.AddAdvertisings( ads );
+			}
+
+			database.RefreshReferences();
+
+			return result;
+		}
+
+		public ITVTDatabase LoadXMLV3Beta( string filename, ITVTDatabase database )
+		{
+			var result = database;
+			var doc = new XmlDocument();
+			doc.Load( filename );
+
+			var versionElement = doc.GetElementsByTagName( "version" );
+			if ( versionElement[0].HasAttribute( "value" ) )
+			{
+				var version = versionElement[0].GetAttributeInteger( "value" );
+				if ( version != 3 )
+					throw new NotSupportedException( "Only database version '3' is supported." );
+			}
+
+			//{
+			//    var movies = new List<TVTProgramme>();
+			//    var allprogrammes = doc.GetElementsByTagName( "allprogrammes" );
+
+			//    foreach ( XmlNode xmlProgramme in allprogrammes )
+			//    {
+			//        foreach ( XmlNode childNode in xmlProgramme.ChildNodes )
+			//        {
+			//            switch ( childNode.Name )
+			//            {
+			//                case "programme":
+			//                    movies.AddRange( LoadMovie( childNode, true ) );
+			//                    break;
+			//                default:
+			//                    throw new NotSupportedException( "Only 'programme'-tags are supported." );
+			//            }
+			//        }
+			//    }
+			//    OldV2Converter.Convert( movies, database, dataRoot );
+			//}
+
+			//{
+			//    var series = new List<MovieOldV2>();
+			//    var allSeries = doc.GetElementsByTagName( "allseries" );
+
+			//    foreach ( XmlNode xmlSeries in allSeries )
+			//    {
+			//        foreach ( XmlNode childNode in xmlSeries.ChildNodes )
+			//        {
+			//            switch ( childNode.Name )
+			//            {
+			//                case "serie":
+			//                    series.AddRange( LoadMovie( childNode, true ) );
+			//                    break;
+			//                default:
+			//                    throw new NotSupportedException( "Only 'serie'-tags are supported." );
+			//            }
+			//        }
+			//    }
+			//    OldV2Converter.Convert( series, database, dataRoot );
+			//}
+
+			//{
+			//    var news = new List<NewsOldV2>();
+			//    var allNews = doc.GetElementsByTagName( "allnews" );
+
+			//    foreach ( XmlNode xmlNews in allNews )
+			//    {
+			//        foreach ( XmlNode childNode in xmlNews.ChildNodes )
+			//        {
+			//            switch ( childNode.Name )
+			//            {
+			//                case "news":
+			//                    news.AddRange( LoadNews( childNode, true ) );
+			//                    break;
+			//                default:
+			//                    throw new NotSupportedException( "Only 'news'-tags are supported." );
+			//            }
+			//        }
+			//    }
+			//    OldV2Converter.Convert( news, database, dataRoot );
+			//}
+
+			{
+				var ads = new List<TVTAdvertising>();
+				var allNews = doc.GetElementsByTagName( "allads" );
+
+				foreach ( XmlNode xmlNews in allNews )
+				{
+					foreach ( XmlNode childNode in xmlNews.ChildNodes )
+					{
+						switch ( childNode.Name )
+						{
+							case "ad":
+								var ad = LoadAd( childNode, true );
+								//Es gab eine Zwischenversion mit Problemen bei der TargetGroup
+								ad.TargetGroup = OldV2Converter.ConvertTargetGroup( (int)ad.TargetGroup );
+								ads.Add( ad );
 								break;
 							default:
 								throw new NotSupportedException( "Only 'news'-tags are supported." );

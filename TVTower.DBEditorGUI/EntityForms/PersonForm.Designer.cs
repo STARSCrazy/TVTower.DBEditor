@@ -1,7 +1,7 @@
 ﻿using TVTower.Entities;
 namespace TVTower.DBEditorGUI.EntityForms
 {
-    partial class PersonForm : EntityForm<TVTPerson>
+    partial class PersonForm
     {
         /// <summary> 
         /// Required designer variable.

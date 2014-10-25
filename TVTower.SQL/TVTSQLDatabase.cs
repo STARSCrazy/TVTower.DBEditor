@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using MySql.Data.MySqlClient;
 using TVTower.Entities;
+using System.Collections.Generic;
 
 namespace TVTower.SQL
 {
@@ -40,6 +41,20 @@ namespace TVTower.SQL
 				database.RefreshReferences();
 			}
 		}
+
+        public void SaveAdvertising(TVTAdvertising advertising)
+        {
+            using ( var connection = GetConnection() )
+            {
+                if ( advertising.IsNew )
+                    TVTCommandsV3.Insert<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), new List<TVTAdvertising>() { advertising } );
+                else if ( advertising.IsChanged )
+                    TVTCommandsV3.Update<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), new List<TVTAdvertising>() { advertising } );
+
+                advertising.IsNew = false;
+                advertising.IsChanged = false;
+            }
+        }
 
 		public void WriteChangesToDatabase( ITVTDatabase database )
 		{
@@ -84,20 +99,6 @@ namespace TVTower.SQL
                     TVTCommandsV3.Update<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), changedPeople );
                     changedPeople.ToList().ForEach( x => { x.IsChanged = false; } );
                 }
-
-				//database.AddProgrammes( programmes.Where( x => (int)x.DataStatus >= (int)TVTDataStatus.OnlyDE ) );
-				//database.AddProgrammes( programmes );
-
-				//var ads = TVTCommandsV3.Read<TVTAdvertising>( connection, TVTCommandsV3.GetAdvertisingSQLDefinition(), "fake_title_de, title_de" );
-				//database.AddAdvertisings( ads );
-
-				//var people = TVTCommandsV3.Read<TVTPerson>( connection, TVTCommandsV3.GetPersonSQLDefinition(), "fake_last_name, fake_first_name, last_name" );
-				//database.AddPeople( people );
-
-				//var news = TVTCommandsV3.Read<TVTNews>( connection, TVTCommandsV3.GetNewsSQLDefinition(), "title_de" );
-				//database.AddNews( news );
-
-				//database.RefreshReferences();
 			}
 		}
 	}

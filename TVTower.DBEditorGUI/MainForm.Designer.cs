@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.tabControlListViews = new System.Windows.Forms.TabControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.dateiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToDatabaseMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControlForms = new System.Windows.Forms.TabControl();
+            this.tabControlListViews = new TVTower.DBEditorGUI.Controls.TVTTabControl();
+            this.tabControlForms = new TVTower.DBEditorGUI.Controls.TVTTabControl();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
             this.mainSplitContainer.Panel1.SuspendLayout();
             this.mainSplitContainer.Panel2.SuspendLayout();
@@ -59,18 +60,9 @@
             this.mainSplitContainer.Panel2.AccessibleName = "FormPanel";
             this.mainSplitContainer.Panel2.Controls.Add(this.tabControlForms);
             this.mainSplitContainer.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mainSplitContainer.Size = new System.Drawing.Size(1015, 664);
-            this.mainSplitContainer.SplitterDistance = 318;
+            this.mainSplitContainer.Size = new System.Drawing.Size(1184, 762);
+            this.mainSplitContainer.SplitterDistance = 364;
             this.mainSplitContainer.TabIndex = 0;
-            // 
-            // tabControlListViews
-            // 
-            this.tabControlListViews.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlListViews.Location = new System.Drawing.Point(0, 24);
-            this.tabControlListViews.Name = "tabControlListViews";
-            this.tabControlListViews.SelectedIndex = 0;
-            this.tabControlListViews.Size = new System.Drawing.Size(1015, 294);
-            this.tabControlListViews.TabIndex = 2;
             // 
             // menuStrip1
             // 
@@ -78,7 +70,7 @@
             this.dateiToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1015, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -97,25 +89,36 @@
             this.connectToDatabaseMenuItem.Text = "Verbinde mit Datenbank";
             this.connectToDatabaseMenuItem.Click += new System.EventHandler(this.connectToDatabaseMenuItem_Click);
             // 
+            // tabControlListViews
+            // 
+            this.tabControlListViews.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlListViews.Location = new System.Drawing.Point(0, 24);
+            this.tabControlListViews.Name = "tabControlListViews";
+            this.tabControlListViews.SelectedIndex = 0;
+            this.tabControlListViews.Size = new System.Drawing.Size(1184, 340);
+            this.tabControlListViews.TabIndex = 2;
+            // 
             // tabControlForms
             // 
             this.tabControlForms.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlForms.Location = new System.Drawing.Point(0, 0);
+            this.tabControlForms.Multiline = true;
             this.tabControlForms.Name = "tabControlForms";
             this.tabControlForms.SelectedIndex = 0;
-            this.tabControlForms.Size = new System.Drawing.Size(1015, 342);
+            this.tabControlForms.Size = new System.Drawing.Size(1184, 394);
             this.tabControlForms.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1015, 664);
+            this.ClientSize = new System.Drawing.Size(1184, 762);
             this.Controls.Add(this.mainSplitContainer);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "TVTower Editor";
             this.mainSplitContainer.Panel1.ResumeLayout(false);
             this.mainSplitContainer.Panel1.PerformLayout();
             this.mainSplitContainer.Panel2.ResumeLayout(false);
@@ -133,8 +136,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem dateiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectToDatabaseMenuItem;
-        private System.Windows.Forms.TabControl tabControlListViews;
-        private System.Windows.Forms.TabControl tabControlForms;
+        private TVTower.DBEditorGUI.Controls.TVTTabControl tabControlListViews;
+        private TVTower.DBEditorGUI.Controls.TVTTabControl tabControlForms;
     }
 }
 

@@ -130,7 +130,7 @@ namespace TVTower.SQL
 
 			AddNamesBasicSQLDefinition( definition );
 
-			definition.Add( x => x.Infomercial );
+			//definition.Add( x => x.Infomercial );
 			definition.Add( x => x.Quality );
 
 			definition.Add( x => x.FixPrice );

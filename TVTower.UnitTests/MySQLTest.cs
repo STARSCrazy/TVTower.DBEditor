@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TVTower.Converter;
 using TVTower.Database;
-using TVTower.DBEditor;
 using TVTower.Entities;
 using TVTower.SQL;
 using TVTower.Xml;
@@ -16,7 +15,7 @@ namespace TVTower.UnitTests
 		[TestMethod]
 		public void A_ConvertOldToNewData()
 		{
-			var database = new TVTBindingListDatabaseOld();
+            var database = new TVTDatabase();
 			database.Initialize();
 
 			using ( var connection = TVTSQLSession.GetSession() )
@@ -59,7 +58,7 @@ namespace TVTower.UnitTests
 			System.Diagnostics.Trace.WriteLine( Directory.GetCurrentDirectory() );
 			Assert.IsTrue( File.Exists( "database.xml" ) );
 
-			var databaseV2 = new TVTBindingListDatabaseOld();
+            var databaseV2 = new TVTDatabase();
 			databaseV2.Initialize();
 
 			var persister = new XmlPersisterV2();
@@ -187,7 +186,7 @@ namespace TVTower.UnitTests
 			databaseV3.Initialize();
 
 			var persister = new XmlPersisterV3();
-			persister.LoadXML( "ads-changes.xml", databaseV3 );
+            persister.LoadXMLV3Beta( "ads-changes.xml", databaseV3 );
 
 			var sqlDB = new TVTDatabase();
 			sqlDB.Initialize();
@@ -245,7 +244,7 @@ namespace TVTower.UnitTests
 		[TestMethod]
 		public void D_CreateXMLV3()
 		{
-			var database = new TVTBindingListDatabaseOld();
+            var database = new TVTDatabase();
 			database.Initialize();
 
 			var dataRoot = TVTDataRoot.V2InUse;

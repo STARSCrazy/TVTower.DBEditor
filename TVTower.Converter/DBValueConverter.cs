@@ -45,7 +45,6 @@ namespace TVTower.Converter
             }
             else if (type == typeof(bool))
             {
-                bool valueBool = false;
                 int intValue = 0;
 
                 if (int.TryParse(value.ToString(), out intValue))
@@ -79,12 +78,22 @@ namespace TVTower.Converter
 
                 if (value != null)
                 {
-                    foreach (var currValue in value.ToString().ToStringList())
+                    if ( listType.IsEnum && value is string )
                     {
-                        var convertedType = ConvertDBValueToType(listType, currValue);
-                        list.Add(convertedType);
+                        var v1 = ( (Enum)value ).GetFlags().ToList();
+
+                        var t2 = (Enum)Enum.ToObject(listType, value);
+                        var t3 = t2.GetFlags().ToList();
                     }
-                    return list;
+                    else
+                    {
+                        foreach ( var currValue in value.ToString().ToStringList() )
+                        {
+                            var convertedType = ConvertDBValueToType( listType, currValue );
+                            list.Add( convertedType );
+                        }
+                    }
+                    return list;                    
                 }
                 else
                     return null;

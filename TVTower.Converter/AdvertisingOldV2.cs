@@ -14,8 +14,6 @@ namespace TVTower.Converter
 		public int targetgroup;
 		public int duration;
 		public bool approved;
-		public string creatorID;
-		public string editorID;
 		public bool custom;
 		public bool deleted;
 	}

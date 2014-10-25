@@ -6,18 +6,29 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using TVTower.Entities;
 using CodeKnight.Core;
+using TVTower.DBEditorGUI.Events;
 
 namespace TVTower.DBEditorGUI.EntityForms
 {
-    public abstract class EntityForm<T> : UserControl
-        where T : IIdEntity
+    public partial class EntityForm : UserControl, IFormControl
     {
+        public event EntitySaveEventHandler EntitySave;
+
         public EntityForm()
         {
+            InitializeComponent();
         }
 
-        public abstract void LoadEntity( T entity );
+        public Control ToControl()
+        {
+            return this;
+        }
+
+        protected virtual void OnSaveEntity( EntitySaveEventArgs e )
+        {
+            if ( EntitySave != null )
+                EntitySave( this, e );
+        }
     }
 }

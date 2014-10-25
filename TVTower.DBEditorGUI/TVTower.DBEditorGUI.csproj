@@ -47,6 +47,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>win32_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,6 +63,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\TVTTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Disclaimer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,12 +81,19 @@
     <Compile Include="EntityForms\EntityForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="EntityForms\EntityForm.Designer.cs">
+      <DependentUpon>EntityForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EntityForms\PersonForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="EntityForms\PersonForm.Designer.cs">
       <DependentUpon>PersonForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Events\EntitySaveEventArgs.cs" />
+    <Compile Include="Extensions\ControlExtensions.cs" />
+    <Compile Include="IEntityForm.cs" />
+    <Compile Include="IFormControl.cs" />
     <Compile Include="ListViewDefinitions\AdvertisingListViewDefinition.cs" />
     <Compile Include="ListViewDefinitions\BaseListViewDefinition.cs" />
     <Compile Include="ListViewDefinitions\PersonListViewDefinition.cs" />
@@ -101,6 +114,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TVTEditorApplication.cs" />
+    <Compile Include="Util\CheckedListBoxItem.cs" />
+    <Compile Include="Util\ComboBoxItem.cs" />
     <EmbeddedResource Include="Disclaimer.resx">
       <DependentUpon>Disclaimer.cs</DependentUpon>
     </EmbeddedResource>
@@ -173,6 +188,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="win32_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,7 +9,7 @@ namespace TVTower.Entities
 		//Movie-Genre 1+
 		Adventure = 1,
 		Action = 2,
-		Animation = 3,
+		//Animation = 3,
 		Crime = 4,
 		Comedy = 5,
 		Documentary = 6,
@@ -30,6 +30,7 @@ namespace TVTower.Entities
 		Undefined_Show = 100,
 
 		//Event-Genre 200+
+		Undefined_Event = 200,
 		Politics = 201, //Wahlen, Große Reden, Bundestagsdebatte
 		Music = 202, //AC/DC-Konzert
 		Sport = 203, //Fussball WM, Olymische Spiele

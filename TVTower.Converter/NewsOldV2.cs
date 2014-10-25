@@ -12,8 +12,6 @@ namespace TVTower.Converter
         public int topicality;
         public int parentID;
         public bool approved;
-        public int creatorID;
-        public int editorID;
         public int episode;
     }
 }

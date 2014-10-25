@@ -443,10 +443,35 @@ namespace TVTower.Converter
 
 		public static TVTTargetGroup ConvertTargetGroup( int oldTargetGroup )
 		{
-			if ( oldTargetGroup >= 0 && oldTargetGroup <= 9 )
-				return (TVTTargetGroup)oldTargetGroup;
-			else
-				return TVTTargetGroup.All;
+            if ( oldTargetGroup >= 0 && oldTargetGroup <= 9 )
+            {
+                switch ( oldTargetGroup )
+                {
+                    case 0:
+                    default:
+                        return TVTTargetGroup.All;
+                    case 1:
+                        return TVTTargetGroup.Children;
+                    case 2:
+                        return TVTTargetGroup.Teenagers;
+                    case 3:
+                        return TVTTargetGroup.HouseWifes;
+                    case 4:
+                        return TVTTargetGroup.Employees;
+                    case 5:
+                        return TVTTargetGroup.Unemployed;
+                    case 6:
+                        return TVTTargetGroup.Manager;
+                    case 7:
+                        return TVTTargetGroup.Pensioners;
+                    case 8:
+                        return TVTTargetGroup.Women;
+                    case 9:
+                        return TVTTargetGroup.Men;
+                }                
+            }
+            else
+                return TVTTargetGroup.All;
 		}
 
 		public static void ConvertGenreAndFlags( TVTProgramme movie, MovieOldV2 movieOld )
@@ -494,7 +519,7 @@ namespace TVTower.Converter
 					movie.TargetGroups.Add( TVTTargetGroup.Children );
 					break;
 				case 10:  //cartoon
-					movie.MainGenre = TVTProgrammeGenre.Animation;
+					movie.MainGenre = TVTProgrammeGenre.Family;
 					movie.Flags.Add( TVTProgrammeFlag.Animation );
 					break;
 				case 11:  //music

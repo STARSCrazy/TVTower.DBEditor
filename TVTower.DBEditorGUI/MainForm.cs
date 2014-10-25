@@ -13,6 +13,7 @@ using TVTower.Entities;
 using TVTower.DBEditorGUI.ListViewDefinitions;
 using TVTower.DBEditorGUI.Controls;
 using CodeKnight.Core;
+using TVTower.DBEditorGUI.Events;
 
 namespace DBEditorGUI
 {
@@ -20,7 +21,8 @@ namespace DBEditorGUI
     {
         public Dictionary<ListViewKey, ListView> ListViews { get; set; }
 
-        public AdvertisingForm advertisingForm = new AdvertisingForm();
+        public AdvertisingForm DefaultAdvertisingForm = new AdvertisingForm();
+        public PersonForm DefaultPersonForm = new PersonForm();
 
         public TabPage CurrentFormTab = null;
 
@@ -119,29 +121,37 @@ namespace DBEditorGUI
 
         private void OpenForm(ListViewKey key, ITVTEntity entity)
         {
-            UserControl form = null;
-
             switch (key)
             {
                 case ListViewKey.Advertisings:
-                    OpenFormInternal<TVTAdvertising>( new AdvertisingForm(), key, (TVTAdvertising)entity );
+                    OpenFormInternal<TVTAdvertising>( DefaultAdvertisingForm, key, (TVTAdvertising)entity );
                     break;
                 case ListViewKey.People:
-                    OpenFormInternal<TVTPerson>( new PersonForm(), key, (TVTPerson)entity );
+                    OpenFormInternal<TVTPerson>( DefaultPersonForm, key, (TVTPerson)entity );
                     break;
             }
         }
 
-        private void OpenFormInternal<T>( EntityForm<T> form, ListViewKey key, T entity )
+        private void OpenFormInternal<T>( IEntityForm<T> form, ListViewKey key, T entity )
             where T : IIdEntity
-        {
+        {            
             form.LoadEntity( entity );
+            form.EntitySave += new EntitySaveEventHandler( form_EntitySave );
 
-            form.Dock = DockStyle.Fill;
-            form.Name = key.ToString() + "Form";
+            if ( CurrentFormTab.Controls.Count == 0 || CurrentFormTab.Controls[0] != form )
+            {
+                form.Dock = DockStyle.Fill;
+                form.Name = key.ToString() + "Form";
 
-            CurrentFormTab.Controls.Clear();
-            CurrentFormTab.Controls.Add( form );
+                CurrentFormTab.Controls.Clear();
+                CurrentFormTab.Controls.Add( form.ToControl() );
+            }
+        }
+
+        void form_EntitySave( object sender, EntitySaveEventArgs e )
+        {
+            TVTEditorApplication.Instance.MYSQLDatabase.SaveAdvertising( (TVTAdvertising)e.Entity );
+            //TVTEditorApplication.Instance.MYSQLDatabase.WriteChangesToDatabase( TVTEditorApplication.Instance.InternalDatabase );
         }
 
         private ListView CreateListView( ListViewKey key, List<TVTColumnHeader> columns )

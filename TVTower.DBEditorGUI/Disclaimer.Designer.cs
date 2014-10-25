@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Disclaimer));
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.rtbDisclaimer = new System.Windows.Forms.RichTextBox();
@@ -78,11 +79,12 @@
             this.Controls.Add(this.rtbDisclaimer);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAccept);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(550, 370);
             this.Name = "Disclaimer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Disclaimer";
+            this.Text = "Haftungsausschluss";
             this.ResumeLayout(false);
 
         }

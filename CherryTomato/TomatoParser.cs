@@ -100,13 +100,14 @@ namespace CherryTomato
 
 			foreach (var rating in jsonArray)
 			{
-				try
-				{
+                //try
+                //{
 					Rating newRating = new Rating() { Type = (string)rating.Key, Score = (int)rating.Value };
 					ratings.Add(newRating);
-				} catch (Exception ex)
-				{
-				}
+                //} catch (Exception ex)
+                //{
+                    
+                //}
 			}
 
 			return ratings;

@@ -172,7 +172,20 @@ namespace TVTower.SQL
 				else
 				{
 					if ( list != null && list.Count > 0 )
-						return list.ToContentString();
+					{
+						var firstItem = list[0];
+						if ( firstItem is Enum )
+						{
+							int sum = 0;
+							foreach ( var item in list )
+							{
+								sum += (int)item;
+							}
+							return sum;
+						}
+						else
+							return list.ToContentString();
+					}
 					else
 						return null;
 				}

@@ -176,8 +176,8 @@ namespace TVTower.SQL
 					news.topicality = reader.GetInt( "topicality" );
 					news.parentID = reader.GetInt( "parentID" );
 					news.approved = reader.GetBool( "approved" );
-					news.creatorID = reader.GetInt( "creatorID" );
-					news.editorID = reader.GetInt( "editorID" );
+					news.creatorID = reader.GetString( "creatorID" );
+					news.editorID = reader.GetString( "editorID" );
 					news.episode = reader.GetInt( "episode" );
 
 					result.Add( news );
