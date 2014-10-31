@@ -142,6 +142,9 @@ namespace TVTower.SQL
 			definition.Add( x => x.Penalty );
 			definition.Add( x => x.TargetGroup );
 
+            definition.Add( x => x.ValidFrom );
+            definition.Add( x => x.ValidTill );
+
 			definition.Add( x => x.AllowedGenres );
 			definition.Add( x => x.ProhibitedGenres );
 			definition.Add( x => x.AllowedProgrammeTypes );

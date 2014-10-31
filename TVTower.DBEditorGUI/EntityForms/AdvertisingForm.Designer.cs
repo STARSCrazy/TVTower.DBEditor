@@ -52,8 +52,8 @@ namespace TVTower.DBEditorGUI.EntityForms
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.cValidTill = new System.Windows.Forms.NumericUpDown();
+            this.cValidFrom = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.cMinImage = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -78,8 +78,8 @@ namespace TVTower.DBEditorGUI.EntityForms
             ((System.ComponentModel.ISupportInitialize)(this.cPenalty)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cProfit)).BeginInit();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cValidTill)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cValidFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cMinImage)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cMinAudience)).BeginInit();
@@ -97,7 +97,7 @@ namespace TVTower.DBEditorGUI.EntityForms
             this.groupBox1.Size = new System.Drawing.Size(443, 153);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Deutsch";
+            this.groupBox1.Text = "Kopfdaten";
             // 
             // tabControl1
             // 
@@ -128,6 +128,7 @@ namespace TVTower.DBEditorGUI.EntityForms
             // 
             this.cTitleDE.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cTitleDE.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cTitleDE.Location = new System.Drawing.Point(6, 6);
             this.cTitleDE.Name = "cTitleDE";
             this.cTitleDE.Size = new System.Drawing.Size(408, 20);
@@ -158,17 +159,23 @@ namespace TVTower.DBEditorGUI.EntityForms
             // 
             // cDescriptionEN
             // 
+            this.cDescriptionEN.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cDescriptionEN.Location = new System.Drawing.Point(6, 31);
             this.cDescriptionEN.Name = "cDescriptionEN";
-            this.cDescriptionEN.Size = new System.Drawing.Size(468, 92);
+            this.cDescriptionEN.Size = new System.Drawing.Size(408, 61);
             this.cDescriptionEN.TabIndex = 6;
             this.cDescriptionEN.Text = "";
             // 
             // cTitleEN
             // 
+            this.cTitleEN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cTitleEN.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cTitleEN.Location = new System.Drawing.Point(6, 6);
             this.cTitleEN.Name = "cTitleEN";
-            this.cTitleEN.Size = new System.Drawing.Size(468, 20);
+            this.cTitleEN.Size = new System.Drawing.Size(408, 20);
             this.cTitleEN.TabIndex = 5;
             // 
             // btnSave
@@ -296,8 +303,8 @@ namespace TVTower.DBEditorGUI.EntityForms
             // 
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Controls.Add(this.numericUpDown2);
-            this.groupBox3.Controls.Add(this.numericUpDown1);
+            this.groupBox3.Controls.Add(this.cValidTill);
+            this.groupBox3.Controls.Add(this.cValidFrom);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.cMinImage);
             this.groupBox3.Location = new System.Drawing.Point(3, 162);
@@ -325,45 +332,45 @@ namespace TVTower.DBEditorGUI.EntityForms
             this.label9.TabIndex = 9;
             this.label9.Text = "Verfügbar ab";
             // 
-            // numericUpDown2
+            // cValidTill
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(132, 71);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            2050,
+            this.cValidTill.Location = new System.Drawing.Point(132, 71);
+            this.cValidTill.Maximum = new decimal(new int[] {
+            2100,
             0,
             0,
             0});
-            this.numericUpDown2.Minimum = new decimal(new int[] {
+            this.cValidTill.Minimum = new decimal(new int[] {
             1985,
             0,
             0,
             0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown2.TabIndex = 8;
-            this.numericUpDown2.Value = new decimal(new int[] {
+            this.cValidTill.Name = "cValidTill";
+            this.cValidTill.Size = new System.Drawing.Size(57, 20);
+            this.cValidTill.TabIndex = 8;
+            this.cValidTill.Value = new decimal(new int[] {
             1985,
             0,
             0,
             0});
             // 
-            // numericUpDown1
+            // cValidFrom
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(132, 45);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            2050,
+            this.cValidFrom.Location = new System.Drawing.Point(132, 45);
+            this.cValidFrom.Maximum = new decimal(new int[] {
+            2100,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.cValidFrom.Minimum = new decimal(new int[] {
             1985,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown1.TabIndex = 7;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.cValidFrom.Name = "cValidFrom";
+            this.cValidFrom.Size = new System.Drawing.Size(57, 20);
+            this.cValidFrom.TabIndex = 7;
+            this.cValidFrom.Value = new decimal(new int[] {
             1985,
             0,
             0,
@@ -539,8 +546,8 @@ namespace TVTower.DBEditorGUI.EntityForms
             ((System.ComponentModel.ISupportInitialize)(this.cProfit)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cValidTill)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cValidFrom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cMinImage)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -586,8 +593,8 @@ namespace TVTower.DBEditorGUI.EntityForms
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown cValidTill;
+        private System.Windows.Forms.NumericUpDown cValidFrom;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.CheckedListBox cAllowedGenres;
         private System.Windows.Forms.GroupBox groupBox6;

@@ -8,6 +8,7 @@ using System.Text;
 using CodeKnight.Core;
 using MySql.Data.MySqlClient;
 using TVTower.Converter;
+using CodeKnight.Core;
 
 namespace TVTower.SQL
 {
@@ -173,8 +174,8 @@ namespace TVTower.SQL
 				{
 					if ( list != null && list.Count > 0 )
 					{
-						var firstItem = list[0];
-						if ( firstItem is Enum )
+						var listType = value.GetType().GetGenericArguments()[0];
+						if ( listType.IsEnum && value != null && value.ToString().IsNumeric() && Attribute.IsDefined( listType, typeof( FlagsAttribute ) ) )
 						{
 							int sum = 0;
 							foreach ( var item in list )
@@ -184,7 +185,7 @@ namespace TVTower.SQL
 							return sum;
 						}
 						else
-							return list.ToContentString();
+							return list.ToContentString<int>();
 					}
 					else
 						return null;

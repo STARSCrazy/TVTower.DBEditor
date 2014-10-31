@@ -40,6 +40,19 @@ namespace CodeKnight.Core
             return result.ToString();
         }
 
+        public static string ToContentString<T>( this IEnumerable list, char seperator = ';' )
+        {
+            var result = new StringBuilder();
+            foreach ( var value in list )
+            {
+                if ( result.Length > 0 )
+                    result.Append( seperator );
+
+                result.Append( ((T)value).ToString() );
+            }
+            return result.ToString();
+        }
+
         public static List<string> ToStringList(this string sourceString, char seperator = ';')
         {
             return sourceString.Split(seperator).ToList();

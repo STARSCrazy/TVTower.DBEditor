@@ -47,7 +47,6 @@ namespace TVTower.DBEditorGUI.EntityForms
             genres.Add( new CheckedListBoxItem( "Mystery", TVTProgrammeGenre.Mystery ) );
             genres.Add( new CheckedListBoxItem( "Liebesfilm", TVTProgrammeGenre.Romance ) );
             genres.Add( new CheckedListBoxItem( "Sci-Fi", TVTProgrammeGenre.SciFi ) );
-            genres.Add( new CheckedListBoxItem( "Krimi", TVTProgrammeGenre.Crime ) );
             genres.Add( new CheckedListBoxItem( "Thriller", TVTProgrammeGenre.Thriller ) );
             genres.Add( new CheckedListBoxItem( "Western", TVTProgrammeGenre.Western ) );
 
@@ -71,6 +70,8 @@ namespace TVTower.DBEditorGUI.EntityForms
             cTitleEN.Text = entity.TitleEN;
             cDescriptionEN.Text = entity.DescriptionEN;
 
+            cValidFrom.Value = entity.ValidFrom < 1985 ? 1985 : entity.ValidFrom;
+            cValidTill.Value = entity.ValidTill < 1985 ? 2100 : entity.ValidTill;
 
             rbFix.Checked = ( entity.FixPrice );
             rbDynamic.Checked = ( !entity.FixPrice );
@@ -96,6 +97,9 @@ namespace TVTower.DBEditorGUI.EntityForms
 
             CurrentEntity.TitleEN = cTitleEN.Text;
             CurrentEntity.DescriptionEN = cDescriptionEN.Text;
+
+            CurrentEntity.ValidFrom = Convert.ToInt32( cValidFrom.Value );
+            CurrentEntity.ValidTill = Convert.ToInt32( cValidTill.Value );
 
             CurrentEntity.MinImage = Convert.ToInt32( cMinImage.Value );
 

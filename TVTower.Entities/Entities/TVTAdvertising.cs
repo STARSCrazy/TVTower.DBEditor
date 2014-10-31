@@ -21,6 +21,9 @@ namespace TVTower.Entities
 		public int Profit { get; set; }			//0 - 1000
 		public int Penalty { get; set; }		//0 - 1000		
 
+        public int ValidFrom { get; set; }      //1985 - 2100
+        public int ValidTill { get; set; }	    //1985 - 2100
+
 		public TVTTargetGroup TargetGroup { get; set; }
 
 		public List<TVTProgrammeGenre> AllowedGenres { get; set; }
@@ -35,6 +38,9 @@ namespace TVTower.Entities
 		{
 			ProPressureGroups = new List<TVTPressureGroup>();
 			ContraPressureGroups = new List<TVTPressureGroup>();
+
+            ValidFrom = 1985;
+            ValidTill = 2100;
 		}
 
 		public override void GenerateGuid()

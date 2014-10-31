@@ -78,12 +78,19 @@ namespace TVTower.Converter
 
                 if (value != null)
                 {
-                    if ( listType.IsEnum && value is string )
-                    {
-                        var v1 = ( (Enum)value ).GetFlags().ToList();
+                    if (listType.IsEnum && value != null && value.ToString().IsNumeric() && Attribute.IsDefined(listType, typeof(FlagsAttribute)))
+                    {    
+                        var valueEnum = Enum.ToObject( listType, int.Parse( value.ToString() ) );
 
-                        var t2 = (Enum)Enum.ToObject(listType, value);
-                        var t3 = t2.GetFlags().ToList();
+                        ( (Enum)valueEnum ).GetFlags().ForEach( x => list.Add( x ) );
+                    }
+                    else if ( listType.IsEnum && value is string )
+                    {
+                        foreach ( var currValue in value.ToString().ToStringList() )
+                        {
+                            var convertedType = ConvertDBValueToType( listType, currValue );
+                            list.Add( convertedType );
+                        }
                     }
                     else
                     {
