@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Xml;
 using TVTower.Converter;
 using TVTower.Entities;
+using CodeKnight.Core;
 
-namespace TVTower.Xml
+namespace TVTower.XmlV2
 {
 	//public enum DatabaseVersion
 	//{

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F5A3E9A8-87D7-420D-A37E-2974A39413D1}</ProjectGuid>
+    <ProjectGuid>{9FB79288-6BF5-46F0-AE08-B31F2D47342E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TVTower.Importer</RootNamespace>
-    <AssemblyName>TVTower.Importer</AssemblyName>
+    <RootNamespace>TVTower.XmlV3</RootNamespace>
+    <AssemblyName>TVTower.XmlV3</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,12 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\External\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\External\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,48 +38,21 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WatTmdb">
-      <HintPath>..\External\WatTmdb.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MadTV\Extensions.cs" />
-    <Compile Include="MadTV\MadTVEncoding.cs" />
-    <Compile Include="MadTV\MadTVMovieImporter.cs" />
-    <Compile Include="MadTV\MadTVImport.cs" />
-    <Compile Include="MadTV\MadTVMovie.cs" />
-    <Compile Include="WebImport\FillMovieExtended.cs" />
-    <Compile Include="WebImport\GenreChecker.cs" />
-    <Compile Include="WebImport\Importer.cs" />
-    <Compile Include="WebImport\MovieStatistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebImport\RequestChecker.cs" />
-    <Compile Include="WebImport\ServiceApi.cs" />
+    <Compile Include="XmlPersisterV3.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CherryTomato\CherryTomato.csproj">
-      <Project>{FFF019A4-DB0B-452A-83AE-C967A546A278}</Project>
-      <Name>CherryTomato</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">
       <Project>{A12F5069-3DCE-406A-A9AB-42184F211121}</Project>
       <Name>CodeKnight.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TVTower.Converter\TVTower.Converter.csproj">
-      <Project>{AFD86351-F554-4DBA-9505-76D6E4008279}</Project>
-      <Name>TVTower.Converter</Name>
     </ProjectReference>
     <ProjectReference Include="..\TVTower.Entities\TVTower.Entities.csproj">
       <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>
       <Name>TVTower.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="WebImport\servicecodes.key">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

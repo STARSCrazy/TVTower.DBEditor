@@ -162,9 +162,9 @@
       <Project>{7321A2E6-0174-41BA-B915-0D89135FFD94}</Project>
       <Name>TVTower.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TVTower.SQL\TVTower.SQL.csproj">
-      <Project>{CBA79910-0D80-4E84-AAB6-92DE2A99C74D}</Project>
-      <Name>TVTower.SQL</Name>
+    <ProjectReference Include="..\TVTower.XmlV3\TVTower.XmlV3.csproj">
+      <Project>{9FB79288-6BF5-46F0-AE08-B31F2D47342E}</Project>
+      <Name>TVTower.XmlV3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

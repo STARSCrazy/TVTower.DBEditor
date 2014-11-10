@@ -2,6 +2,19 @@
 
 namespace TVTower.Entities
 {
+    public enum DatabaseVersion
+    {
+        V2 = 2,
+        V3 = 3
+    }
+
+    public enum DataStructure
+    {
+        Full,
+        FakeData,
+        OriginalData
+    }
+
 	public interface ITVTDatabase
 	{
 		void AddProgramme( TVTProgramme movie );

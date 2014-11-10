@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace TVTower.Xml
+namespace CodeKnight.Core
 {
 	public static class Extensions
 	{

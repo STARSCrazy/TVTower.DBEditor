@@ -32,9 +32,11 @@
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.dateiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.connectToDatabaseMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectToSQLDatabaseMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadXMLMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlListViews = new TVTower.DBEditorGUI.Controls.TVTTabControl();
             this.tabControlForms = new TVTower.DBEditorGUI.Controls.TVTTabControl();
+            this.saveXMLMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
             this.mainSplitContainer.Panel1.SuspendLayout();
             this.mainSplitContainer.Panel2.SuspendLayout();
@@ -77,17 +79,27 @@
             // dateiToolStripMenuItem
             // 
             this.dateiToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.connectToDatabaseMenuItem});
+            this.loadXMLMenuItem,
+            this.saveXMLMenuItem,
+            this.connectToSQLDatabaseMenuItem});
             this.dateiToolStripMenuItem.Name = "dateiToolStripMenuItem";
             this.dateiToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.dateiToolStripMenuItem.Text = "Datei";
             // 
-            // connectToDatabaseMenuItem
+            // connectToSQLDatabaseMenuItem
             // 
-            this.connectToDatabaseMenuItem.Name = "connectToDatabaseMenuItem";
-            this.connectToDatabaseMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.connectToDatabaseMenuItem.Text = "Verbinde mit Datenbank";
-            this.connectToDatabaseMenuItem.Click += new System.EventHandler(this.connectToDatabaseMenuItem_Click);
+            this.connectToSQLDatabaseMenuItem.Enabled = false;
+            this.connectToSQLDatabaseMenuItem.Name = "connectToSQLDatabaseMenuItem";
+            this.connectToSQLDatabaseMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.connectToSQLDatabaseMenuItem.Text = "Verbinde mit SQL-Datenbank";
+            this.connectToSQLDatabaseMenuItem.Click += new System.EventHandler(this.connectToDatabaseMenuItem_Click);
+            // 
+            // loadXMLMenuItem
+            // 
+            this.loadXMLMenuItem.Name = "loadXMLMenuItem";
+            this.loadXMLMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.loadXMLMenuItem.Text = "Öffne XML-Datenbank";
+            this.loadXMLMenuItem.Click += new System.EventHandler(this.loadXMLMenuItem_Click);
             // 
             // tabControlListViews
             // 
@@ -107,6 +119,13 @@
             this.tabControlForms.SelectedIndex = 0;
             this.tabControlForms.Size = new System.Drawing.Size(1184, 394);
             this.tabControlForms.TabIndex = 3;
+            // 
+            // saveXMLMenuItem
+            // 
+            this.saveXMLMenuItem.Name = "saveXMLMenuItem";
+            this.saveXMLMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.saveXMLMenuItem.Text = "Speichere XML-Datenbank";
+            this.saveXMLMenuItem.Click += new System.EventHandler(this.saveXMLMenuItem_Click);
             // 
             // MainForm
             // 
@@ -135,9 +154,11 @@
         private System.Windows.Forms.SplitContainer mainSplitContainer;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem dateiToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem connectToDatabaseMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem connectToSQLDatabaseMenuItem;
         private TVTower.DBEditorGUI.Controls.TVTTabControl tabControlListViews;
         private TVTower.DBEditorGUI.Controls.TVTTabControl tabControlForms;
+        private System.Windows.Forms.ToolStripMenuItem loadXMLMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveXMLMenuItem;
     }
 }
 

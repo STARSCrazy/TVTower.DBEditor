@@ -2,7 +2,7 @@
 using System.Xml;
 using TVTower.Entities;
 
-namespace TVTower.Xml.Persister
+namespace TVTower.XmlV2.Persister
 {
     //public class TVTSeriesMoviePersister : TVTMoviePersister
     //{

@@ -2,7 +2,7 @@
 using System.Xml;
 using TVTower.Converter;
 
-namespace TVTower.Xml.Persister
+namespace TVTower.XmlV2.Persister
 {
 	//public class TVTProgrammePersisterV2 : TVTEpisodePersisterV2<TVTProgramme>
 	//{

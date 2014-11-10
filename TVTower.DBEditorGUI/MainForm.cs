@@ -72,35 +72,42 @@ namespace DBEditorGUI
             foreach ( var entity in entities )
             {
                 var item = new ListViewItem();
-                item.Tag = entity;
-                item.Text = textMethod.Invoke( entity );
-                item.SubItems.Clear();
 
-                var colIndex = 0;
-
-                foreach ( var column in listView.Columns )
-                {
-                    if ( column is TVTGenericColumnHeader<T> )
-                    {
-                        var colAd = column as TVTGenericColumnHeader<T>;
-
-                        ListViewItem.ListViewSubItem subItem = null;
-
-                        if ( item.SubItems.Count >= colIndex + 1 )
-                            subItem = item.SubItems[0];
-                        else
-                        {
-                            subItem = new ListViewItem.ListViewSubItem();
-                            item.SubItems.Add( subItem );
-                        }
-
-                        subItem.Text = colAd.GetValueString( entity );
-
-                        colIndex++;
-                    }
-                }
+                UpdateViewItem( listView, item, entity, textMethod );
 
                 listView.Items.Add( item );
+            }
+        }
+
+        private void UpdateViewItem<T>( ListView listView, ListViewItem item, T entity, Func<T, string> textMethod )
+            where T : IIdEntity
+        {
+            item.Tag = entity;
+            item.Text = textMethod.Invoke( entity );
+            item.SubItems.Clear();            
+
+            var colIndex = 0;
+
+            foreach ( var column in listView.Columns )
+            {
+                if ( column is TVTGenericColumnHeader<T> )
+                {
+                    var colAd = column as TVTGenericColumnHeader<T>;
+
+                    ListViewItem.ListViewSubItem subItem = null;
+
+                    if ( item.SubItems.Count >= colIndex + 1 )
+                        subItem = item.SubItems[0];
+                    else
+                    {
+                        subItem = new ListViewItem.ListViewSubItem();
+                        item.SubItems.Add( subItem );
+                    }
+
+                    subItem.Text = colAd.GetValueString( entity );
+
+                    colIndex++;
+                }
             }
         }
 
@@ -148,9 +155,25 @@ namespace DBEditorGUI
             }
         }
 
+        private void RefreshViewItem<T>( ListViewKey key, T entity, Func<T, string> textMethod )
+            where T : IIdEntity
+        {
+            var listview = ListViews[key];
+            var item = listview.Items.Cast<ListViewItem>().FirstOrDefault( x => object.Equals(x.Tag, entity) );
+            if ( item != null )
+            {
+                UpdateViewItem( listview, item, entity, textMethod );
+            }
+        }
+
         void form_EntitySave( object sender, EntitySaveEventArgs e )
         {
-            TVTEditorApplication.Instance.MYSQLDatabase.SaveAdvertising( (TVTAdvertising)e.Entity );
+            if ( e.Entity is TVTAdvertising )
+            {
+                RefreshViewItem<TVTAdvertising>( ListViewKey.Advertisings, e.Entity as TVTAdvertising, x => x.TitleDE ); //TODO: Vereinheitlichen: VOr allem Textmethod
+            }
+
+            //TVTEditorApplication.Instance.MYSQLDatabase.SaveAdvertising( (TVTAdvertising)e.Entity );
             //TVTEditorApplication.Instance.MYSQLDatabase.WriteChangesToDatabase( TVTEditorApplication.Instance.InternalDatabase );
         }
 
@@ -188,6 +211,26 @@ namespace DBEditorGUI
         {
             TVTEditorApplication.Instance.ConnectToMySQLDatabase( Settings.Default.DBConnection );
             RefreshAllViews();
+        }
+
+        private void loadXMLMenuItem_Click( object sender, EventArgs e )
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "XML-Datei (*.xml)|*.xml|Alle Dateien (*.*)|*.*";
+            dialog.FilterIndex = 0;
+            dialog.RestoreDirectory = true;
+            switch (dialog.ShowDialog())
+            {
+                case DialogResult.OK:
+                    TVTEditorApplication.Instance.LoadXMLFile( dialog.FileName );
+                    RefreshAllViews();
+                break;
+            }
+        }
+
+        private void saveXMLMenuItem_Click( object sender, EventArgs e )
+        {
+            TVTEditorApplication.Instance.SaveXMLFile();
         }
     }
 }

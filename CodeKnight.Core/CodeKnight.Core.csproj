@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="EnumFlag.cs" />
     <Compile Include="Extensions\OtherExtensions.cs" />
+    <Compile Include="Extensions\XmlPersisterExtensions.cs" />
     <Compile Include="Interfaces\IIdEntity.cs" />
     <Compile Include="Interfaces\IIndexEntity.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />

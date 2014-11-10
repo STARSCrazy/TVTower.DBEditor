@@ -1,7 +1,8 @@
 ﻿using System.Xml;
 using TVTower.Entities;
+using CodeKnight.Core;
 
-namespace TVTower.Xml.Persister
+namespace TVTower.XmlV2.Persister
 {
     public class TVTEpisodePersisterV2<T> : TVTEntityPersisterV2<T>
         where T : ITVTEpisode

@@ -70,9 +70,13 @@
       <Project>{CBA79910-0D80-4E84-AAB6-92DE2A99C74D}</Project>
       <Name>TVTower.SQL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TVTower.Xml\TVTower.Xml.csproj">
+    <ProjectReference Include="..\TVTower.XmlV2\TVTower.XmlV2.csproj">
       <Project>{AA190C79-EE0F-4396-BC57-2BFD89B1F242}</Project>
-      <Name>TVTower.Xml</Name>
+      <Name>TVTower.XmlV2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TVTower.XmlV3\TVTower.XmlV3.csproj">
+      <Project>{9FB79288-6BF5-46F0-AE08-B31F2D47342E}</Project>
+      <Name>TVTower.XmlV3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

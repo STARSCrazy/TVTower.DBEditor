@@ -5,6 +5,7 @@ using TVTower.Converter;
 using TVTower.Database;
 using TVTower.Entities;
 using TVTower.SQL;
+using TVTower.XmlV2;
 using TVTower.Xml;
 
 namespace TVTower.UnitTests

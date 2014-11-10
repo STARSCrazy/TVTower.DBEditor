@@ -4,24 +4,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
-using TVTower.Converter;
 using TVTower.Entities;
+using CodeKnight.Core;
 
 namespace TVTower.Xml
 {
-	public enum DatabaseVersion
-	{
-		V2 = 2,
-		V3 = 3
-	}
-
-	public enum DataStructure
-	{
-		Full,
-		FakeData,
-		OriginalData
-	}
-
 	public class XmlPersisterV3
 	{
 		public const int CURRENT_VERSION = 3;
@@ -889,7 +876,6 @@ namespace TVTower.Xml
 							case "ad":
 								var ad = LoadAd( childNode, true );
 								//Es gab eine Zwischenversion mit Problemen bei der TargetGroup
-								ad.TargetGroup = OldV2Converter.ConvertTargetGroup( (int)ad.TargetGroup );
 								ads.Add( ad );
 								break;
 							default:
@@ -904,29 +890,5 @@ namespace TVTower.Xml
 
 			return result;
 		}
-
-
-
-
-
-
-
-
-
-		private void ConvertOldMovieData( TVTProgramme movie, int version )
-		{
-			if ( version <= 2 ) //Alte BlitzMax-Datenbank
-			{
-				movie.MovieAdditional.GenreOldVersion = movie.MovieAdditional.MainGenreRaw;
-				OldV2Converter.ConvertGenreAndFlags( movie, null );
-			}
-			else
-			{
-				movie.MainGenre = (TVTProgrammeGenre)movie.MovieAdditional.MainGenreRaw;
-				movie.SubGenre = (TVTProgrammeGenre)movie.MovieAdditional.SubGenreRaw;
-			}
-		}
-
-
 	}
 }
