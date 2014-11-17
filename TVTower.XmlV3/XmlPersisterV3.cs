@@ -142,10 +142,18 @@ namespace TVTower.Xml
 			{
 				adNode.AddAttribute( "id", ad.Id.ToString() );
 				adNode.AddAttribute( "creator", ad.CreatorId );
+				adNode.AddAttribute( "lastmodified", ad.LastModified != null ? ad.LastModified.ToString() : "" );
 			}
 			element.AppendChild( adNode );
 
 			SetTitleAndDescriptionMinimal( doc, adNode, dataStructure, ad );
+
+			var restrictionsNode = doc.CreateElement( "restrictions" );
+			{
+				restrictionsNode.AddAttribute( "valid_from", ad.ValidFrom.ToString() );
+				restrictionsNode.AddAttribute( "valid_till", ad.ValidTill.ToString() );
+			}
+			adNode.AppendChild( restrictionsNode );
 
 			var conditionsNode = doc.CreateElement( "conditions" );
 			{
@@ -628,6 +636,12 @@ namespace TVTower.Xml
 		{
 			var result = new TVTAdvertising();
 			result.Id = xmlNode.GetAttribute( "id" );
+			result.CreatorId = xmlNode.GetAttribute( "creator" );
+			var lastMod = xmlNode.GetAttribute( "lastmodified" );
+			DateTime lastModified;
+			if ( DateTime.TryParse( lastMod, out lastModified ) )
+				result.LastModified = lastModified;
+			
 
 			foreach ( XmlLinkedNode movieChild in xmlNode.ChildNodes )
 			{
@@ -661,10 +675,44 @@ namespace TVTower.Xml
 							}
 						}
 						break;
+					case "restrictions":
+						result.ValidFrom = movieChild.GetAttributeInteger( "valid_from" );
+						result.ValidTill = movieChild.GetAttributeInteger( "valid_till" );
+						break;
 					case "conditions":
 						result.MinAudience = movieChild.GetAttributeFloat( "min_audience" );
 						result.MinImage = movieChild.GetAttributeInteger( "min_image" );
 						result.TargetGroup = (TVTTargetGroup)movieChild.GetAttributeInteger( "target_group" );
+
+						foreach ( XmlLinkedNode cond in movieChild.ChildNodes )
+						{
+							switch ( cond.Name )
+							{
+								case "allowed_genre":
+                                    if ( result.AllowedGenres == null )
+                                        result.AllowedGenres = new List<TVTProgrammeGenre>();
+									result.AllowedGenres.Add( (TVTProgrammeGenre)Enum.Parse( typeof( TVTProgrammeGenre ), cond.GetElementValue() ) );
+									break;
+								case "prohibited_genre":
+                                    if ( result.ProhibitedGenres == null )
+                                        result.ProhibitedGenres = new List<TVTProgrammeGenre>();
+									result.ProhibitedGenres.Add( (TVTProgrammeGenre)Enum.Parse( typeof( TVTProgrammeGenre ), cond.GetElementValue() ) );
+									break;
+								case "allowed_programme_type":
+                                    if ( result.AllowedProgrammeTypes == null )
+                                        result.AllowedProgrammeTypes = new List<TVTProgrammeType>();
+									result.AllowedProgrammeTypes.Add( (TVTProgrammeType)Enum.Parse( typeof( TVTProgrammeType ), cond.GetElementValue() ) );
+									break;
+								case "prohibited_programme_type":
+                                    if ( result.ProhibitedProgrammeTypes == null )
+                                        result.ProhibitedProgrammeTypes = new List<TVTProgrammeType>();
+									result.ProhibitedProgrammeTypes.Add( (TVTProgrammeType)Enum.Parse( typeof( TVTProgrammeType ), cond.GetElementValue() ) );
+									break;
+							}
+						}
+
+						//AllowedGenres
+
 						break;
 					case "data":
 						//result.Infomercial = movieChild.GetAttributeInteger( "infomercial" ) == 1;
@@ -674,8 +722,9 @@ namespace TVTower.Xml
 						result.FixPrice = movieChild.GetAttributeInteger( "fix_price" ) == 1;
 						result.Profit = movieChild.GetAttributeInteger( "profit" );
 						result.Penalty = movieChild.GetAttributeInteger( "penalty" );
-						//var proPressureGroups = (TVTPressureGroup)movieChild.GetAttributeInteger( "pro_pressure_groups" );
-						//var contraPressureGroups = (TVTPressureGroup)movieChild.GetAttributeInteger( "contra_pressure_groups" );							
+
+                        result.ProPressureGroups = EnumFlag<TVTPressureGroup>.New( movieChild.GetAttributeInteger( "pro_pressure_groups" ) ).ToTypeList();
+						result.ContraPressureGroups = EnumFlag<TVTPressureGroup>.New( movieChild.GetAttributeInteger( "contra_pressure_groups" ) ).ToTypeList();
 						break;
 				}
 			}

@@ -41,9 +41,12 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssertExt.cs" />
+    <Compile Include="EntityHelper.cs" />
     <Compile Include="FakeNameTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MySQLTest.cs" />
+    <Compile Include="XMLV3Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeKnight.Core\CodeKnight.Core.csproj">

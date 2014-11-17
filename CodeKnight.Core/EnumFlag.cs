@@ -7,6 +7,16 @@ namespace CodeKnight.Core
     {
         private int mask;
 
+        public static EnumFlag<T> New()
+        {
+            return new EnumFlag<T>();
+        }
+
+        public static EnumFlag<T> New(int value)
+        {
+            return New().SetFlagSum( value );
+        }
+
         public EnumFlag()
         {
             if ( !typeof( T ).IsEnum )
@@ -53,7 +63,10 @@ namespace CodeKnight.Core
 
         public bool Test( T type )
         {
-            return ( mask & (int)( (object)type ) ) > 0;
+            if ( (int)( (object)type ) < 0 )
+                return false;
+            else
+                return ( mask & (int)( (object)type ) ) > 0;
         }
 
         //public void AddNamedFilter( UseCaseSpecification spec, string filterName, string parameterName )
@@ -69,9 +82,10 @@ namespace CodeKnight.Core
         //    spec.AddNamedFilter( filterName, parameterName, parameterValue );
         //}
 
-        public void SetFlagSum(int flagSum)
+        public EnumFlag<T> SetFlagSum( int flagSum )
         {
             mask = flagSum;
+            return this;
         }
 
         public int ToBitMask()
