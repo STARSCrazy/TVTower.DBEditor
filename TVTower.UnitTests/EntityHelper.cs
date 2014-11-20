@@ -63,7 +63,87 @@ namespace TVTower.UnitTests
             return advertising;
         }
 
+        public static TVTPerson GetMinimalPerson( string firstName, string lastName )
+        {
+            var person = new TVTPerson();
+            person.GenerateGuid();
+            person.FirstName = firstName;
+            person.LastName = lastName;
+            return person;
+        }
 
+        public static TVTProgramme GetIconicProgramme()
+        {
+            var programme = new TVTProgramme();
+            programme.GenerateGuid();
+            programme.OldId = "110";
+            programme.DataType = TVTDataType.Undefined;
+            programme.DataStatus = TVTDataStatus.Approved;
+            programme.DataRoot = TVTDataRoot.MadTV;
+            programme.DataUsage = TVTDataUsage.MadTVOriginal;
+            programme.Approved = true;
+            programme.CreatorId = "creatorX";
+            programme.EditorId = "editorY";
+            programme.LastModified = DateTime.Now.AddDays( -1 );
+            programme.IsNew = true;
+            programme.IsChanged = true;
+
+            programme.TitleDE = "ValueA";
+            programme.TitleEN = "ValueB";
+            programme.DescriptionDE = "ValueC";
+            programme.DescriptionEN = "ValueD";
+
+            programme.ProductType = TVTProductType.Programme;
+            programme.ProgrammeType = TVTProgrammeType.Reportage;
+            programme.FakeTitleDE = "fakeA";
+            programme.FakeTitleEN = "fakeB";
+            programme.FakeDescriptionDE = "fakeDescA";
+            programme.FakeDescriptionEN = "fakeDescB";
+            programme.DescriptionMovieDB = "hkh";
+
+            var personA = GetMinimalPerson( "PersA", "PersALast" );
+            var personB = GetMinimalPerson( "PersB", "PersBLast" );
+            var personC = GetMinimalPerson( "PersC", "PersCLast" );
+            programme.Staff.Add( new TVTStaff( personA, TVTPersonFunction.Actor ) );
+            programme.Staff.Add( new TVTStaff( personB, TVTPersonFunction.Actor ) );
+            programme.Staff.Add( new TVTStaff( personC, TVTPersonFunction.Director ) );
+
+            programme.BettyBonus = 11;
+            programme.PriceMod = (float)1.22;
+            programme.CriticsRate = 33;
+            programme.ViewersRate = 44;
+            programme.BoxOfficeRate = 55;
+
+            programme.Country = "FR";
+            programme.Year = 1952;
+            programme.DistributionChannel = TVTDistributionChannel.Auction;
+
+            programme.MainGenre = TVTProgrammeGenre.Drama;
+            programme.SubGenre = TVTProgrammeGenre.Fantasy;
+
+            programme.Blocks = 3;
+            programme.LiveHour = 20;
+
+            programme.Flags.Add( TVTProgrammeFlag.Cult );
+            programme.Flags.Add( TVTProgrammeFlag.BMovie );
+
+            programme.TargetGroups.Add( TVTTargetGroup.Manager );
+            programme.TargetGroups.Add( TVTTargetGroup.Pensioners );
+
+            programme.ProPressureGroups = new List<TVTPressureGroup>();
+            programme.ProPressureGroups.Add( TVTPressureGroup.AntiSmoker );
+            programme.ProPressureGroups.Add( TVTPressureGroup.ArmsLobby );
+            programme.ContraPressureGroups = new List<TVTPressureGroup>();
+            programme.ContraPressureGroups.Add( TVTPressureGroup.Capitalists );
+            programme.ContraPressureGroups.Add( TVTPressureGroup.Communists );
+
+            programme.ImdbId = "pp";
+            programme.TmdbId = 55;
+            programme.RottenTomatoesId = 99;
+            programme.ImageUrl = "urlX";
+
+            return programme;
+        }
     }
 
     public enum TestMode
@@ -79,7 +159,7 @@ namespace TVTower.UnitTests
             if ( testMode == TestMode.XMLV3 )
             {
                 Assert.AreEqual( ent1.Id, ent2.Id );
-                Assert.AreEqual( ent1.DataType, ent2.DataType );                
+                Assert.AreEqual( ent1.DataType, ent2.DataType );
                 Assert.AreEqual( ent1.CreatorId, ent2.CreatorId );
                 Assert.AreEqual( ent1.LastModified.ToString(), ent2.LastModified.ToString() );
             }
@@ -121,6 +201,46 @@ namespace TVTower.UnitTests
             AssertExt.AreCollectionEqual( ad1.ProhibitedProgrammeTypes, ad2.ProhibitedProgrammeTypes );
             AssertExt.AreCollectionEqual( ad1.ProPressureGroups, ad2.ProPressureGroups );
             AssertExt.AreCollectionEqual( ad1.ContraPressureGroups, ad2.ContraPressureGroups );
+        }
+
+        public void AssertProgrammes( TVTProgramme prog1, TVTProgramme prog2, TestMode testMode )
+        {
+            AssertEntity( prog1, prog2, testMode );
+
+            Assert.AreEqual( prog1.TitleDE, prog2.TitleDE );
+            Assert.AreEqual( prog1.TitleEN, prog2.TitleEN );
+            Assert.AreEqual( prog1.DescriptionDE, prog2.DescriptionDE );
+            Assert.AreEqual( prog1.DescriptionEN, prog2.DescriptionEN );
+
+            Assert.AreEqual( prog1.ProductType, prog2.ProductType );
+            Assert.AreEqual( prog1.ProgrammeType, prog2.ProgrammeType );
+            Assert.AreEqual( prog1.FakeTitleDE, prog2.FakeTitleDE );
+            Assert.AreEqual( prog1.FakeTitleEN, prog2.FakeTitleEN );
+            Assert.AreEqual( prog1.FakeDescriptionDE, prog2.FakeDescriptionDE );
+            Assert.AreEqual( prog1.FakeDescriptionEN, prog2.FakeDescriptionEN );
+
+            Assert.AreEqual( prog1.DescriptionMovieDB, prog2.DescriptionMovieDB );
+            Assert.AreEqual( prog1.Staff, prog2.Staff );
+            Assert.AreEqual( prog1.BettyBonus, prog2.BettyBonus );
+            Assert.AreEqual( prog1.PriceMod, prog2.PriceMod );
+            Assert.AreEqual( prog1.CriticsRate, prog2.CriticsRate );
+            Assert.AreEqual( prog1.ViewersRate, prog2.ViewersRate );
+            Assert.AreEqual( prog1.BoxOfficeRate, prog2.BoxOfficeRate );
+            Assert.AreEqual( prog1.Country, prog2.Country );
+            Assert.AreEqual( prog1.Year, prog2.Year );
+            Assert.AreEqual( prog1.DistributionChannel, prog2.DistributionChannel );
+            Assert.AreEqual( prog1.MainGenre, prog2.MainGenre );
+            Assert.AreEqual( prog1.SubGenre, prog2.SubGenre );
+            Assert.AreEqual( prog1.Blocks, prog2.Blocks );
+            Assert.AreEqual( prog1.LiveHour, prog2.LiveHour );
+            Assert.AreEqual( prog1.Flags, prog2.Flags );
+            Assert.AreEqual( prog1.TargetGroups, prog2.TargetGroups );
+            AssertExt.AreCollectionEqual( prog1.ProPressureGroups, prog2.ProPressureGroups );
+            AssertExt.AreCollectionEqual( prog1.ContraPressureGroups, prog2.ContraPressureGroups );
+            Assert.AreEqual( prog1.ImdbId, prog2.ImdbId );
+            Assert.AreEqual( prog1.TmdbId, prog2.TmdbId );
+            Assert.AreEqual( prog1.RottenTomatoesId, prog2.RottenTomatoesId );
+            Assert.AreEqual( prog1.ImageUrl, prog2.ImageUrl );
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TVTower.UnitTests
 	[TestClass]
 	public class MySQLTest
 	{
-		[TestMethod]
+		//[TestMethod]
 		public void A_ConvertOldToNewData()
 		{
             var database = new TVTDatabase();
@@ -52,7 +52,7 @@ namespace TVTower.UnitTests
 			}
 		}
 
-		[TestMethod]
+		//[TestMethod]
 		[DeploymentItem( "TestData\\database.xml" )]
 		public void B_ReadXMLV2AndMerge()
 		{
@@ -176,7 +176,7 @@ namespace TVTower.UnitTests
 			}
 		}
 
-		[TestMethod]
+		//[TestMethod]
 		[DeploymentItem( "TestData\\ads-changes.xml" )]
 		public void C_ReadXMLV2AndMergeAdChanges()
 		{
@@ -242,7 +242,7 @@ namespace TVTower.UnitTests
 
 
 
-		[TestMethod]
+		//[TestMethod]
 		public void D_CreateXMLV3()
 		{
             var database = new TVTDatabase();

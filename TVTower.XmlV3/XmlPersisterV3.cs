@@ -632,6 +632,107 @@ namespace TVTower.Xml
 			return (node.Attributes.Count == 0 && !node.HasChildNodes);
 		}
 
+        public TVTProgramme LoadProgramme( XmlNode xmlNode, bool isFake )
+        {
+            var result = new TVTProgramme();
+            result.Id = xmlNode.GetAttribute( "id" );
+            result.CreatorId = xmlNode.GetAttribute( "creator" );
+            var lastMod = xmlNode.GetAttribute( "lastmodified" );
+            DateTime lastModified;
+            if ( DateTime.TryParse( lastMod, out lastModified ) )
+                result.LastModified = lastModified;
+
+            throw new NotImplementedException();
+
+            //foreach ( XmlLinkedNode movieChild in xmlNode.ChildNodes )
+            //{
+            //    switch ( movieChild.Name )
+            //    {
+            //        case "title":
+            //            foreach ( XmlLinkedNode tileNode in movieChild.ChildNodes )
+            //            {
+            //                switch ( tileNode.Name )
+            //                {
+            //                    case "de":
+            //                        result.TitleDE = tileNode.GetElementValue();
+            //                        break;
+            //                    case "en":
+            //                        result.TitleEN = tileNode.GetElementValue();
+            //                        break;
+            //                }
+            //            }
+            //            break;
+            //        case "description":
+            //            foreach ( XmlLinkedNode descNode in movieChild.ChildNodes )
+            //            {
+            //                switch ( descNode.Name )
+            //                {
+            //                    case "de":
+            //                        result.DescriptionDE = descNode.GetElementValue();
+            //                        break;
+            //                    case "en":
+            //                        result.DescriptionEN = descNode.GetElementValue();
+            //                        break;
+            //                }
+            //            }
+            //            break;
+            //        case "restrictions":
+            //            result.ValidFrom = movieChild.GetAttributeInteger( "valid_from" );
+            //            result.ValidTill = movieChild.GetAttributeInteger( "valid_till" );
+            //            break;
+            //        case "conditions":
+            //            result.MinAudience = movieChild.GetAttributeFloat( "min_audience" );
+            //            result.MinImage = movieChild.GetAttributeInteger( "min_image" );
+            //            result.TargetGroup = (TVTTargetGroup)movieChild.GetAttributeInteger( "target_group" );
+
+            //            foreach ( XmlLinkedNode cond in movieChild.ChildNodes )
+            //            {
+            //                switch ( cond.Name )
+            //                {
+            //                    case "allowed_genre":
+            //                        if ( result.AllowedGenres == null )
+            //                            result.AllowedGenres = new List<TVTProgrammeGenre>();
+            //                        result.AllowedGenres.Add( (TVTProgrammeGenre)Enum.Parse( typeof( TVTProgrammeGenre ), cond.GetElementValue() ) );
+            //                        break;
+            //                    case "prohibited_genre":
+            //                        if ( result.ProhibitedGenres == null )
+            //                            result.ProhibitedGenres = new List<TVTProgrammeGenre>();
+            //                        result.ProhibitedGenres.Add( (TVTProgrammeGenre)Enum.Parse( typeof( TVTProgrammeGenre ), cond.GetElementValue() ) );
+            //                        break;
+            //                    case "allowed_programme_type":
+            //                        if ( result.AllowedProgrammeTypes == null )
+            //                            result.AllowedProgrammeTypes = new List<TVTProgrammeType>();
+            //                        result.AllowedProgrammeTypes.Add( (TVTProgrammeType)Enum.Parse( typeof( TVTProgrammeType ), cond.GetElementValue() ) );
+            //                        break;
+            //                    case "prohibited_programme_type":
+            //                        if ( result.ProhibitedProgrammeTypes == null )
+            //                            result.ProhibitedProgrammeTypes = new List<TVTProgrammeType>();
+            //                        result.ProhibitedProgrammeTypes.Add( (TVTProgrammeType)Enum.Parse( typeof( TVTProgrammeType ), cond.GetElementValue() ) );
+            //                        break;
+            //                }
+            //            }
+
+            //            //AllowedGenres
+
+            //            break;
+            //        case "data":
+            //            //result.Infomercial = movieChild.GetAttributeInteger( "infomercial" ) == 1;
+            //            result.Quality = movieChild.GetAttributeInteger( "quality" );
+            //            result.Repetitions = movieChild.GetAttributeInteger( "repetitions" );
+            //            result.Duration = movieChild.GetAttributeInteger( "duration" );
+            //            result.FixPrice = movieChild.GetAttributeInteger( "fix_price" ) == 1;
+            //            result.Profit = movieChild.GetAttributeInteger( "profit" );
+            //            result.Penalty = movieChild.GetAttributeInteger( "penalty" );
+
+            //            result.ProPressureGroups = EnumFlag<TVTPressureGroup>.New( movieChild.GetAttributeInteger( "pro_pressure_groups" ) ).ToTypeList();
+            //            result.ContraPressureGroups = EnumFlag<TVTPressureGroup>.New( movieChild.GetAttributeInteger( "contra_pressure_groups" ) ).ToTypeList();
+            //            break;
+            //    }
+            //}
+
+            return result;
+        }
+
 		public TVTAdvertising LoadAd( XmlNode xmlNode, bool isFake )
 		{
 			var result = new TVTAdvertising();
@@ -745,6 +846,27 @@ namespace TVTower.Xml
 				if ( version != 3 )
 					throw new NotSupportedException( "Only database version '3' is supported." );
 			}
+
+            {
+                var programmes = new List<TVTProgramme>();
+                var allNews = doc.GetElementsByTagName( "allprogrammes" );
+
+                foreach ( XmlNode xmlNews in allNews )
+                {
+                    foreach ( XmlNode childNode in xmlNews.ChildNodes )
+                    {
+                        switch ( childNode.Name )
+                        {
+                            case "programme":
+                                programmes.Add( LoadAd( childNode, true ) );
+                                break;
+                            default:
+                                throw new NotSupportedException( "Only 'news'-tags are supported." );
+                        }
+                    }
+                }
+                database.AddProgrammes( programmes );
+            }
 
 			//{
 			//    var movies = new List<TVTProgramme>();

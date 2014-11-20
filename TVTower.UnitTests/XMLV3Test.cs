@@ -19,8 +19,10 @@ namespace TVTower.UnitTests
             initialDatabase.Initialize();
 
             var advertising = EntityHelper.GetIconicAdvertising();
-
             initialDatabase.AddAdvertising(advertising);
+
+            var programme = EntityHelper.GetIconicProgramme();
+            initialDatabase.AddProgramme( programme );
 
             var persister = new XmlPersisterV3();
             persister.SaveXML( initialDatabase, "UnitTestXMLV2.xml", DatabaseVersion.V3, DataStructure.FakeData );
@@ -29,9 +31,14 @@ namespace TVTower.UnitTests
             loadDatabase.Initialize();
 
             persister.LoadXML( "UnitTestXMLV2.xml", loadDatabase );
+
             Assert.AreEqual( 1, loadDatabase.GetAllAdvertisings().Count() );
             var loadAdvertising = loadDatabase.GetAllAdvertisings().First();
             AssertAdvertisings( advertising, loadAdvertising, TestMode.XMLV3 );
+
+            Assert.AreEqual( 1, loadDatabase.GetAllProgrammes().Count() );
+            var loadProgrammes = loadDatabase.GetAllProgrammes().First();
+            AssertProgrammes( programme, loadProgrammes, TestMode.XMLV3 );
         }
     }
 }
