@@ -22,8 +22,8 @@ namespace TVTower.Entities
 		public List<TVTPersonFunction> Functions { get; set; }
 
 		public TVTPersonGender Gender { get; set; } //Als Enum?		
-		public string Birthday { get; set; }
-		public string Deathday { get; set; }
+		public int? Birthday { get; set; }
+		public int? Deathday { get; set; }
 		//public string PlaceOfBirth { get; set; }
 		public string Country { get; set; }
 

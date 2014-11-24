@@ -144,6 +144,56 @@ namespace TVTower.UnitTests
 
             return programme;
         }
+
+        public static TVTPerson GetIconicPerson( string firstName, string lastName )
+        {
+            var person = new TVTPerson();            
+            person.GenerateGuid();
+            person.OldId = "110";
+            person.DataType = TVTDataType.Undefined;
+            person.DataStatus = TVTDataStatus.Approved;
+            person.DataRoot = TVTDataRoot.MadTV;
+            person.DataUsage = TVTDataUsage.MadTVOriginal;
+            person.Approved = true;
+            person.CreatorId = "creatorX";
+            person.EditorId = "editorY";
+            person.LastModified = DateTime.Now.AddDays( -1 );
+            person.IsNew = true;
+            person.IsChanged = true;
+
+            person.FirstName = firstName;
+            person.LastName = lastName;
+            person.NickName = "nick";
+
+            person.FakeFirstName = firstName + "Fake";
+            person.FakeLastName = lastName + "Fake";
+            person.FakeNickName = "nickFake";
+
+            person.TmdbId = 111;
+            person.ImdbId = "dbdb";
+            person.ImageUrl = "imgUrl";
+
+            person.Functions.Add(TVTPersonFunction.Actor);
+
+            person.Gender = TVTPersonGender.Female;
+            person.Birthday = 1999;
+            person.Deathday = 2010;
+            person.Country = "FR";
+            person.Prominence = 2;
+            person.Skill = 99;
+            person.Fame = 10;
+            person.Scandalizing = 33;
+            person.PriceMod = 20;
+            person.Power = 30;
+            person.Humor = 20;
+            person.Charisma = 70;
+            person.Appearance = 80;
+            person.TopGenre1 = TVTProgrammeGenre.Erotic;
+            person.TopGenre2 = TVTProgrammeGenre.Fantasy;
+            person.ProgrammeCount = 33;
+
+            return person;
+        }
     }
 
     public enum TestMode
@@ -201,6 +251,45 @@ namespace TVTower.UnitTests
             AssertExt.AreCollectionEqual( ad1.ProhibitedProgrammeTypes, ad2.ProhibitedProgrammeTypes );
             AssertExt.AreCollectionEqual( ad1.ProPressureGroups, ad2.ProPressureGroups );
             AssertExt.AreCollectionEqual( ad1.ContraPressureGroups, ad2.ContraPressureGroups );
+        }
+
+        public void AssertPeople( TVTPerson pers1, TVTPerson pers2, TestMode testMode, bool isFake = false )
+        {
+            AssertEntity( pers1, pers2, testMode );
+
+            if ( isFake )
+            {
+                Assert.AreEqual( pers1.FakeFirstName, pers2.FakeFirstName );
+                Assert.AreEqual( pers1.FakeLastName, pers2.FakeLastName );
+                Assert.AreEqual( pers1.FakeNickName, pers2.FakeNickName );
+            } else {
+                Assert.AreEqual( pers1.FirstName, pers2.FirstName );
+                Assert.AreEqual( pers1.LastName, pers2.LastName );
+                Assert.AreEqual( pers1.NickName, pers2.NickName );
+            }
+            Assert.AreEqual( pers1.TmdbId, pers2.TmdbId );
+            Assert.AreEqual( pers1.ImdbId, pers2.ImdbId );
+            Assert.AreEqual( pers1.ImageUrl, pers2.ImageUrl );
+            AssertExt.AreCollectionEqual( pers1.Functions, pers2.Functions );
+            Assert.AreEqual( pers1.Gender, pers2.Gender );
+            Assert.AreEqual( pers1.Birthday, pers2.Birthday );
+            Assert.AreEqual( pers1.Deathday, pers2.Deathday );
+            Assert.AreEqual( pers1.Country, pers2.Country );
+            Assert.AreEqual( pers1.Prominence, pers2.Prominence );
+            Assert.AreEqual( pers1.Skill, pers2.Skill );
+            Assert.AreEqual( pers1.Fame, pers2.Fame );
+            Assert.AreEqual( pers1.Scandalizing, pers2.Scandalizing );
+            Assert.AreEqual( pers1.PriceMod, pers2.PriceMod );
+            Assert.AreEqual( pers1.Power, pers2.Power );
+            Assert.AreEqual( pers1.Humor, pers2.Humor );
+            Assert.AreEqual( pers1.Charisma, pers2.Charisma );
+            Assert.AreEqual( pers1.Appearance, pers2.Appearance );
+            Assert.AreEqual( pers1.TopGenre1, pers2.TopGenre1 );
+            Assert.AreEqual( pers1.TopGenre2, pers2.TopGenre2 );
+            if ( testMode != TestMode.XMLV3 )
+            {
+                Assert.AreEqual( pers1.ProgrammeCount, pers2.ProgrammeCount );
+            }
         }
 
         public void AssertProgrammes( TVTProgramme prog1, TVTProgramme prog2, TestMode testMode )

@@ -57,6 +57,15 @@ namespace CodeKnight.Core
 				return 0;
 		}
 
+		public static int? GetAttributeNullableInteger( this XmlNode node, string name )
+		{
+			var attr = node.Attributes[name];
+			if ( attr != null )
+				return int.Parse( attr.Value );
+			else
+				return null;
+		}
+
 		public static float GetAttributeFloat( this XmlNode node, string name )
 		{
 			var attr = node.Attributes[name];
@@ -72,6 +81,16 @@ namespace CodeKnight.Core
 				return "";
 			else if ( node.ChildNodes.Count == 1 )
 				return node.ChildNodes[0].Value;
+			else
+				throw new NotSupportedException();
+		}
+
+		public static int GetElementValueInteger( this XmlNode node )
+		{
+			if ( node.ChildNodes.Count == 0 )
+				return 0;
+			else if ( node.ChildNodes.Count == 1 )
+				return int.Parse(node.ChildNodes[0].Value);
 			else
 				throw new NotSupportedException();
 		}

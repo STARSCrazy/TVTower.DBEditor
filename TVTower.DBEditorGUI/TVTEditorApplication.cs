@@ -52,7 +52,7 @@ namespace TVTower.DBEditorGUI
             InternalDatabase.Clear();
 
             var persister = new XmlPersisterV3();
-            persister.LoadXML( filename, InternalDatabase );            
+            persister.LoadXML( filename, InternalDatabase, DataStructure.FakeData );            
         }
 
         public void SaveXMLFile( )
